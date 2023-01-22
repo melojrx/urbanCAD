@@ -8,7 +8,7 @@
     <div class="container-fluid container_nav">
        
             <a class="navbar-brand" href="{{url_for('evento.home')}}"> 
-              <h3 class="urban_logo"> URBAN MOB </h3>
+              <h3 class="urban_logo"> URBAN CAD </h3>
             </a>
        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -23,6 +23,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('evento.home')}}">Início</a>
           </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('viatura.listar')}}">Viaturas</a>
+          </li>           
           {% if session["userAdmin"] or session["userGoverno"] %}
           <li class="nav-item" id="novaocorrenciaadmmenu">
             <a class="nav-link" href="{{url_for('evento.iniciar')}}">Cadastrar Ocorrência</a>

@@ -158,7 +158,7 @@ class eventoController:
         db.session.add(eventoHistorico)
         db.session.commit()
 
-        flash('Evento cadastrado com sucesso.', 'Sucess')
+        flash('Evento cadastrado com sucesso.', 'sucess')
 
         return redirect(url_for('evento.home'))
 

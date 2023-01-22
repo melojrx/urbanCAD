@@ -21,11 +21,13 @@ from .rotas.loginRout import login_bp
 from .rotas.eventoRout import evento_bp
 from .rotas.eventoSearchRout import evento_search_bp
 from .rotas.relatorioRout import relatorio_bp
+from.rotas.viaturaRout import viatura_bp
 
 app.register_blueprint(public)
 app.register_blueprint(login_bp)
 app.register_blueprint(evento_bp)
 app.register_blueprint(evento_search_bp)
 app.register_blueprint(relatorio_bp)
-# print(list(app.url_map.iter_rules()))
+app.register_blueprint(viatura_bp)
+# print(list(app.url_map.iter_rules()), sep='\n')
 

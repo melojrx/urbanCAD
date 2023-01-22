@@ -2,7 +2,7 @@ from ..database import db
 
 class StatusEvento(db.Model):
     __tablename__ = 'tb_status_evento_sev'
-    __table_args__ = {"schema":"cidade"}
+    __table_args__ = {"schema":"cad"}
     
     id = db.Column('id_status_evento_sev', db.Integer, autoincrement=True, primary_key=True)
     txtStatusEvento = db.Column('txt_status_evento_sev', db.String(50), nullable=False)
