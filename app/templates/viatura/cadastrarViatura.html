@@ -17,6 +17,16 @@
                     
                     <br>
 
+                    {{form.placa.label(class_="form-label")}}
+                    {{form.placa(class_="form-control")}}
+                    {% for error in form.placa.errors %}
+                        <div class="important">
+                            {{error}}
+                        </div> 
+                    {% endfor %}
+
+                    <br>
+
                     {{form.descricao.label(class_="form-label")}}
                     {{form.descricao(class_="form-control")}}
                     {% for error in form.descricao.errors %}
@@ -24,7 +34,30 @@
                             {{error}}
                         </div> 
                     {% endfor %}
+
+                    <br>
+
+                    {{form.instituicao.label(class_="form-label")}}
+                    {{form.instituicao(class_="form-select")}}
+                    {% for error in form.instituicao.errors %}
+                    <div class="important">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+
+                    <br>
+
+                    {{form.tipoPatrulha.label(class_="form-label")}}
+                    {{form.tipoPatrulha(class_="form-select")}}
+                    {% for error in form.tipoPatrulha.errors %}
+                    <div class="important">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+
                 </div>
+
+
                 <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end">
                     <button type="submit" class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i>Salvar</button>
                 </div>

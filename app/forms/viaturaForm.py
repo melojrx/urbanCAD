@@ -12,6 +12,14 @@ class ViaturaForm(Form):
             Length(max=30, message='O código deve ter no mínimo %(max)d caracteres')
         ])
 
+    placa = StringField(
+        'Placa:',
+        render_kw={"placeholder": "Placa da viatura."},
+        validators = [
+            InputRequired(message=('*Campo Requerido')),
+            Length(max=7, message='A placa deve ter no mínimo %(max)d caracteres')
+        ])   
+
     descricao = StringField(
         'Descrição:',
         render_kw={"placeholder": "Descrição da viatura."},
@@ -19,3 +27,19 @@ class ViaturaForm(Form):
             InputRequired(message=('*Campo Requerido')),
             Length(max=100, message='O código deve ter no mínimo %(max)d caracteres')
         ])        
+
+    instituicao = SelectField(
+        'Inistituição',
+        coerce=int,
+        validators = [
+            DataRequired(message='*Campo Requerido'),
+            InputRequired(message=('*Campo Requerido'))
+    ])
+
+    tipoPatrulha = SelectField(
+        'Tipo Patrulha',
+        coerce=int,
+        validators = [
+            DataRequired(message='*Campo Requerido'),
+            InputRequired(message=('*Campo Requerido'))
+    ])

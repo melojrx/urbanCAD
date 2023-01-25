@@ -66,6 +66,20 @@ CREATE SEQUENCE cad.categoria_seq
   START 1
   CACHE 1;
 
+  CREATE SEQUENCE cad.instituicao_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.tipo_patrulha_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
 -- ################
 -- #    TABLES    #
 -- ################
@@ -149,14 +163,36 @@ CREATE TABLE cad.tb_evento_observacao_eob (
 ALTER TABLE cad.tb_evento_observacao_eob ADD CONSTRAINT evento_observacao_fkey FOREIGN KEY (id_evento_historico_eob) REFERENCES cad.tb_evento_historico_ehi (id_evento_historico_ehi);
 ALTER TABLE cad.tb_evento_observacao_eob ADD CONSTRAINT usuario_observacao_fkey FOREIGN KEY (id_usuario_eob) REFERENCES cad.tb_usuario_usu (id_usuario_usu);
 
+CREATE TABLE cad.tb_instituicao_ins (
+	id_instituicao_ins integer NOT NULL DEFAULT nextval('cad.instituicao_seq'::regclass),
+	txt_instituicao_ins varchar(50) NOT NULL,
+	dat_inicio_ins timestamp without time zone NOT NULL,
+	dat_fim_ins timestamp without time zone,
+	CONSTRAINT sinstituicao_pkey PRIMARY KEY (id_instituicao_ins)
+);
+
+CREATE TABLE cad.tb_tipo_patrulha_tpa (
+	id_tipo_patrulha_tpa integer NOT NULL DEFAULT nextval('cad.tipo_patrulha_seq'::regclass),
+	txt_tipo_patrulha_tpa varchar(50) NOT NULL,
+	dat_inicio_tpa timestamp without time zone NOT NULL,
+	dat_fim_tpa timestamp without time zone,
+	CONSTRAINT tipo_patrulha_pkey PRIMARY KEY (id_tipo_patrulha_tpa)
+);
+
 CREATE TABLE cad.tb_viatura_via (
 	id_viatura_via integer NOT NULL DEFAULT nextval('cad.viatura_seq'::regclass),
+  id_instituicao_via integer NOT NULL,
+  id_tipo_patrulha_via integer NOT NULL,
   txt_descricao_via varchar(100) NOT NULL,
 	txt_codigo_via varchar(30) NOT NULL,
+  txt_placa_via varchar(7) NOT NULL,
   dat_inicio_via timestamp without time zone NOT NULL,
 	dat_fim_via timestamp without time zone,
 	CONSTRAINT viatura_pkey PRIMARY KEY (id_viatura_via)
 );
+ALTER TABLE cad.tb_viatura_via ADD CONSTRAINT instituicao_fkey FOREIGN KEY (id_instituicao_via) REFERENCES cad.tb_instituicao_ins (id_instituicao_ins);
+ALTER TABLE cad.tb_viatura_via ADD CONSTRAINT tipo_patrulha_fkey FOREIGN KEY (id_tipo_patrulha_via) REFERENCES cad.tb_tipo_patrulha_tpa (id_tipo_patrulha_tpa);
+
 
 -- ####################################
 -- #        INSERTS PARA TESTES       #
@@ -188,3 +224,13 @@ INSERT INTO cad.tb_subcategoria_sub(id_categoria_sub, txt_subcategoria_sub, dat_
 INSERT INTO cad.tb_status_evento_sev (txt_status_evento_sev, dat_inicio_sev, dat_fim_sev) VALUES('Aguardando Despacho', now(), null);
 INSERT INTO cad.tb_status_evento_sev (txt_status_evento_sev, dat_inicio_sev, dat_fim_sev) VALUES('Em andamento', now(), null);
 INSERT INTO cad.tb_status_evento_sev (txt_status_evento_sev, dat_inicio_sev, dat_fim_sev) VALUES('Finalizado', now(), null);
+
+INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, dat_inicio_ins, dat_fim_ins) VALUES('Trânsito', now(), null);
+INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, dat_inicio_ins, dat_fim_ins) VALUES('PM', now(), null);
+INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, dat_inicio_ins, dat_fim_ins) VALUES('CBM', now(), null);
+
+INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Carro', now(), null);
+INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Moto', now(), null);
+INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Bicicleta', now(), null);
+INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Cavalo', now(), null);
+INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Andando', now(), null);
