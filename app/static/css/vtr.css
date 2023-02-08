@@ -1,0 +1,15 @@
+.titulo-cadastro-vtr {
+    border-bottom: 1.5px solid #A6A6A6;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+}
+
+.titulo-vtr {
+    margin-bottom: 2px;
+}
+
+.subtitulo-vtr {
+    font-weight: 350;
+    margin-bottom: 10px;
+}

@@ -3,10 +3,21 @@
 
 <div class="container-fluid">
     <div class="row">
+        <section class="painel_esquerdo_gov">
+
+            {% include 'includeLinksEsquerda.html' %}
+      
+        </section>
         <main class="col-md-12 col-lg-9 col-sm-12 col-xs-12">
             <form method="POST" enctype='multipart/form-data' action="{{ url_for('viatura.cadastrar') }}">
                 <div class="container ">
-                    <h5>PUBLIQUE SUA DEMANDA</h5>
+                    <div class="titulo-cadastro-vtr">
+                        <h5 class="titulo-vtr">Viaturas</h5>
+                        <span class="subtitulo-vtr">Gerencie as viaturas do sistema</span>
+                    </div>
+                    <div class="button m-2 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
                     {{form.codigo.label(class_="form-label")}}
                     {{form.codigo(class_="form-control")}}
                     {% for error in form.codigo.errors %}
@@ -56,12 +67,12 @@
                     {% endfor %}
 
                 </div>
-
-
-                <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end">
-                    <button type="submit" class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i>Salvar</button>
+                
+                <div class="d-flex justify-content-end m-2 " >
+                    <button type="submit" class="btn btn-danger"  onclick="window.location.href='{{url_for('evento.home')}}';">Voltar</button>
                 </div>
-            </form>
+                
+            </form> 
         </main>
     </div>
 </div>

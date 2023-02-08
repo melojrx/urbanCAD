@@ -5,21 +5,7 @@
     <div class="row">
         
         <section class="painel_esquerdo_gov">
-            <div class="titulo_identificacao_logado">
-              
-              <div class="urban-gov-menu-gov">
-                {% if current_user.is_authenticated %}
-                <a href="/"><i class="bi bi-person-circle "></i></a>
-                <span class="titulo-menu-gov">{{ current_user.name }}</span>
-                {% endif %}
-              </div>
-              <div class="urban-gov-menu-gov" id="div-iden-cargo">
-                <span class="ident-cargo"> GESTOR - NÍVEL 1</span>
-                <i class="bi bi-check2-square"></i>
-              </div>
-        
-            </div>
-
+           
             {% include 'includeLinksEsquerda.html' %}
 
         </section>

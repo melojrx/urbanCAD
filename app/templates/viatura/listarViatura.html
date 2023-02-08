@@ -3,48 +3,69 @@
 
 <div class="container-fluid">
     <div class="row">
-        <aside class="col-md-3 col-lg-3 col-sm-12 col-xs-12 bg-info bg-gradient shadow" id="painel-lateral">
-            <section class="main-identificacao ">
-                {% if current_user.is_authenticated %}
-                <div class="container box-identificacao">
-                    <i class="bi bi-person-circle "></i>
-                    <span class="text-uppercase">{{ current_user.name }}</span>
-                </div>
-                {% endif %}
-            </section>
-        </aside>
+        <section class="painel_esquerdo_gov">
+
+            {% include 'includeLinksEsquerda.html' %}
+      
+        </section>
         <main class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
-            <!-- Botão Cadastrar Viatura -->
-            <div class="col-6 m-1">
-                <button type="button" class="btn btn-primary bg-primary"
-                        onclick="window.location.href='{{url_for('viatura.prepareCadastrar')}}';">Cadastrar
+            <div class="container">
+                <div class="titulo-cadastro-vtr">
+                    <h5 class="titulo-vtr">Viaturas</h5>
+                    <span class="subtitulo-vtr">Gerencie as viaturas do sistema</span>
+                </div>
+            </div>
+            <div class="button m-2 d-flex justify-content-end">
+                 <!-- Botão Cadastrar Viatura -->
+                <button type="button" class="btn btn-primary"  onclick="window.location.href='{{url_for('viatura.prepareCadastrar')}}';">Nova Viatura
                 </button>
             </div>
-
-            <!-- Lista Viaturas -->
-            {% for viatura in listViatura.items %}
-            <div class="container painel-direito">
-                <div class="row m-1">
-                    <div class="col m-1 align-items-center">
-                        {{viatura.txtCodigo}}</span>
-                    </div>
-                    <div class="col m-1 align-items-center">
-                        {{viatura.txtplaca}}</span>
-                    </div>
-                    <div class="col m-1 justify-content-md-end">
-                        {{viatura.txtDescricao}}
-                    </div>
-                    <div class="col m-1 align-items-center">
-                        {{viatura.instituicao.txtInstituicao}}</span>
-                    </div>
-                    <div class="col m-1 align-items-center">
-                        {{viatura.tipoPatrulha.txtTipoPatrulha}}</span>
-                    </div>                    
-
-                </div>
+            <div class="container mb-1 mt-3">
+                <h6> <strong> <i class="bi bi-search"></i>REGISTROS </strong></h6>
+                <hr class="mt-1">
             </div>
-            {%endfor%}
+            <div class="row">
 
+                <div class="col-8 m-1">
+                  <input type="text" name="#" class="form-control form-control-sm m-1"
+                    placeholder="Pesquisar viaturas" />
+                </div>
+      
+                <div class="col-3 m-1">
+                  <select class="form-select form-select-sm m-1" aria-label="#" name="#">
+                    <option selected value=""> 10 </option>
+                    <option value="#"> 15 </option>
+                    <option value="#"> 20 </option>
+                  </select>
+                </div>
+
+            </div>
+          
+            <div class="container mb-1 ml-2">
+                <table class="table table-striped tabela-filtros">
+                    <thead>
+                        <tr>
+                        <th scope="col"></th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Placa</th>
+                        <th scope="col">Instituição</th>
+                        <th scope="col">Tipo Patrulha</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                        <!-- Lista Viaturas -->
+                        {% for viatura in listViatura.items %}
+                        <tr>
+                            <th scope="row">{{loop.index0 + 1}}</th>
+                            <td>{{viatura.txtCodigo}}</td>
+                            <td>{{viatura.txtPlaca}}</td>
+                            <td>{{viatura.instituicao.txtInstituicao}}</td>
+                            <td>{{viatura.tipoPatrulha.txtTipoPatrulha}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                </table>
+            </div>
             <!-- Pagination Links-->
             <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
                 <a href="{{ url_for('viatura.listar', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
@@ -76,6 +97,9 @@
                 Página {{ listViatura.page }} de {{ listViatura.pages }}
             </p>
             <!-- End Pagination Links-->
+            <div class="d-flex justify-content-end m-2 " >
+                <button type="submit" class="btn btn-danger"  onclick="window.location.href='{{url_for('evento.home')}}';">Voltar</button>
+            </div>
 
         </main>
     </div>

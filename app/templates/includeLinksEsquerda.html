@@ -1,3 +1,27 @@
+  <div class="urban-gov-menu-gov-dashboard">
+    <i class="bi bi-house-fill"></i>
+    <a href="{{url_for('evento.home')}}"><span class="titulo-menu-gov">Dashboard</span></a>
+  </div>
+  <div class="menu-categorias">
+    <span class="categorias-menu-gov">ATENDIMENTO</span>
+  </div>
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-geo-alt-fill"></i>
+    <a href="{{url_for('evento.home')}}"><span class="titulo-menu-gov">Monitoramento</span></a>
+  </div>
+  {% if session["userAdmin"] or session["userGoverno"] %}
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-clipboard2-data-fill"></i>
+    <a href="{{url_for('evento.iniciar')}}"><span class="titulo-menu-gov">Ocorrência</span></a>
+  </div>
+  {% endif %}
+  <div class="menu-categorias">
+    <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
+  </div>
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-car-front-fill"></i>
+    <a href="{{url_for('viatura.listar')}}"><span class="titulo-menu-gov">Viaturas</span></a>
+  </div>
   <div class="urban-gov-menu-gov">
     <i class="bi bi-search"></i>
     <a href="{{url_for('eventoSearch.prepareSearch')}}"><span class="titulo-menu-gov">Consultas</span></a>
@@ -6,12 +30,6 @@
     <div class="urban-gov-menu-gov">
       <i class="bi bi-file-text"></i>
       <a href="{{url_for('relatorio.prepareRelatorio')}}"><span class="titulo-menu-gov">Relatórios</span></a>
-    </div>
-  {% endif %}
-  {% if session["userAdmin"] or session["userGoverno"] %}
-    <div class="urban-gov-menu-gov">
-      <i class="bi bi-file-earmark-plus"></i>
-      <a href="{{url_for('evento.iniciar')}}"><span class="titulo-menu-gov">Nova Ocorrência</span></a>
     </div>
   {% endif %}
   <div class="urban-gov-menu-gov">
