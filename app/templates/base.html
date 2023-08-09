@@ -7,7 +7,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark" >
     <div class="container-fluid container_nav">
        
-            <a class="navbar-brand" href="{{url_for('evento.home')}}"> 
+            <a class="navbar-brand" href="{{url_for('login.site')}}"> 
               <h3 class="urban_logo"> URBAN CAD </h3>
             </a>
        
@@ -21,10 +21,10 @@
             <a class="nav-link" href="{{url_for('login.site')}}">Site</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('evento.home')}}">Início</a>
+            <a class="nav-link" href="{{url_for('login.site')}}">Início</a>
           </li> 
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('viatura.listar')}}">Viaturas</a>
+            <a class="nav-link" href="{{url_for('viatura.listarViaturas')}}">Viaturas</a>
           </li>           
           {% if session["userAdmin"] or session["userGoverno"] %}
           <li class="nav-item" id="novaocorrenciaadmmenu">

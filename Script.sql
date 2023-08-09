@@ -8,14 +8,6 @@ CREATE SCHEMA cad;
 -- #  SEQUENCES   #
 -- ################
 
-CREATE SEQUENCE cad.usuario_seq
-  INCREMENT 1
-  MINVALUE 1
-  MAXVALUE 9223372036854775807
-  START 1
-  CACHE 1;
-
-
 CREATE SEQUENCE cad.categoria_seq
   INCREMENT 1
   MINVALUE 1
@@ -84,17 +76,6 @@ CREATE SEQUENCE cad.categoria_seq
 -- #    TABLES    #
 -- ################
 
-CREATE TABLE cad.tb_usuario_usu (
-	id_usuario_usu integer NOT NULL DEFAULT nextval('cad.usuario_seq'::regclass),
-	txt_nome_usu varchar(200) NOT NULL,
-	txt_email_usu varchar(200) NOT NULL,
-  txt_cpf_usu varchar(11) NOT NULL,
-	txt_password_usu varchar(128) NOT NULL,
-  flg_governo_usu boolean null DEFAULT false,
-  flg_admin_usu boolean null DEFAULT false,
-	CONSTRAINT usuario_pkey PRIMARY KEY (id_usuario_usu)
-);
-
 CREATE TABLE cad.tb_categoria_cat (
 	id_categoria_cat integer NOT NULL DEFAULT nextval('cad.categoria_seq'::regclass),
 	txt_categoria_cat varchar(50) NOT NULL,
@@ -136,7 +117,7 @@ CREATE TABLE cad.tb_evento_eve (
 	CONSTRAINT evento_pkey PRIMARY KEY (id_evento_eve)
 );
 ALTER TABLE cad.tb_evento_eve ADD CONSTRAINT subcategoria_fkey FOREIGN KEY (id_subcategoria_eve) REFERENCES cad.tb_subcategoria_sub (id_subcategoria_sub);
-ALTER TABLE cad.tb_evento_eve ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_eve) REFERENCES cad.tb_usuario_usu (id_usuario_usu);
+ALTER TABLE cad.tb_evento_eve ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_eve) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
 
 CREATE TABLE cad.tb_evento_historico_ehi (
 	id_evento_historico_ehi integer NOT NULL DEFAULT nextval('cad.evento_historico_seq'::regclass),
@@ -149,7 +130,7 @@ CREATE TABLE cad.tb_evento_historico_ehi (
 );
 ALTER TABLE cad.tb_evento_historico_ehi ADD CONSTRAINT evento_fkey FOREIGN KEY (id_evento_ehi) REFERENCES cad.tb_evento_eve (id_evento_eve);
 ALTER TABLE cad.tb_evento_historico_ehi ADD CONSTRAINT status_fkey FOREIGN KEY (id_status_evento_ehi) REFERENCES cad.tb_status_evento_sev (id_status_evento_sev);
-ALTER TABLE cad.tb_evento_historico_ehi ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_ehi) REFERENCES cad.tb_usuario_usu (id_usuario_usu);
+ALTER TABLE cad.tb_evento_historico_ehi ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_ehi) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
 
 CREATE TABLE cad.tb_evento_observacao_eob (
 	id_evento_observacao_eob integer NOT NULL DEFAULT nextval('cad.evento_observacao_seq'::regclass),
@@ -161,7 +142,7 @@ CREATE TABLE cad.tb_evento_observacao_eob (
 	CONSTRAINT evento_observacao_pkey PRIMARY KEY (id_evento_observacao_eob)
 );
 ALTER TABLE cad.tb_evento_observacao_eob ADD CONSTRAINT evento_observacao_fkey FOREIGN KEY (id_evento_historico_eob) REFERENCES cad.tb_evento_historico_ehi (id_evento_historico_ehi);
-ALTER TABLE cad.tb_evento_observacao_eob ADD CONSTRAINT usuario_observacao_fkey FOREIGN KEY (id_usuario_eob) REFERENCES cad.tb_usuario_usu (id_usuario_usu);
+ALTER TABLE cad.tb_evento_observacao_eob ADD CONSTRAINT usuario_observacao_fkey FOREIGN KEY (id_usuario_eob) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
 
 CREATE TABLE cad.tb_instituicao_ins (
 	id_instituicao_ins integer NOT NULL DEFAULT nextval('cad.instituicao_seq'::regclass),
@@ -197,19 +178,6 @@ ALTER TABLE cad.tb_viatura_via ADD CONSTRAINT tipo_patrulha_fkey FOREIGN KEY (id
 -- ####################################
 -- #        INSERTS PARA TESTES       #
 -- ####################################
-
-INSERT INTO cad.tb_usuario_usu
-(txt_nome_usu, txt_email_usu, txt_cpf_usu, txt_password_usu, flg_governo_usu, flg_admin_usu)
-VALUES('Usuário', 'usuario@gmail.com', '11111111111','pbkdf2:sha256:260000$FUnuJtPVxUVIAbbO$14563e437e0e8c2c603fa509bd6f0c0461bb1cf62beba90aae238f07539f70d4', NULL, NULL);
-
-INSERT INTO cad.tb_usuario_usu
-(txt_nome_usu, txt_email_usu, txt_cpf_usu, txt_password_usu, flg_governo_usu, flg_admin_usu)
-VALUES('admin', 'admin@gmail.com', '22222222222','pbkdf2:sha256:260000$JQwgcuStn5qtjS3f$953618c6e160f2efa171d1467897752561cd3d6c294aac521d046c195e8e47de', NULL, true);
-
-INSERT INTO cad.tb_usuario_usu
-(txt_nome_usu, txt_email_usu, txt_cpf_usu, txt_password_usu, flg_governo_usu, flg_admin_usu)
-VALUES('Governo', 'governo@gmail.com', '33333333333','pbkdf2:sha256:260000$vBlSzVoaRjC9MwlR$30b687a8d23140c53ecc80aa6523c3abff23eb45652daa5b369918a5368fefa8', true, true);
-
 
 INSERT INTO cad.tb_categoria_cat(txt_categoria_cat, dat_inicio_cat, dat_fim_cat)VALUES('Acidente', now(), null);
 INSERT INTO cad.tb_categoria_cat(txt_categoria_cat, dat_inicio_cat, dat_fim_cat)VALUES('Assalto', now(), null);

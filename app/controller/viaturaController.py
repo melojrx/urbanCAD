@@ -14,8 +14,8 @@ class viaturaController:
     ROWS_PER_PAGE = 5
 
     @viatura_bp.route('/listarViaturas', methods=['GET'])
-    @login_required
-    def listar():
+    # @login_required
+    def listarViaturas():
         try:
             page = request.args.get('page', 1, type=int)
             
@@ -26,7 +26,7 @@ class viaturaController:
 
         return render_template('viatura/listarViatura.html', listViatura=listViatura)
 
-    @viatura_bp.route('/cadastrarViatura', methods=['GET'])
+    @viatura_bp.route('/prepareCadastrar', methods=['GET'])
     @login_required
     def prepareCadastrar():
         form = ViaturaForm(request.form)
@@ -40,7 +40,7 @@ class viaturaController:
         return render_template('viatura/cadastrarViatura.html', form=form)
 
 
-    @viatura_bp.route('/viatura' , methods=['POST'])
+    @viatura_bp.route('/cadastrar' , methods=['POST'])
     @login_required
     def cadastrar():
 

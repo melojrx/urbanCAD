@@ -47,7 +47,7 @@
 
             <!-- Pagination Links-->
             <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-                <a href="{{ url_for('viatura.listar', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
+                <a href="{{ url_for('viatura.listarViaturas', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
                     {% if listViatura.page == 1 %}disabled{% endif %}">
                     &laquo;
                 </a><!-- Loop through the number of pages to display a link for each-->
@@ -56,18 +56,18 @@
                 %}{% if page_num %}
                 <!-- Check for the active page and set the link to "Active"-->
                 {% if listViatura.page == page_num %}
-                <a href="{{ url_for('viatura.listar', page=page_num) }}" class="btn btn-primary">
+                <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-primary">
                     {{ page_num }}
                 </a>
                 {% else %}
-                <a href="{{ url_for('viatura.listar', page=page_num) }}" class="btn btn-outline-primary">
+                <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-outline-primary">
                     {{ page_num }}
                 </a>
                 {% endif %}
                 {% else %}
                 ...
                 {% endif %}
-                {% endfor %} <a href="{{ url_for('viatura.listar', page=listViatura.next_num) }}" class="btn btn-outline-primary 
+                {% endfor %} <a href="{{ url_for('viatura.listarViaturas', page=listViatura.next_num) }}" class="btn btn-outline-primary 
                     {% if listViatura.page == listViatura.pages %}disabled{% endif %}">
                     &raquo;
                 </a>

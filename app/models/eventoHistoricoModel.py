@@ -1,3 +1,4 @@
+from app.models.userModel import User
 from ..database import db
 from ..models import statusEventoModel, eventoModel
 
@@ -9,7 +10,7 @@ class EventoHistorico(db.Model):
     id = db.Column('id_evento_historico_ehi', db.Integer, autoincrement=True, primary_key=True)
     idEvento = db.Column('id_evento_ehi',db.Integer, db.ForeignKey('cad.tb_evento_eve.id_evento_eve'), nullable=False)
     idStatusEvento = db.Column('id_status_evento_ehi', db.Integer, db.ForeignKey('cad.tb_status_evento_sev.id_status_evento_sev'), nullable=False)
-    idUsuario = db.Column('id_usuario_ehi', db.Integer, db.ForeignKey('cad.tb_usuario_usu.id_usuario_usu'), nullable=False)
+    idUsuario = db.Column('id_usuario_uve', db.Integer, db.ForeignKey(User.id), nullable=False)
     dataInicio = db.Column('dat_inicio_ehi', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_ehi', db.DateTime, nullable=True)
 

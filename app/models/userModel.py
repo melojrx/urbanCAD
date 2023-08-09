@@ -5,20 +5,17 @@ from flask_login import UserMixin
 
 
 @login_manager.user_loader
-def get_user(user_id):
+def load_user(user_id):
     return User.query.filter_by(id=user_id).first()
 
 class User(db.Model, UserMixin):
     __tablename__ = 'tb_usuario_usu'
-    __table_args__ = {"schema":"cad"}
+    __table_args__ = {"schema":"comum"}
     
     id = db.Column('id_usuario_usu', db.Integer, autoincrement=True, primary_key=True)
     name = db.Column('txt_nome_usu', db.String(200), nullable=False)
     email = db.Column('txt_email_usu', db.String(200), nullable=False, unique=True)
     cpf = db.Column('txt_cpf_usu', db.String(11), nullable=False, unique=True)
-    password = db.Column('txt_password_usu', db.String(128), nullable=False)
-    flgGoverno = db.Column('flg_governo_usu', db.Boolean)
-    flgAdmin = db.Column('flg_admin_usu', db.Boolean)
 
     def __init__(self, name, email, cpf, password):
         self.name = name
