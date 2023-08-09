@@ -26,6 +26,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('viatura.listarViaturas')}}">Viaturas</a>
           </li>           
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('maleta.listarDeteccao')}}">Detecções</a>
+          </li>             
           {% if session["userAdmin"] or session["userGoverno"] %}
           <li class="nav-item" id="novaocorrenciaadmmenu">
             <a class="nav-link" href="{{url_for('evento.iniciar')}}">Cadastrar Ocorrência</a>
