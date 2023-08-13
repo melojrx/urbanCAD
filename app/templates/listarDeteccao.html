@@ -2,84 +2,75 @@
 {% block conteudo %}
 
 <div class="container-fluid">
-    <div class="row">
-        <aside class="col-md-3 col-lg-3 col-sm-12 col-xs-12 bg-info bg-gradient shadow" id="painel-lateral">
-            <section class="main-identificacao ">
-                {% if current_user.is_authenticated %}
-                <div class="container box-identificacao">
-                    <i class="bi bi-person-circle "></i>
-                    <span class="text-uppercase">{{ current_user.name }}</span>
-                </div>
-                {% endif %}
-            </section>
-        </aside>
-        <main class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
 
-            <!-- Lista Viaturas -->
-            {% for row in listDeteccao.items %}
-            <div class="container painel-direito">
-                <div class="row m-1">
-                    <div class="col m-1 align-items-center">
-                        {{row.code}}</span>
-                    </div>               
-                </div>
-                <div class="row m-1">
-                    <div class="col m-1 align-items-center">
-                        {{row.gps_data_lat}}</span>
-                    </div>               
-                </div>
-                <div class="row m-1">
-                    <div class="col m-1 align-items-center">
-                        {{row.gps_data_long}}</span>
-                    </div>               
-                </div>
-                <div class="row m-1">
-                    <div class="col m-1 align-items-center">
-                        {{row.gps_data_timestamp}}</span>
-                    </div>               
-                </div>
-                <div class="row m-1">
-                    <div class="col m-1 align-items-center">
-                        {{row.plate}}</span>
-                    </div>               
-                </div>    
-            </div>
-            {%endfor%}
+    <div class="container border mt-2 rounded p-4 mb-2">
 
-            <!-- Pagination Links-->
-            <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-                <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.prev_num) }}" class="btn btn-outline-primary 
-                    {% if listDeteccao.page == 1 %}disabled{% endif %}">
-                    &laquo;
-                </a><!-- Loop through the number of pages to display a link for each-->
-                {% for page_num in listDeteccao.iter_pages(left_edge=1, right_edge=1, left_current=1,
-                right_current=2)
-                %}{% if page_num %}
-                <!-- Check for the active page and set the link to "Active"-->
-                {% if listDeteccao.page == page_num %}
-                <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-primary">
-                    {{ page_num }}
-                </a>
-                {% else %}
-                <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-outline-primary">
-                    {{ page_num }}
-                </a>
-                {% endif %}
-                {% else %}
-                ...
-                {% endif %}
-                {% endfor %} <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.next_num) }}" class="btn btn-outline-primary 
-                    {% if listDeteccao.page == listDeteccao.pages %}disabled{% endif %}">
-                    &raquo;
-                </a>
-            </div>
-            <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-                Página {{ listDeteccao.page }} de {{ listDeteccao.pages }}
-            </p>
-            <!-- End Pagination Links-->
-
-        </main>
+        <div class="container p-0 mb-1 mt-1">
+          <h6 class="titulo-filtra-demandas"> <strong><i class="bi bi-pin-map-fill"></i>&nbsp;&nbsp; Listagem de Detecções
+            </strong></h6>
+          <hr class="mt-1">
+        </div>
+   
+    {% if listDeteccao.items %}
+    <div class="table-responsive">
+        <table class="table border table-striped table-hover table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Latitude</th>
+                    <th scope="col">Longitude</th>
+                    <th scope="col">Timestamp</th>
+                    <th scope="col">Placa</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in listDeteccao.items %}
+                <tr>
+                    <td>{{ row.code }}</td>
+                    <td>{{ row.gps_data_lat }}</td>
+                    <td>{{ row.gps_data_long }}</td>
+                    <td>{{ row.gps_data_timestamp }}</td>
+                    <td>{{ row.plate }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    
+    <!-- Pagination Links-->
+    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+        <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.prev_num) }}" class="btn btn-outline-primary 
+            {% if listDeteccao.page == 1 %}disabled{% endif %}">
+            &laquo;
+        </a><!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in listDeteccao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if listDeteccao.page == page_num %}
+        <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-primary">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-outline-primary">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %} <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.next_num) }}" class="btn btn-outline-primary 
+            {% if listDeteccao.page == listDeteccao.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
+    </div>
+    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+        Página {{ listDeteccao.page }} de {{ listDeteccao.pages }}
+    </p>
+    <!-- End Pagination Links-->
+    {% else %}
+    <p class="text-center">Nenhum registro encontrado.</p>
+    {% endif %}
+    
 </div>
 
 {% endblock conteudo %}

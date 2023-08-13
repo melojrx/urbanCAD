@@ -29,7 +29,7 @@ class ViaturaForm(Form):
         ])        
 
     instituicao = SelectField(
-        'Inistituição',
+        'Instituição',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
