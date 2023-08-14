@@ -1,6 +1,6 @@
+from app.models.ocorrenciaObservacaoModel import OcorrenciaObservacao
 from app.models.statusOcorrenciaModel import StatusOcorrencia
 from app.models.ocorrenciaModel import Ocorrencia
-from app.models.ocorrenciaObservacaoModel import OcorrenciaObservacao
 from app.models.statusOcorrenciaModel import StatusOcorrencia
 from app.models.userModel import User
 from ..database import db
@@ -10,7 +10,7 @@ class OcorrenciaHistorico(db.Model):
     __tablename__ = 'tb_ocorrencia_historico_ohi'
     __table_args__ = {"schema":"cad"}
     
-    id = db.Column('id_evento_historico_ehi', db.Integer, autoincrement=True, primary_key=True)
+    id = db.Column('id_ocorrencia_historico_ohi', db.Integer, autoincrement=True, primary_key=True)
     idOcorrencia= db.Column('id_ocorrencia_ohi',db.Integer, db.ForeignKey(Ocorrencia.id), nullable=False)
     idStatusOcorrencia = db.Column('id_status_ocorrencia_ohi', db.Integer, db.ForeignKey(StatusOcorrencia.id), nullable=False)
     idUsuario = db.Column('id_usuario_ohi', db.Integer, db.ForeignKey(User.id), nullable=False)

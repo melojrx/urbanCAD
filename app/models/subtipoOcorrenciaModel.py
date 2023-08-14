@@ -1,3 +1,4 @@
+from app.models.tipoOcorrenciaModel import TipoOcorrencia
 from ..database import db
 
 class SubtipoOcorrencia(db.Model):
@@ -5,9 +6,9 @@ class SubtipoOcorrencia(db.Model):
     __table_args__ = {"schema":"cad"}
     
     id = db.Column('id_subtipo_ocorrencia_soc', db.Integer, autoincrement=True, primary_key=True)
-    idTipoOcorrencia = db.Column('id_tipo_ocorrencia_soc',db.Integer, db.ForeignKey('cad.tb_categoria_cat.id_categoria_cat'), nullable=False)
+    idTipoOcorrencia = db.Column('id_tipo_ocorrencia_soc',db.Integer, db.ForeignKey('cad.tb_tipo_ocorrencia_toc.id_tipo_ocorrencia_toc'), nullable=False)
     txtSubtipoOcorrencia = db.Column('txt_subtipo_ocorrencia_soc', db.String(50), nullable=False)
     dataInicio = db.Column('dat_inicio_soc', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_soc', db.DateTime, nullable=True)
 
-    tipoCororrencia = db.relationship("TipoCorrencia")
+    tipoCororrencia = db.relationship(TipoOcorrencia)
