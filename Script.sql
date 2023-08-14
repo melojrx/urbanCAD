@@ -111,7 +111,6 @@ CREATE TABLE cad.tb_ocorrencia_oco (
   txt_endereco_oco varchar(1000) NOT NULL,
   txt_latitude_oco varchar(20) NOT NULL,
   txt_longitude_oco varchar(20) NOT NULL,
-  img_file_oco bytea NOT NULL,
 	dat_inicio_oco timestamp without time zone NOT null default now(),
 	dat_fim_oco timestamp without time zone default null,
 	CONSTRAINT ocorrencia_pkey PRIMARY KEY (id_ocorrencia_oco)

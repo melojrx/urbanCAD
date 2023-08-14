@@ -1,4 +1,4 @@
-<a href="{{url_for('viatura.listarViaturas')}}"><div class="urban-gov-menu-gov mt-3">
+<a href="{{url_for('ocorrencia.iniciar')}}"><div class="urban-gov-menu-gov mt-3">
   <i class="bi bi-house-fill"></i>
   <span class="titulo-menu-gov">Inicio</span>
 </div> </a>  
@@ -9,21 +9,29 @@
   <i class="bi bi-geo-alt-fill"></i>
   <a href="#"><span class="titulo-menu-gov">Monitoramento</span></a>
 </div>
+{% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-file-earmark-diff-fill"></i>
+    <a href="{{url_for('ocorrencia.listarOcorrencia')}}"><span class="titulo-menu-gov">Ocorrências</span></a>
+  </div>
+{% endif %}
 <div class="urban-gov-menu-gov">
   <i class="bi bi-file-earmark-diff-fill"></i>
-  <a href="#"><span class="titulo-menu-gov">Ocorrências</span></a>
+  <a href="{{url_for('ocorrencia.minhasOcorrencias')}}"><span class="titulo-menu-gov">Minhas Ocorrências</span></a>
 </div>
-<div class="menu-categorias">
-  <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
-</div>  
-<div class="urban-gov-menu-gov">
-  <i class="bi bi-car-front-fill"></i>
-  <a href="{{url_for('viatura.listarViaturas')}}"><span class="titulo-menu-gov">Viaturas</span></a>
-</div>
-<div class="urban-gov-menu-gov">
-  <i class="bi bi-pin-map-fill"></i>
-  <a href="{{ url_for('maleta.listarDeteccao') }}"><span class="titulo-menu-gov">Detecções</span></a>
-</div>
+{% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
+  <div class="menu-categorias">
+    <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
+  </div>  
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-car-front-fill"></i>
+    <a href="{{url_for('viatura.listarViaturas')}}"><span class="titulo-menu-gov">Viaturas</span></a>
+  </div>
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-pin-map-fill"></i>
+    <a href="{{ url_for('maleta.listarDeteccao') }}"><span class="titulo-menu-gov">Detecções</span></a>
+  </div>
+{% endif %}
   
 <div class="footer-sidebar mt-auto">
     <footer class="container-fluid text-center border-top ">

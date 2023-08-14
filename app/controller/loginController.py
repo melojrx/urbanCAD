@@ -65,7 +65,7 @@ class loginController:
             user = User.query.filter_by(email=form.email.data).first()
             session["roles"] = 'URBANCAD_GOVERNO'
             login_user(user)
-            return redirect(url_for('viatura.listarViaturas')) 
+            return redirect(url_for('ocorrencia.iniciar')) 
         else:
              return render_template('login.html', form=form)
         # ------------------------------------------------

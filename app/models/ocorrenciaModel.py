@@ -14,7 +14,6 @@ class Ocorrencia(db.Model):
     txtEndereco = db.Column('txt_endereco_oco', db.String(500), nullable=False)
     txtLat = db.Column('txt_latitude_oco', db.String(20), nullable=False)
     txtLong = db.Column('txt_longitude_oco', db.String(20), nullable=False)
-    file = db.Column('img_file_oco', db.LargeBinary, nullable=False)
     dataInicio = db.Column('dat_inicio_oco', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_oco', db.DateTime, nullable=True)
     fileBase64 = None
@@ -29,7 +28,7 @@ class Ocorrencia(db.Model):
     #     primaryjoin="and_(Evento.id==EventoHistorico.idEvento, "
     #                 "EventoHistorico.dataFim == None)")
 
-    def __init__(self, idSubtipoOcorrenia, idUsuario, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, file, dataInicio):
+    def __init__(self, idSubtipoOcorrenia, idUsuario, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, dataInicio):
         self.idSubtipoOcorrenia = idSubtipoOcorrenia
         self.idUsuario = idUsuario
         self.numOcorrencia = numOcorrencia
@@ -37,5 +36,4 @@ class Ocorrencia(db.Model):
         self.txtEndereco = txtEndereco
         self.txtLat = txtLat
         self.txtLong = txtLong
-        self.file = file
         self.dataInicio = dataInicio

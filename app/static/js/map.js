@@ -44,12 +44,12 @@ async function simpleReverseGeocoding(e) {
 
   async function simpleGeocoding() {
     const adress = document.getElementById('endereco').value;
- 
+   
     const url = 'https://nominatim.openstreetmap.org/search.php?q='+adress+'&dedupe=0&format=jsonv2'
  
     fetch(url,  
       {
-        method: 'POST',      
+        method: 'GET',      
         credentials: 'same-origin',
         headers:{
           'Content-Type': 'application/json'

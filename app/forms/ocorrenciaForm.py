@@ -3,7 +3,7 @@ from wtforms.widgets import TextArea
 from wtforms import Form, StringField, SelectField, FileField
 from wtforms.validators import DataRequired, InputRequired, Length
  
-class EventoForm(Form):
+class OcorrenciaForm(Form):
 
     problema = StringField(
         'Qual o problema?',
@@ -30,24 +30,18 @@ class EventoForm(Form):
         'Long:',
         render_kw={'readonly': True})     
 
-    categoria = SelectField(
-        'Categoria',
+    tipoOcorrencia = SelectField(
+        'Tipo de Ocorrência',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
             InputRequired(message=('*Campo Requerido'))
     ])
 
-    subcategoria = SelectField(
-        'Subcategoria',
+    subtipoOcorrencia = SelectField(
+        'Subtipo de Ocorrência',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
-            InputRequired(message=('*Campo Requerido'))
-    ])
-
-    file = FileField(
-        'Insira uma foto:',
-        validators = [
             InputRequired(message=('*Campo Requerido'))
     ])

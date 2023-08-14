@@ -1,0 +1,9 @@
+<div class="form-group">
+    {{form.subtipoOcorrencia.label(class_="form-label")}}
+    {{form.subtipoOcorrencia(class_="form-select")}}
+    {% for error in form.subtipoOcorrencia.errors %}
+        <div class="important">
+            {{error}}
+        </div>
+    {% endfor %}  
+</div>
