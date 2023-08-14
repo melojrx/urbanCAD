@@ -1,13 +1,32 @@
-  <div class="urban-gov-menu-gov">
-    <i class="bi bi-search"></i>
-    <a href="{{url_for('viatura.listarViaturas')}}"><span class="titulo-menu-gov">Viaturas</span></a>
-  </div>
-  <div class="urban-gov-menu-gov">
-    <i class="bi bi-search"></i>
-    <a href="{{url_for('maleta.listarlistarDeteccao')}}"><span class="titulo-menu-gov">Detecções</span></a>
-  </div>  
-   <div class="footer_painel_esquerdo">
-    <p class="titulo_footer_painel_esquedo">
-      Política de Privacidade </p>
-    <p class="Tiger_Dev2022"> © Tiger_Dev 2022 </p>
+<a href="{{url_for('viatura.listarViaturas')}}"><div class="urban-gov-menu-gov mt-3">
+  <i class="bi bi-house-fill"></i>
+  <span class="titulo-menu-gov">Inicio</span>
+</div> </a>  
+<div class="menu-categorias">
+  <span class="categorias-menu-gov">ATENDIMENTO</span>
+</div>  
+<div class="urban-gov-menu-gov">
+  <i class="bi bi-geo-alt-fill"></i>
+  <a href="#"><span class="titulo-menu-gov">Monitoramento</span></a>
+</div>
+<div class="urban-gov-menu-gov">
+  <i class="bi bi-file-earmark-diff-fill"></i>
+  <a href="#"><span class="titulo-menu-gov">Ocorrências</span></a>
+</div>
+<div class="menu-categorias">
+  <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
+</div>  
+<div class="urban-gov-menu-gov">
+  <i class="bi bi-car-front-fill"></i>
+  <a href="{{url_for('viatura.listarViaturas')}}"><span class="titulo-menu-gov">Viaturas</span></a>
+</div>
+<div class="urban-gov-menu-gov">
+  <i class="bi bi-pin-map-fill"></i>
+  <a href="{{ url_for('maleta.listarDeteccao') }}"><span class="titulo-menu-gov">Detecções</span></a>
+</div>
+  
+<div class="footer-sidebar mt-auto">
+    <footer class="container-fluid text-center border-top ">
+      <p class="fw-semibold mt-1">&copy; 2023 Todos os direitos reservados.</p>
+    </footer>
   </div>

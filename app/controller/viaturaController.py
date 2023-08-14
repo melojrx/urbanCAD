@@ -51,4 +51,4 @@ class viaturaController:
         db.session.add(viatura)
         db.session.commit()
         flash('Viatura cadastrada com sucesso', 'sucess')
-        return redirect(url_for('viatura.listar'))        
+        return redirect(url_for('viatura.listarViaturas'))        

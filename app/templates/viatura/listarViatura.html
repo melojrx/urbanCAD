@@ -1,84 +1,82 @@
 {% extends 'base.html' %}
 {% block conteudo %}
-
 <div class="container-fluid">
-    <div class="row">
-        <aside class="col-md-3 col-lg-3 col-sm-12 col-xs-12 bg-info bg-gradient shadow" id="painel-lateral">
-            <section class="main-identificacao ">
-                {% if current_user.is_authenticated %}
-                <div class="container box-identificacao">
-                    <i class="bi bi-person-circle "></i>
-                    <span class="text-uppercase">{{ current_user.name }}</span>
-                </div>
-                {% endif %}
-            </section>
-        </aside>
-        <main class="col-md-9 col-lg-9 col-sm-12 col-xs-12">
-            <!-- Botão Cadastrar Viatura -->
-            <div class="col-6 m-1">
-                <button type="button" class="btn btn-primary bg-primary"
-                        onclick="window.location.href='{{url_for('viatura.prepareCadastrar')}}';">Cadastrar
-                </button>
-            </div>
 
-            <!-- Lista Viaturas -->
-            {% for viatura in listViatura.items %}
-            <div class="container painel-direito">
-                <div class="row m-1">
-                    <div class="col m-1 align-items-center">
-                        {{viatura.txtCodigo}}</span>
-                    </div>
-                    <div class="col m-1 align-items-center">
-                        {{viatura.txtplaca}}</span>
-                    </div>
-                    <div class="col m-1 justify-content-md-end">
-                        {{viatura.txtDescricao}}
-                    </div>
-                    <div class="col m-1 align-items-center">
-                        {{viatura.instituicao.txtInstituicao}}</span>
-                    </div>
-                    <div class="col m-1 align-items-center">
-                        {{viatura.tipoPatrulha.txtTipoPatrulha}}</span>
-                    </div>                    
-
-                </div>
-            </div>
-            {%endfor%}
-
-            <!-- Pagination Links-->
-            <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-                <a href="{{ url_for('viatura.listarViaturas', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
-                    {% if listViatura.page == 1 %}disabled{% endif %}">
-                    &laquo;
-                </a><!-- Loop through the number of pages to display a link for each-->
-                {% for page_num in listViatura.iter_pages(left_edge=1, right_edge=1, left_current=1,
-                right_current=2)
-                %}{% if page_num %}
-                <!-- Check for the active page and set the link to "Active"-->
-                {% if listViatura.page == page_num %}
-                <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-primary">
-                    {{ page_num }}
-                </a>
-                {% else %}
-                <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-outline-primary">
-                    {{ page_num }}
-                </a>
-                {% endif %}
-                {% else %}
-                ...
-                {% endif %}
-                {% endfor %} <a href="{{ url_for('viatura.listarViaturas', page=listViatura.next_num) }}" class="btn btn-outline-primary 
-                    {% if listViatura.page == listViatura.pages %}disabled{% endif %}">
-                    &raquo;
-                </a>
-            </div>
-            <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-                Página {{ listViatura.page }} de {{ listViatura.pages }}
-            </p>
-            <!-- End Pagination Links-->
-
-        </main>
+  <div class="container border mt-2 rounded p-4 mb-2">
+      <div class="row d-flex">
+        <div class="col m-0">
+          <h6 class="titulo-filtra-demandas m-0"><strong><i class="bi bi-list-ul"></i>&nbsp;&nbsp; Listagem de Viaturas</strong></h6>
+        </div>
+        <!-- Botão Cadastrar Viatura -->
+        <div class="col d-flex justify-content-md-end p-1 mt-1">
+          <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('viatura.prepareCadastrar') }}';">Nova Viatura</button>
+        </div>
+      </div>
+    
+      <hr class="mt-1" />
+    <!-- Lista Viaturas -->
+      <div class="table-resposive">
+        <table class="table border table-striped table-hover table-borderless">
+          {% if listSolicitacaoHistorico != None %}
+            <thead>
+              <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Placa</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Instituição</th>
+                <th scope="col">Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for viatura in listViatura.items %}
+                <tr>
+                  <td>{{ viatura.txtCodigo }}</td>
+                  <td>{{ viatura.txtplaca }}</td>
+                  <td>{{ viatura.txtDescricao }}</td>
+                  <td>{{ viatura.instituicao.txtInstituicao }}</td>
+                  <td>{{ viatura.tipoPatrulha.txtTipoPatrulha }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          {% else %}
+            <tr>
+              <td>Nenhuma solicitação cadastrada</td>
+            </tr>
+          {% endif %}
+        </table>
+      </div>
+      
+      <!-- Pagination Links-->
+      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+        <a href="{{ url_for('viatura.listarViaturas', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
+            {% if listViatura.page == 1 %}disabled{% endif %}">
+            &laquo;
+        </a><!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in listViatura.iter_pages(left_edge=1, right_edge=1, left_current=1,
+        right_current=2)
+        %}{% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if listViatura.page == page_num %}
+        <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-primary">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-outline-primary">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %} <a href="{{ url_for('viatura.listarViaturas', page=listViatura.next_num) }}" class="btn btn-outline-primary 
+            {% if listViatura.page == listViatura.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
     </div>
+    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+        Página {{ listViatura.page }} de {{ listViatura.pages }}
+    </p>
+  <!-- End Pagination Links-->
+  </div>
 </div>
-
-{% endblock conteudo %}
+{% endblock %}

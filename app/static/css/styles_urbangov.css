@@ -47,56 +47,6 @@
   font-size: 0.9em;
 }
 
-.urban-gov-menu-gov,
-.titulo-menu-gov {
-  color: black;
-  font-weight: bold; 
-}
-
-.urban-gov-menu-gov {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-left: 20px;
-  cursor: pointer;
-}
-
-.titulo-menu-gov {
-  font-size: 1em;
-}
-
-.bi-file-text, 
-.bi-search, 
-.bi-bar-chart-line, 
-.bi-file-earmark-plus
- {
-  font-size: 2.5em;
-  padding-right: 8px;
-}
-
-.ident-cargo {
-  padding-right: 10px;
-}
-
-#div-iden-cargo {
- display: flex;
- justify-content: center;
-}
-
-.footer_painel_esquerdo {
-  display: flex;
-  flex-direction: column;
-  align-self: flex-end;
-  align-items: center;
-  font-style: normal;
-  font-size: 14px;
-  font-weight: bolder;
-  margin-bottom: 5px;
-  margin-left: auto;
-  margin-right: auto;
-  
-  }
-
    /* Seção Principal - Mapa */
 
 .main-gov {
@@ -161,37 +111,7 @@
   padding-right: 1px;
 }
   
-  /* Barra Lateral direita */
-.painel_direito_gov {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* width: 30%; */
-  /* background-image: url('../img/barra_lateral.png'); */
-  background-repeat: no-repeat;
-  height: auto;
-  background-size: cover; 
-}
-
-.container_lista_ultimas_demandas {
-  border: 1px solid #3333;
-  margin: 5px auto;
-  
-}
-.data_hora_lista_gov {
-  font-size: 14px;
-}
-
-.titulo_lista_demandas {
-    padding-top: 10px;
-    
-}
-
-.usuario-logado-lista {
-  font-size: small;
-  font-weight: 500;
-}
+/* Respossividade */
 
 @media screen and (max-width:990px) {
   .painel_esquerdo_gov,

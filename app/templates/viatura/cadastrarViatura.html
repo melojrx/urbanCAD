@@ -2,68 +2,73 @@
 {% block conteudo %}
 
 <div class="container-fluid">
-    <div class="row">
-        <main class="col-md-12 col-lg-9 col-sm-12 col-xs-12">
-            <form method="POST" enctype='multipart/form-data' action="{{ url_for('viatura.cadastrar') }}">
-                <div class="container ">
-                    <h5>PUBLIQUE SUA DEMANDA</h5>
-                    {{form.codigo.label(class_="form-label")}}
-                    {{form.codigo(class_="form-control")}}
-                    {% for error in form.codigo.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div>
-                    {% endfor %}
-                    
-                    <br>
 
-                    {{form.placa.label(class_="form-label")}}
-                    {{form.placa(class_="form-control")}}
-                    {% for error in form.placa.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div> 
-                    {% endfor %}
-
-                    <br>
-
-                    {{form.descricao.label(class_="form-label")}}
-                    {{form.descricao(class_="form-control")}}
-                    {% for error in form.descricao.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div> 
-                    {% endfor %}
-
-                    <br>
-
-                    {{form.instituicao.label(class_="form-label")}}
-                    {{form.instituicao(class_="form-select")}}
-                    {% for error in form.instituicao.errors %}
+    <div class="container border mt-2 rounded p-4 mb-2">
+        <form method="POST" enctype='multipart/form-data' action="{{ url_for('viatura.cadastrar') }}">
+        <div class="row d-flex">
+            <div class="col m-0">
+                <h6 class="titulo-filtra-demandas m-0"><strong><i class="bi bi-car-front-fill"></i>&nbsp;&nbsp; Cadastro de Viaturas</strong></h6>
+            </div>
+            <div class="col d-flex justify-content-md-end p-1 mt-1">
+                <button type="submit" class="btn btn-primary bg-primary">Salvar</button>
+            </div>
+        </div>      
+        <hr class="mt-1" />
+        <div class="form-group mb-3 row justify-content-between">
+            <div class="col">
+                {{form.codigo.label(class_="form-label")}}
+                {{form.codigo(class_="form-control")}}
+                {% for error in form.codigo.errors %}
                     <div class="important">
                         {{error}}
                     </div>
-                    {% endfor %}
-
-                    <br>
-
-                    {{form.tipoPatrulha.label(class_="form-label")}}
-                    {{form.tipoPatrulha(class_="form-select")}}
-                    {% for error in form.tipoPatrulha.errors %}
+                {% endfor %}
+            </div>
+            <div class="col">        
+                {{form.placa.label(class_="form-label")}}
+                {{form.placa(class_="form-control")}}
+                {% for error in form.placa.errors %}
                     <div class="important">
                         {{error}}
-                    </div>
-                    {% endfor %}
-
+                    </div> 
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group mb-3 row justify-content-between">
+            <div class="col">
+                {{form.tipoPatrulha.label(class_="form-label")}}
+                {{form.tipoPatrulha(class_="form-select")}}
+                {% for error in form.tipoPatrulha.errors %}
+                <div class="important">
+                    {{error}}
                 </div>
-
-
-                <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end">
-                    <button type="submit" class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i>Salvar</button>
+                {% endfor %}    
+            </div>
+            <div class="col">        
+                {{form.instituicao.label(class_="form-label")}}
+                {{form.instituicao(class_="form-select")}}
+                {% for error in form.instituicao.errors %}
+                <div class="important">
+                    {{error}}
                 </div>
-            </form>
-        </main>
+                {% endfor %}
+            </div>    
+        </div>
+        <div class="form-group mb-3">
+            {{form.descricao.label(class_="form-label")}}
+            {{form.descricao(class_="form-control")}}
+            {% for error in form.descricao.errors %}
+                <div class="important">
+                    {{error}}
+                </div> 
+            {% endfor %} 
+        </div>
+        </form>
+        <div class="mt-3 text-end justify-content-end">
+            <button class="btn btn-danger ms-2" type="button"
+            onclick="window.location.href='{{url_for('viatura.listarViaturas')}}';">Voltar</button>
+        </div> 
+        </div>
     </div>
 </div>
-
 {% endblock conteudo %}
