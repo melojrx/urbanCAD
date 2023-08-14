@@ -14,7 +14,7 @@ class viaturaController:
     ROWS_PER_PAGE = 5
 
     @viatura_bp.route('/listarViaturas', methods=['GET'])
-    # @login_required
+    @login_required
     def listarViaturas():
         try:
             page = request.args.get('page', 1, type=int)
