@@ -8,12 +8,14 @@ class OcorrenciaSearchForm(Form):
     )
     
     dataInicioSearch = DateField(
-        'Início', format='%d/%m/%Y', 
+        'Início', 
+        format='%d/%m/%Y',
         render_kw={"placeholder": "dd/mm/aa"}
     )
 
     dataFimSearch = DateField(
-        'Fim', format='%d/%m/%Y', 
+        'Fim', 
+        format='%d/%m/%Y',
         render_kw={"placeholder": "dd/mm/aa"}
     )
     
