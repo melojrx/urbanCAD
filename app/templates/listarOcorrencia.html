@@ -3,6 +3,40 @@
 
 <div class="container-fluid">
 
+    <div class="col-md-9 col-lg-9 container-fluid">
+
+        <div class="container p-0 mb-1 mt-4">
+          <h5 class="titulo-filtra-demandas"> <strong> <i class="bi bi-search"></i> Consultas </strong></h5>
+          <hr class="mt-1">
+        </div>
+  
+      <form action="{{url_for('ocorrencia.listarOcorrencia')}}" method="GET">
+        <div class="container main-filtra-eventos">
+            <div class="col-3 m-1">
+                {{form.numOcorrenciaSearch.label(class_="form-label m-1")}}
+                {{ form.numOcorrenciaSearch(class="form-control form-control-sm m-1") }}
+            </div>
+        </div>
+
+        <div class="col-3 m-1">
+            {{form.dataInicioSearch.label(class_="form-label m-1")}}
+            {{ form.dataInicioSearch(class="form-control form-control-sm m-1") }}
+        </div>
+
+        <div class="col-3 m-1">
+            {{form.dataFimSearch.label(class_="form-label m-1")}}
+            {{ form.dataFimSearch(class="form-control form-control-sm m-1") }}
+        </div>
+
+        <div class="col-3 div-button-filtrar-eventos">
+            {{ form.submit(class_="btn btn-primary") }}
+            <button type="button" class="btn btn-outline-danger btn-sm m-1"
+                 onclick="window.location.href='{{url_for('ocorrencia.listarOcorrencia')}}';">Limpar
+            </button>
+        </div>        
+    </form>
+        
+
     <div class="container border mt-2 rounded p-4 mb-2">
 
         <div class="row d-flex">

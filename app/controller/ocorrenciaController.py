@@ -1,5 +1,7 @@
 import datetime
 import geocoder
+
+from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
 from ..database import db
 from app.models.ocorrenciaModel import Ocorrencia
 from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
@@ -36,9 +38,36 @@ class ocorrenciaController():
     @ocorrencia_bp.route('/listarOcorrencia', methods=['GET'])
     @login_required
     def listarOcorrencia():
+
+        form = OcorrenciaSearchForm(request.form)
+        numOcorrenciaSearch = request.args.get('numOcorrenciaSearch')
+        form.numOcorrenciaSearch.data = numOcorrenciaSearch
+        dataInicioSearch = request.args.get('dataInicioSearch')
+        form.dataInicioSearch.data = dataInicioSearch
+        dataFimSearch = request.args.get('dataFimSearch')
+        form.dataFimSearch.data = dataFimSearch
+
         page = request.args.get('page', 1, type=int)
-        listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
-        return render_template('listarOcorrencia.html', listOcorrenciaHistorico=listOcorrenciaHistorico)
+
+        if (numOcorrenciaSearch != "" and numOcorrenciaSearch != None) or (dataInicioSearch != "" and dataInicioSearch != None) or (dataFimSearch != "" and dataFimSearch !=None):          
+
+            querySearch = OcorrenciaHistorico.query.filter(OcorrenciaHistorico.dataFim.is_(None))
+
+            if numOcorrenciaSearch != "" and numOcorrenciaSearch != None:
+                querySearch= querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.numOcorrencia == numOcorrenciaSearch)
+
+            if (dataInicioSearch != "" and dataInicioSearch != None ) and (dataFimSearch != "" and dataFimSearch !=None):
+                querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio >= dataInicioSearch).filter(Ocorrencia.dataInicio <= dataFimSearch)
+            elif (dataInicioSearch != "" and dataInicioSearch != None) and (dataFimSearch == "" or dataFimSearch == None):
+                querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio >= dataInicioSearch)
+            elif (dataInicioSearch == "" or dataInicioSearch == None) and (dataFimSearch != "" and dataFimSearch != None):
+                querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio <= dataFimSearch)
+
+            listOcorrenciaHistorico = querySearch.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        else:
+            listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+
+        return render_template('listarOcorrencia.html', listOcorrenciaHistorico=listOcorrenciaHistorico,form=form)
     
     @ocorrencia_bp.route('/minhasOcorrencias', methods=['GET'])
     @login_required
