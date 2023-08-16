@@ -100,9 +100,9 @@ class ocorrenciaController():
         listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idUsuario==current_user.id, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
         return render_template('minhasOcorrencias.html', listOcorrenciaHistorico=listOcorrenciaHistorico)
 
-    @ocorrencia_bp.route('/prepareCadastrar', methods=['GET'])
+    @ocorrencia_bp.route('/prepareCadastrarOcorrencia', methods=['GET'])
     @login_required
-    def prepareCadastrar():
+    def prepareCadastrarOcorrencia():
 
         global listTipoOcorrencia 
 
