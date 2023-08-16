@@ -12,7 +12,7 @@
 {% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
   <div class="urban-gov-menu-gov">
     <i class="bi bi-file-earmark-diff-fill"></i>
-    <a href="{{url_for('ocorrencia.listarOcorrencia')}}"><span class="titulo-menu-gov">Ocorrências</span></a>
+    <a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}"><span class="titulo-menu-gov">Ocorrências</span></a>
   </div>
 {% endif %}
 <div class="urban-gov-menu-gov">

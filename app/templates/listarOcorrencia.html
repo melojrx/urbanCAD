@@ -10,7 +10,7 @@
           <hr class="mt-1">
         </div>
   
-      <form action="{{url_for('ocorrencia.listarOcorrencia')}}" method="GET">
+      <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
         <div class="container main-filtra-eventos">
             <div class="col-3 m-1">
                 {{form.numOcorrenciaSearch.label(class_="form-label m-1")}}
@@ -31,7 +31,7 @@
         <div class="col-3 div-button-filtrar-eventos">
             {{ form.submit(class_="btn btn-primary") }}
             <button type="button" class="btn btn-outline-danger btn-sm m-1"
-                 onclick="window.location.href='{{url_for('ocorrencia.listarOcorrencia')}}';">Limpar
+                 onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Limpar
             </button>
         </div>        
     </form>
@@ -82,7 +82,7 @@
     
     <!-- Pagination Links-->
     <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-        <a href="{{ url_for('ocorrencia.listarOcorrencia', page=listOcorrenciaHistorico.prev_num) }}" class="btn btn-outline-primary 
+        <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}" class="btn btn-outline-primary 
             {% if listOcorrenciaHistorico.page == 1 %}disabled{% endif %}">
             &laquo;
         </a><!-- Loop through the number of pages to display a link for each-->
@@ -90,18 +90,18 @@
         {% if page_num %}
         <!-- Check for the active page and set the link to "Active"-->
         {% if listOcorrenciaHistorico.page == page_num %}
-        <a href="{{ url_for('ocorrencia.listarOcorrencia', page=page_num) }}" class="btn btn-primary">
+        <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="btn btn-primary">
             {{ page_num }}
         </a>
         {% else %}
-        <a href="{{ url_for('ocorrencia.listarOcorrencia', page=page_num) }}" class="btn btn-outline-primary">
+        <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="btn btn-outline-primary">
             {{ page_num }}
         </a>
         {% endif %}
         {% else %}
         ...
         {% endif %}
-        {% endfor %} <a href="{{ url_for('ocorrencia.listarOcorrencia', page=listOcorrenciaHistorico.next_num) }}" class="btn btn-outline-primary 
+        {% endfor %} <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.next_num) }}" class="btn btn-outline-primary 
             {% if listOcorrenciaHistorico.page == listOcorrenciaHistorico.pages %}disabled{% endif %}">
             &raquo;
         </a>

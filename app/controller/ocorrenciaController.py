@@ -27,7 +27,7 @@ class ocorrenciaController():
             # Se o usário tem permissão de governo
             if 'URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]: 
                 # Lista todos os eventos cadastrados
-                return redirect(url_for('ocorrencia.listarOcorrencia'))
+                return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
             else :
                 return redirect(url_for('ocorrencia.minhasOcorrencias'))
 
@@ -35,9 +35,19 @@ class ocorrenciaController():
             flash('Erro: {}'.format(e), 'error')
 
     @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
-    @ocorrencia_bp.route('/listarOcorrencia', methods=['GET'])
+    @ocorrencia_bp.route('/prepareSearchOcorrencia', methods=['GET'])
     @login_required
-    def listarOcorrencia():
+    def prepareSearchOcorrencia():
+        page = request.args.get('page', 1, type=int)
+        form = OcorrenciaSearchForm(request.form)
+        listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        return render_template('listarOcorrencia.html', listOcorrenciaHistorico=listOcorrenciaHistorico, form=form)
+
+
+    @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
+    @ocorrencia_bp.route('/searchOcorrencia', methods=['GET'])
+    @login_required
+    def searchOcorrencia():
 
         form = OcorrenciaSearchForm(request.form)
         numOcorrenciaSearch = request.args.get('numOcorrenciaSearch')
@@ -76,7 +86,7 @@ class ocorrenciaController():
 
                 listOcorrenciaHistorico = querySearch.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
             else:
-                listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+                return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
    
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
