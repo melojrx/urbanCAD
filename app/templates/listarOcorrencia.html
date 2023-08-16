@@ -3,65 +3,61 @@
 
 <div class="container-fluid">
 
-    <div class="col-md-9 col-lg-9 container-fluid">
+    <div class="container-fluid border mt-2 rounded mb-2">
 
-        <div class="container p-0 mb-1 mt-4">
-          <h5 class="titulo-filtra-demandas"> <strong> <i class="bi bi-search"></i> Consultas </strong></h5>
+        <div class="container-fluid p-0 mb-1 mt-2">
+          <h6 class="titulo-filtra-demandas"> <strong> <i class="bi bi-file-earmark-diff-fill" style="font-size: 2rem;"></i> Registros de ocorrências </strong></h6>
           <hr class="mt-1">
         </div>
   
-      <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
-        <div class="container main-filtra-eventos">
+        <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
+        <div class="row">
             <div class="col-3 m-1">
                 {{form.numOcorrenciaSearch.label(class_="form-label m-1")}}
                 {{ form.numOcorrenciaSearch(class="form-control form-control-sm m-1") }}
             </div>
-        </div>
+            <div class="col-3 m-1">
+                {{form.dataInicioSearch.label(class_="form-label m-1")}}
+                {{ form.dataInicioSearch(class="form-control form-control-sm m-1") }}
+            </div>
+            <div class="col-3 m-1">
+                {{form.dataFimSearch.label(class_="form-label m-1")}}
+                {{ form.dataFimSearch(class="form-control form-control-sm m-1") }}
+            </div>
+            <div class="col-3 m-1">
+                {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
+                <button type="button" class="btn btn-outline-danger btn-sm m-1"
+                     onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Limpar
+                </button>
+            </div>     
+        </div>    
+        </form>
+    </div> 
 
-        <div class="col-3 m-1">
-            {{form.dataInicioSearch.label(class_="form-label m-1")}}
-            {{ form.dataInicioSearch(class="form-control form-control-sm m-1") }}
-        </div>
-
-        <div class="col-3 m-1">
-            {{form.dataFimSearch.label(class_="form-label m-1")}}
-            {{ form.dataFimSearch(class="form-control form-control-sm m-1") }}
-        </div>
-
-        <div class="col-3 div-button-filtrar-eventos">
-            {{ form.submit(class_="btn btn-primary") }}
-            <button type="button" class="btn btn-outline-danger btn-sm m-1"
-                 onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Limpar
-            </button>
-        </div>        
-    </form>
-        
-
-    <div class="container border mt-2 rounded p-4 mb-2">
+    <div class="container-fluid border mt-1 rounded p-4 mb-2">
 
         <div class="row d-flex">
             <div class="col m-0">
               <h6 class="titulo-filtra-demandas m-0"><strong><i class="bi bi-list-ul"></i>&nbsp;&nbsp; Listagem de Ocorrências</strong></h6>
             </div>
-            <!-- Botão Cadastrar Viatura -->
+            <!-- Botão Cadastrar Ocorrência -->
             <div class="col d-flex justify-content-md-end p-1 mt-1">
               <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">Nova Ocorrência</button>
             </div>
           </div>        
    
     {% if listOcorrenciaHistorico.items %}
-    <div class="table-responsive">
+    <div class="table-responsive mt-2">
         <table class="table border table-striped table-hover table-borderless">
             <thead>
                 <tr>
                     <th scope="col">Tipo Ocorrência</th>
                     <th scope="col">Subtipo Ocorrência</th>
                     <th scope="col">Nº da Ocorrência</th>
-                    <th scope="col">Latitude</th>
-                    <th scope="col">Longitude</th>
+                  <!--  <th scope="col">Latitude</th>
+                    <th scope="col">Longitude</th> -->
                     <th scope="col">Status</th>
                     <th scope="col">Data</th>
-        
                 </tr>
             </thead>
             <tbody>
@@ -70,8 +66,8 @@
                     <td>{{ row.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}</td>
                     <td>{{ row.ocorrencia.subcategoria.txtSubtipoOcorrencia}}</td>
                     <td>{{ row.ocorrencia.numOcorrencia}}</td>
-                    <td>{{ row.ocorrencia.txtLat}}</td>
-                    <td>{{ row.ocorrencia.txtLong }}</td>
+                    <!--<td>{{ row.ocorrencia.txtLat}}</td>
+                    <td>{{ row.ocorrencia.txtLong }}</td>-->
                     <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
                     <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
                 </tr>
@@ -79,7 +75,6 @@
             </tbody>
         </table>
     </div>
-    
     <!-- Pagination Links-->
     <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
         <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}" class="btn btn-outline-primary 
