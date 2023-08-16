@@ -15,10 +15,10 @@
     <a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}"><span class="titulo-menu-gov">Ocorrências</span></a>
   </div>
 {% endif %}
-<div class="urban-gov-menu-gov">
+<!--<div class="urban-gov-menu-gov">
   <i class="bi bi-file-earmark-diff-fill"></i>
   <a href="{{url_for('ocorrencia.minhasOcorrencias')}}"><span class="titulo-menu-gov">Minhas Ocorrências</span></a>
-</div>
+</div>-->
 {% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
   <div class="menu-categorias">
     <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
