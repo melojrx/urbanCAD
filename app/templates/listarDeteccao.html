@@ -21,6 +21,7 @@
                     <th scope="col">Longitude</th>
                     <th scope="col">Timestamp</th>
                     <th scope="col">Placa</th>
+                    <th scope="col" width="30%"> Imagem</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,13 +31,28 @@
                     <td>{{ row.gps_data_lat }}</td>
                     <td>{{ row.gps_data_long }}</td>
                     <td>{{ row.gps_data_timestamp }}</td>
-                    <td>{{ row.plate }}</td>
+                    <td>{{ row.plate if row.plate else "---" }}</td>
+                    <td>
+                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#enlargedImageModal" data-imgsrc="{{row.fileBase64}}">
+                            <img class="figure-img rounded" src="data:image/jpeg;base64,{{row.fileBase64}}" width="30%">
+                        </button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
     
+    <div class="modal fade" id="enlargedImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <img class="img-fluid" id="enlargedImg" src="" alt="Enlarged Image">
+            </div>
+          </div>
+        </div>
+      </div>         
+
     <!-- Pagination Links-->
     <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
         <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.prev_num) }}" class="btn btn-outline-primary 
@@ -73,4 +89,24 @@
     
 </div>
 
+<script>
+    $('#enlargedImageModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget); // Botão que acionou o modal
+      var imgSrc = button.data('imgsrc'); // Obtém o atributo 'data-imgsrc' do botão
+  
+      imgSrc="data:image/jpeg;base64,"+imgSrc
+
+      var modal = $(this);
+      modal.find('#enlargedImg').attr('src', imgSrc);
+    });
+  
+    $('#enlargedImageModal').on('hidden.bs.modal', function () {
+      var modal = $(this);
+      modal.find('#enlargedImg').attr('src', ''); // Limpa a imagem quando o modal for fechado
+    });
+  </script>
+  
+ 
+
 {% endblock conteudo %}
+  

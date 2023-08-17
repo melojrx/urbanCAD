@@ -12,6 +12,8 @@ class DeteccaoVeicular(db.Model):
     plate = db.Column('plate', db.String(7))
     image = db.Column('image', db.LargeBinary)
 
+    fileBase64 = None
+
     def __init__(self, code, gps_data_lat, gps_data_long, gps_data_timestamp, plate, image):
         self.code = code
         self.gps_data_lat = gps_data_lat

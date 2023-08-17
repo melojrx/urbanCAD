@@ -1,3 +1,4 @@
+from base64 import b64encode
 from flask_login import login_required
 from ..models.deteccaoVeicular import DeteccaoVeicular
 from ..rotas.maletaRout import maleta_bp
@@ -15,6 +16,9 @@ class viaturaController:
             page = request.args.get('page', 1, type=int)
             
             listDeteccao = DeteccaoVeicular.query.order_by(DeteccaoVeicular.gps_data_timestamp.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)    
+
+            for row in listDeteccao.items:
+                row.fileBase64 = b64encode(row.image).decode()
 
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
