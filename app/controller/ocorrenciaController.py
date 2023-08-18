@@ -7,6 +7,7 @@ from app.models.ocorrenciaModel import Ocorrencia
 from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
 from app.models.subtipoOcorrenciaModel import SubtipoOcorrencia
 from app.models.tipoOcorrenciaModel import TipoOcorrencia
+from app.models.interessadoModel import Interessado
 from ..enum import statusOcorrenciaEnum
 from ..rotas.ocorrenciaRout import ocorrencia_bp
 from .roleRequired import roles_required
@@ -121,6 +122,9 @@ class ocorrenciaController():
             txtEndereco = form.endereco.data
             txtLat = form.latitude.data
             txtLong = form.longitude.data
+            txtInteressado = form.txtInteressado.data
+            txtCpf = form.txtCpf.data
+            txtTelefone = form.txtTelefone.data
             dataInicio = datetime.datetime.now()
 
             if not subtipoOcorrencia:
@@ -142,8 +146,10 @@ class ocorrenciaController():
 
             ocorrencia = Ocorrencia(subtipoOcorrencia, current_user.id, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, dataInicio)
             ocorrenciaHistorico = OcorrenciaHistorico(ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.AGUARDANDO_ATENDIMENTO.value, current_user.id, dataInicio)
+            interessado = Interessado(ocorrencia, txtInteressado, txtCpf, txtTelefone)
 
             db.session.add(ocorrenciaHistorico)
+            db.session.add(interessado)
             db.session.commit()
 
             return redirect(url_for('ocorrencia.iniciar'))

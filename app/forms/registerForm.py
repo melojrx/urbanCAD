@@ -1,26 +1,8 @@
-# from xml.dom import ValidationErr
-from validate_docbr import CPF
-from wtforms import BooleanField, Form, PasswordField, StringField, SubmitField, ValidationError
+from ..util.validaCpfUtil import ValidaCpf
+from wtforms import BooleanField, Form, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, Length
 
-class ValidCpf(object):
-    def __init__(self, message=None):
-        if message is None:
-            message = 'Ops. Não nos parece um CPF válido.'
-        self.message = message
-
-    def __call__(self, form, field):
-        cpf = CPF()
-        if not cpf.validate(field.data):
-            raise ValidationError(self.message)
-
-
 class RegisterForm(Form):
-
-    # def validaCpf(self, field):
-    #     cpf = CPF()
-    #     if not cpf.validate(field.data): 
-    #         raise ValidationErr('Ops. Não nos parece um CPF válido.')
 
     name = StringField(
     'Informe seu Nome',
@@ -40,7 +22,7 @@ class RegisterForm(Form):
     validators = [
         DataRequired(message='*Campo Requerido'),
         Length(max=11, min=11, message='O CPF deve ter conter exatamente 11 caracteres'),
-        ValidCpf()
+        ValidaCpf()
     ])
 
     password = PasswordField('Password', 

@@ -23,55 +23,82 @@
                         <h6 class="titulo-filtra-demandas"> <strong> <i class="bi bi-file-earmark-diff-fill" style="font-size: 2rem;"></i> Cadastro de ocorrências </strong></h6>
                         <hr class="mt-1">
                     </div>
-                        <div class="mb-2">
-                            {{form.problema.label(class_="form-label")}}
-                            {{form.problema(class_="form-control")}}
-                            {% for error in form.problema.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div>
-                            {% endfor %}
+                    <div class="mb-2">
+                        {{form.txtInteressado.label(class_="form-label")}}
+                        {{form.txtInteressado(class_="form-control")}}
+                        {% for error in form.txtInteressado.errors %}
+                        <div class="important">
+                            {{error}}
                         </div>
-                        <div class="mb-2">
-                            {{form.endereco.label(class_="form-label")}}
-                            {{form.endereco(class_="form-control")}}
-                            {% for error in form.endereco.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div> 
-                            {% endfor %}
-                        </div>            
-                        <div class="mb-2">
-                            <button type="button" class="btn btn-primary bg-primary" onclick="simpleGeocoding()">
-                                Pesquisar
-                            </button>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-2">
+                        {{form.txtCpf.label(class_="form-label")}}
+                        {{form.txtCpf(class_="form-control")}}
+                        {% for error in form.txtCpf.errors %}
+                        <div class="important">
+                            {{error}}
                         </div>
-                        <!-- <button type="button" class="btn btn-primary btn-sm" onclick="simpleGeocoding()"><i class="bi bi-search"></i></button> -->
-                        <div class="d-none">
-                            {{form.latitude.label(class_="form-label")}}
-                            {{form.latitude(class_="form-control")}}
+                        {% endfor %}
+                    </div>                  
+                    <div class="mb-2">
+                        {{form.txtTelefone.label(class_="form-label")}}
+                        {{form.txtTelefone(class_="form-control")}}
+                        {% for error in form.txtTelefone.errors %}
+                        <div class="important">
+                            {{error}}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-2">
+                        {{form.problema.label(class_="form-label")}}
+                        {{form.problema(class_="form-control")}}
+                        {% for error in form.problema.errors %}
+                        <div class="important">
+                            {{error}}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-2">
+                        {{form.endereco.label(class_="form-label")}}
+                        {{form.endereco(class_="form-control")}}
+                        {% for error in form.endereco.errors %}
+                        <div class="important">
+                            {{error}}
+                        </div> 
+                        {% endfor %}
+                    </div>            
+                    <div class="mb-2">
+                        <button type="button" class="btn btn-primary bg-primary" onclick="simpleGeocoding()">
+                            Pesquisar
+                        </button>
+                    </div>
+                    <!-- <button type="button" class="btn btn-primary btn-sm" onclick="simpleGeocoding()"><i class="bi bi-search"></i></button> -->
+                    <div class="d-none">
+                        {{form.latitude.label(class_="form-label")}}
+                        {{form.latitude(class_="form-control")}}
 
-                            {{form.longitude.label(class_="form-label")}}
-                            {{form.longitude(class_="form-control")}}
+                        {{form.longitude.label(class_="form-label")}}
+                        {{form.longitude(class_="form-control")}}
+                    </div>
+                    <div id="map" class="container-fluid mb-3"></div>
+            
+                    <div class="mb-2">
+                        {{form.tipoOcorrencia.label(class_="form-label")}}
+                        {{form.tipoOcorrencia(class_="form-select")}}
+                        {% for error in form.tipoOcorrencia.errors %}
+                        <div class="important">
+                            {{error}}
                         </div>
-                        <div id="map" class="container-fluid mb-3"></div>
-               
-                        <div class="mb-2">
-                            {{form.tipoOcorrencia.label(class_="form-label")}}
-                            {{form.tipoOcorrencia(class_="form-select")}}
-                            {% for error in form.tipoOcorrencia.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="mb-2" id="showSubtipoOcorrencia"></div>
-                        <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
-                            <button type="submit" class="btn btn-primary  ">Cadastrar</button>
-                            <button type="button" class="btn btn-danger"
-                                onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
-                            </button>
-                        </div>            
+                        {% endfor %}
+                    </div>
+                    <div class="mb-2" id="showSubtipoOcorrencia"></div>
+                    <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+                        <button type="submit" class="btn btn-primary  ">Cadastrar</button>
+                        <button type="button" class="btn btn-danger"
+                            onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
+                        </button>
+                    </div>            
                 </div>  
             </form>
         </main>

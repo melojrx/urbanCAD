@@ -51,6 +51,7 @@
         <table class="table border table-striped table-hover table-borderless">
             <thead>
                 <tr>
+                    <th scope="col">Interessado</th>
                     <th scope="col">Tipo Ocorrência</th>
                     <th scope="col">Subtipo Ocorrência</th>
                     <th scope="col">Nº da Ocorrência</th>
@@ -63,6 +64,7 @@
             <tbody>
                 {% for row in listOcorrenciaHistorico.items %}
                 <tr>
+                    <td>{{ row.ocorrencia.interessado.txtInteressado}}</td>
                     <td>{{ row.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}</td>
                     <td>{{ row.ocorrencia.subcategoria.txtSubtipoOcorrencia}}</td>
                     <td>{{ row.ocorrencia.numOcorrencia}}</td>

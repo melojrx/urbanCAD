@@ -58,6 +58,13 @@ CREATE SEQUENCE cad.tipo_ocorrencia_seq
   START 1
   CACHE 1;
 
+  CREATE SEQUENCE cad.interessado_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
   CREATE SEQUENCE cad.instituicao_seq
   INCREMENT 1
   MINVALUE 1
@@ -174,6 +181,15 @@ CREATE TABLE cad.tb_viatura_via (
 ALTER TABLE cad.tb_viatura_via ADD CONSTRAINT instituicao_fkey FOREIGN KEY (id_instituicao_via) REFERENCES cad.tb_instituicao_ins (id_instituicao_ins);
 ALTER TABLE cad.tb_viatura_via ADD CONSTRAINT tipo_patrulha_fkey FOREIGN KEY (id_tipo_patrulha_via) REFERENCES cad.tb_tipo_patrulha_tpa (id_tipo_patrulha_tpa);
 
+CREATE TABLE cad.tb_interessado_int (
+	id_interessado_int integer NOT NULL DEFAULT nextval('cad.interessado_seq'::regclass),
+  id_ocorrencia_int integer NOT NULL,
+  txt_interessado_int varchar(100) NOT NULL,
+	txt_cpf_int varchar(11),
+  txt_telefone_int varchar(11) NOT NULL,
+	CONSTRAINT interessado_pkey PRIMARY KEY (id_interessado_int)
+);
+ALTER TABLE cad.tb_interessado_int ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_int) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
 
 -- ####################################
 -- #        INSERTS PARA TESTES       #
@@ -192,9 +208,9 @@ INSERT INTO cad.tb_status_ocorrencia_sto (txt_status_ocorrencia_sto, dat_inicio_
 INSERT INTO cad.tb_status_ocorrencia_sto (txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES('Em andamento', now(), null);
 INSERT INTO cad.tb_status_ocorrencia_sto (txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES('Finalizado', now(), null);
 
-INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, dat_inicio_ins, dat_fim_ins) VALUES('Trânsito', now(), null);
-INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, dat_inicio_ins, dat_fim_ins) VALUES('PM', now(), null);
-INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, dat_inicio_ins, dat_fim_ins) VALUES('CBM', now(), null);
+INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, txt_sigla_ins, dat_inicio_ins, dat_fim_ins) VALUES('Trânsito', 'AMC', now(), null);
+INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, txt_sigla_ins, dat_inicio_ins, dat_fim_ins) VALUES('Polícia Militar', 'PM', now(), null);
+INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, txt_sigla_ins, dat_inicio_ins, dat_fim_ins) VALUES('Corpo de Bombeiros Militar', 'CBM', now(), null);
 
 INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Carro', now(), null);
 INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Moto', now(), null);
