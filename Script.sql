@@ -146,6 +146,7 @@ ALTER TABLE cad.tb_ocorrencia_observacao_oob ADD CONSTRAINT usuario_observacao_f
 CREATE TABLE cad.tb_instituicao_ins (
 	id_instituicao_ins integer NOT NULL DEFAULT nextval('cad.instituicao_seq'::regclass),
 	txt_instituicao_ins varchar(50) NOT NULL,
+  txt_sigla_ins varchar(10) NOT NULL,
 	dat_inicio_ins timestamp without time zone NOT NULL,
 	dat_fim_ins timestamp without time zone,
 	CONSTRAINT sinstituicao_pkey PRIMARY KEY (id_instituicao_ins)

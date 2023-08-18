@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid">
+
+    <div class="container-fluid border mt-2 rounded mb-2">
+        <div class="container-fluid p-0 mb-1 mt-2">
+          <h6 class="titulo-filtra-demandas"> <strong> <i class="bi bi-file-earmark-diff-fill" style="font-size: 2rem;"></i> Registros de instituições </strong></h6>
+          <hr class="mt-1">
+        </div>
+    </div> 
+
+    <div class="container-fluid border mt-1 rounded p-4 mb-2">
+
+        <div class="row d-flex">
+            <div class="col m-0">
+              <h6 class="titulo-filtra-demandas m-0"><strong><i class="bi bi-list-ul"></i>&nbsp;&nbsp; Listagem de instituições</strong></h6>
+            </div>
+            <div class="col d-flex justify-content-md-end p-1 mt-1">
+              <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('instituicao.prepareCadastrarInstituicao') }}';">Nova Instituicao</button>
+            </div>
+          </div>        
+   
+    {% if listInstituicao.items %}
+    <div class="table-responsive mt-2">
+        <table class="table border table-striped table-hover table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Sigla</th>
+                    <th scope="col">Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in listInstituicao.items %}
+                    <tr>
+                        <td>{{ row.txtInstituicao}}</td>
+                        <td>{{ row.txtSigla}}</td>
+                        <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Pagination Links-->
+    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+        <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=listInstituicao.prev_num) }}" class="btn btn-outline-primary 
+            {% if listInstituicao.page == 1 %}disabled{% endif %}">
+            &laquo;
+        </a><!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in listInstituicao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if listInstituicao.page == page_num %}
+        <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=page_num) }}" class="btn btn-primary">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=page_num) }}" class="btn btn-outline-primary">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %} <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=listInstituicao.next_num) }}" class="btn btn-outline-primary 
+            {% if listInstituicao.page == listInstituicao.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
+    </div>
+    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+        Página {{ listInstituicao.page }} de {{ listInstituicao.pages }}
+    </p>
+    <!-- End Pagination Links-->
+    {% else %}
+    <p class="text-center">Nenhum registro encontrado.</p>
+    {% endif %}
+    
+</div>
+
+{% endblock conteudo %}
