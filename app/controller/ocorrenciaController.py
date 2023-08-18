@@ -75,13 +75,10 @@ class ocorrenciaController():
                     querySearch= querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.numOcorrencia == numOcorrenciaSearch)
 
                 if dataInicioSearch and dataFimSearch:
-                    print('primeiro IF')
                     querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio >= dataInicioSearch).filter(Ocorrencia.dataInicio <= dataFimSearch)
                 elif dataInicioSearch and not dataFimSearch:
-                    print('segundo IF')
                     querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio >= dataInicioSearch)
                 elif not dataInicioSearch and dataFimSearch:
-                    print('terceiro IF')
                     querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio <= dataFimSearch)
 
                 listOcorrenciaHistorico = querySearch.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)

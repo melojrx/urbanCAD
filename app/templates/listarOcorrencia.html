@@ -11,26 +11,26 @@
         </div>
   
         <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
-        <div class="row">
-            <div class="col-3 m-1">
-                {{form.numOcorrenciaSearch.label(class_="form-label m-1")}}
-                {{ form.numOcorrenciaSearch(class="form-control form-control-sm m-1") }}
-            </div>
-            <div class="col-3 m-1">
-                {{form.dataInicioSearch.label(class_="form-label m-1")}}
-                {{ form.dataInicioSearch(class="form-control form-control-sm m-1") }}
-            </div>
-            <div class="col-3 m-1">
-                {{form.dataFimSearch.label(class_="form-label m-1")}}
-                {{ form.dataFimSearch(class="form-control form-control-sm m-1") }}
-            </div>
-            <div class="col-3 m-1">
-                {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
-                <button type="button" class="btn btn-outline-danger btn-sm m-1"
-                     onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Limpar
-                </button>
-            </div>     
-        </div>    
+            <div class="row">
+                <div class="col-3 m-1">
+                    {{form.numOcorrenciaSearch.label(class_="form-label m-1")}}
+                    {{ form.numOcorrenciaSearch(class="form-control form-control-sm m-1") }}
+                </div>
+                <div class="col-3 m-1">
+                    {{form.dataInicioSearch.label(class_="form-label m-1")}}
+                    {{ form.dataInicioSearch(class="form-control form-control-sm m-1") }}
+                </div>
+                <div class="col-3 m-1">
+                    {{form.dataFimSearch.label(class_="form-label m-1")}}
+                    {{ form.dataFimSearch(class="form-control form-control-sm m-1") }}
+                </div>
+                <div class="col-3 m-1">
+                    {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
+                    <button type="button" class="btn btn-outline-danger btn-sm m-1"
+                        onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Limpar
+                    </button>
+                </div>     
+            </div>    
         </form>
     </div> 
 

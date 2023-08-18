@@ -10,6 +10,30 @@
             </strong></h6>
           <hr class="mt-1">
         </div>
+
+        <form action="{{url_for('maleta.searchDeteccao')}}" method="GET">
+          <div class="row">
+              <div class="col-3 m-1">
+                  {{form.dataInicioSearch.label(class_="form-label m-1")}}
+                  {{form.dataInicioSearch(class="form-control form-control-sm m-1")}}
+              </div>
+              <div class="col-3 m-1">
+                  {{form.dataFimSearch.label(class_="form-label m-1")}}
+                  {{form.dataFimSearch(class="form-control form-control-sm m-1")}}
+              </div>
+              <div class="col-3 m-1">
+                {{form.isPlacaSearch.label(class_="form-label m-1")}}
+                {{ form.isPlacaSearch }}
+            </div>              
+              <div class="col-3 m-1">
+                  {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
+                  <button type="button" class="btn btn-outline-danger btn-sm m-1"
+                      onclick="window.location.href='{{url_for('maleta.listarDeteccao')}}';">Limpar
+                  </button>
+              </div>     
+          </div>    
+      </form>
+    </div>
    
     {% if listDeteccao.items %}
     <div class="table-responsive">
