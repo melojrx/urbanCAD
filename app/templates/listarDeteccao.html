@@ -3,13 +3,45 @@
 
 <div class="container-fluid">
 
-    <div class="container border mt-2 rounded p-4 mb-2">
+    <div class="container-fluid border mt-2 rounded p-4 mb-2">
 
-        <div class="container p-0 mb-1 mt-1">
+        <div class="container-fluid p-0 mb-1 mt-1">
           <h6 class="titulo-filtra-demandas"> <strong><i class="bi bi-pin-map-fill"></i>&nbsp;&nbsp; Listagem de Detecções
             </strong></h6>
           <hr class="mt-1">
         </div>
+
+        <form action="{{url_for('maleta.searchDeteccao')}}" method="GET">
+          <div class="row">
+              <div class="col-3 m-1">
+                  {{form.dataInicioSearch.label(class_="form-label m-1")}}
+                  {{form.dataInicioSearch(class="form-control form-control-sm m-1")}}
+              </div>
+              <div class="col-3 m-1">
+                {{form.horaInicioSearch.label(class_="form-label m-1")}}
+                {{form.horaInicioSearch(class="form-control form-control-sm m-1")}}
+              </div>              
+              <div class="col-3 m-1">
+                  {{form.dataFimSearch.label(class_="form-label m-1")}}
+                  {{form.dataFimSearch(class="form-control form-control-sm m-1")}}
+              </div>
+              <div class="col-3 m-1">
+                {{form.horaFimSearch.label(class_="form-label m-1")}}
+                {{form.horaFimSearch(class="form-control form-control-sm m-1")}}
+              </div>               
+              <div class="col-3 m-1">
+                {{form.isPlacaSearch.label(class_="form-label m-1")}}
+                {{ form.isPlacaSearch}}
+              </div>              
+              <div class="col-3 m-1">
+                  {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
+                  <button type="button" class="btn btn-outline-danger btn-sm m-1"
+                      onclick="window.location.href='{{url_for('maleta.listarDeteccao')}}';">Limpar
+                  </button>
+              </div>     
+          </div>    
+      </form>
+    </div>
    
     {% if listDeteccao.items %}
     <div class="table-responsive">
