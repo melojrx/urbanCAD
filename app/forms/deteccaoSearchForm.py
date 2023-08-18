@@ -1,19 +1,25 @@
 from wtforms import Form, SubmitField, BooleanField, DateField, TimeField
-from flask_bootstrap import Bootstrap
  
 class DeteccaoSearchForm(Form):
   
     dataInicioSearch = DateField(
-        'Início', 
+        'Data de Início', 
         format='%Y-%m-%d',
         render_kw={"placeholder": "dd/mm/aa"}
     )
 
+    horaInicioSearch = TimeField(
+        'Hora Início:'
+    )
 
     dataFimSearch = DateField(
-        'Fim', 
+        'Data de Fim', 
         format='%Y-%m-%d',
         render_kw={"placeholder": "dd/mm/aa"}
+    )
+
+    horaFimSearch = TimeField(
+        'Hora Fim:'
     )
 
     isPlacaSearch = BooleanField(

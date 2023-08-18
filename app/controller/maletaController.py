@@ -39,16 +39,25 @@ class viaturaController:
         form.isPlacaSearch.data = isPlacaSearch
         dataInicioSearch = request.args.get('dataInicioSearch')
         dataFimSearch = request.args.get('dataFimSearch')
+        horaInicioSearch = request.args.get('horaInicioSearch')
+        horaFimSearch = request.args.get('horaFimSearch')
 
         page = request.args.get('page', 1, type=int)
 
-        print(isPlacaSearch)
-
         if dataInicioSearch:
-            dataInicioSearch = datetime.datetime.strptime(dataInicioSearch, '%Y-%m-%d %H:%M:%S')
+            if horaInicioSearch:
+                dataInicioSearch = datetime.datetime.strptime(dataInicioSearch + " " + horaInicioSearch,"%Y-%m-%d %H:%M")
+                form.horaInicioSearch.data = datetime.datetime.strptime(horaInicioSearch, "%H:%M")
+            else:
+                dataInicioSearch = datetime.datetime.strptime(dataInicioSearch, '%Y-%m-%d')
             form.dataInicioSearch.data = dataInicioSearch
         if dataFimSearch:
-            dataFimSearch = datetime.datetime.strptime(dataFimSearch, '%Y-%m-%d %H:%M:%S')
+            if horaFimSearch:
+                dataFimSearch = datetime.datetime.strptime(dataFimSearch + " " + horaFimSearch, '%Y-%m-%d %H:%M')
+                form.horaFimSearch.data = datetime.datetime.strptime(horaFimSearch, "%H:%M")
+            else:
+                dataFimSearch = datetime.datetime.strptime(dataFimSearch, '%Y-%m-%d')
+                dataFimSearch = dataFimSearch.replace(hour=23, minute=59, second=59)
             form.dataFimSearch.data = dataFimSearch
 
         try: 
@@ -61,7 +70,7 @@ class viaturaController:
                     querySearch= querySearch.filter(DeteccaoVeicular.plate != None)
 
                 if dataInicioSearch and dataFimSearch:
-                    querySearch = querySearch.filter(DeteccaoVeicular.gps_data_timestamp >= dataInicioSearch).filter(DeteccaoVeicular.dataInicio <= dataFimSearch)
+                    querySearch = querySearch.filter(DeteccaoVeicular.gps_data_timestamp >= dataInicioSearch).filter(DeteccaoVeicular.gps_data_timestamp <= dataFimSearch)
                 elif dataInicioSearch and not dataFimSearch:
                     querySearch = querySearch.filter(DeteccaoVeicular.gps_data_timestamp >= dataInicioSearch)
                 elif not dataInicioSearch and dataFimSearch:
