@@ -96,7 +96,8 @@ body {
 .bi-geo-alt-fill,
 .bi-pin-map-fill,
 .bi-file-earmark-diff-fill,
-.bi-list-ul {
+.bi-list-ul,
+.bi-bank {
     font-size: 2.2em;
     padding-right: 8px;
 }
