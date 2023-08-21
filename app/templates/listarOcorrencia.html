@@ -55,10 +55,9 @@
                     <th scope="col">Tipo Ocorrência</th>
                     <th scope="col">Subtipo Ocorrência</th>
                     <th scope="col">Nº da Ocorrência</th>
-                  <!--  <th scope="col">Latitude</th>
-                    <th scope="col">Longitude</th> -->
                     <th scope="col">Status</th>
                     <th scope="col">Data</th>
+                    <th class="text-left">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,15 +67,32 @@
                     <td>{{ row.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}</td>
                     <td>{{ row.ocorrencia.subcategoria.txtSubtipoOcorrencia}}</td>
                     <td>{{ row.ocorrencia.numOcorrencia}}</td>
-                    <!--<td>{{ row.ocorrencia.txtLat}}</td>
-                    <td>{{ row.ocorrencia.txtLong }}</td>-->
                     <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
                     <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal" data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
+                            <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}" width="30%"></i>
+                        </a>
+                        <a href="{{ url_for('despacho.prepareDespachar', idOcorrencia=row.ocorrencia.id) }}" class="btn btn-danger btn-sm" role="button" title="Despachar">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </a>                        
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <div class="modal fade" id="txtProblemaModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xb">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+                <p id="modalText"></p>
+            </div>
+          </div>
+        </div>
+      </div>     
+
     <!-- Pagination Links-->
     <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
         <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}" class="btn btn-outline-primary 
@@ -112,5 +128,20 @@
     {% endif %}
     
 </div>
+
+<script>
+    $('#txtProblemaModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget); // Botão que acionou o modal
+      var txtProblema = button.data('imgsrc'); // Obtém o atributo 'data-imgsrc' do botão
+  
+      var modal = $(this);
+      modal.find('#modalText').text(txtProblema);
+    });
+  
+    $('#txtProblemaModal').on('hidden.bs.modal', function () {
+      var modal = $(this);
+      modal.find('#modalText').text(''); // Limpa a imagem quando o modal for fechado
+    });
+  </script>
 
 {% endblock conteudo %}
