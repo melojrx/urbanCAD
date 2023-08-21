@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid">
+
+    <div class="container-fluid border mt-2 rounded mb-2">
+
+        <div class="container-fluid p-0 mb-1 mt-2">
+            <h6 class="titulo-filtra-demandas"> <strong> <i class="bi bi-file-earmark-diff-fill"
+                        style="font-size: 2rem;"></i> Registros de despachos </strong></h6>
+            <hr class="mt-1">
+        </div>
+    </div>
+
+    <div class="container-fluid border mt-1 rounded p-4 mb-2">
+
+        <div class="row d-flex">
+            <div class="col m-0">
+                <h6 class="titulo-filtra-demandas m-0"><strong><i class="bi bi-list-ul"></i>&nbsp;&nbsp; Listagem de
+                        Despachos</strong></h6>
+            </div>
+        </div>
+
+        {% if listDespacho.items %}
+        <div class="table-responsive mt-2">
+            <table class="table border table-striped table-hover table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">Orgão Responsável</th>
+                        <th scope="col">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in listDespacho.items %}
+                    <tr>
+                        <td>{{ row.instituicao.txtSigla}}</td>
+                        <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Links-->
+        <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+            <a href="{{ url_for('despacho.prepareSearchDespacho', page=listDespacho.prev_num) }}" class="btn btn-outline-primary 
+            {% if listDespacho.page == 1 %}disabled{% endif %}">
+                &laquo;
+            </a><!-- Loop through the number of pages to display a link for each-->
+            {% for page_num in listDespacho.iter_pages(left_edge=1, right_edge=1, left_current=1,
+            right_current=2) %}
+            {% if page_num %}
+            <!-- Check for the active page and set the link to "Active"-->
+            {% if listDespacho.page == page_num %}
+            <a href="{{ url_for('despacho.prepareSearchDespacho', page=page_num) }}" class="btn btn-primary">
+                {{ page_num }}
+            </a>
+            {% else %}
+            <a href="{{ url_for('despacho.prepareSearchDespacho', page=page_num) }}" class="btn btn-outline-primary">
+                {{ page_num }}
+            </a>
+            {% endif %}
+            {% else %}
+            ...
+            {% endif %}
+            {% endfor %} <a href="{{ url_for('despacho.prepareSearchDespacho', page=listDespacho.next_num) }}"
+                class="btn btn-outline-primary 
+            {% if listDespacho.page == listDespacho.pages %}disabled{% endif %}">
+                &raquo;
+            </a>
+        </div>
+        <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+            Página {{ listDespacho.page }} de {{ listDespacho.pages }}
+        </p>
+        <!-- End Pagination Links-->
+        {% else %}
+        <p class="text-center">Nenhum registro encontrado.</p>
+        {% endif %}
+
+    </div>
+
+    {% endblock conteudo %}

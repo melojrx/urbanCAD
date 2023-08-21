@@ -15,6 +15,9 @@ from ..rotas.despachoRout import despacho_bp
 
 class instituicaoController():
 
+    global ROWS_PER_PAGE 
+    ROWS_PER_PAGE = 10
+
     @roles_required('URBANCAD_ADMIN')
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
@@ -54,3 +57,11 @@ class instituicaoController():
             return render_template('despacho.html', form=form)
 
         return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))   
+    
+    @roles_required('URBANCAD_ADMIN')
+    @despacho_bp.route('/prepareSearchDespacho', methods=['GET'])
+    @login_required
+    def prepareSearchDespacho():
+        page = request.args.get('page', 1, type=int)
+        listDespacho = Despacho.query.join(Ocorrencia).join(OcorrenciaHistorico).filter(and_(OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        return render_template('listarDespacho.html', listDespacho=listDespacho)

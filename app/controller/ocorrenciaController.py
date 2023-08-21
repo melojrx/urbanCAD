@@ -30,7 +30,7 @@ class ocorrenciaController():
                 # Lista todos os eventos cadastrados
                 return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
             else :
-                return redirect(url_for('ocorrencia.minhasOcorrencias'))
+                return redirect(url_for('ocorrencia.prepareCadastrarOcorrencia'))
 
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
