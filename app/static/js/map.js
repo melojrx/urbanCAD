@@ -24,7 +24,7 @@ function adicionarMarcador(marker) {
 async function simpleReverseGeocoding(e) {
     fetch('http://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng,  
       {
-        method: 'POST',      
+        method: 'GET',      
         credentials: 'same-origin',
         headers:{
           'Content-Type': 'application/json'

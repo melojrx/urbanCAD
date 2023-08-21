@@ -60,19 +60,16 @@
                         {% endfor %}
                     </div>
                     <div class="mb-2">
-                        {{form.endereco.label(class_="form-label")}}
-                        {{form.endereco(class_="form-control")}}
+                        {{ form.endereco.label(class_="form-label") }}
+                        {{ form.endereco(class_="form-control", id="endereco") }}
+                        <div id="endereco-suggestions"></div>
                         {% for error in form.endereco.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div> 
+                            <div class="important">
+                                {{ error }}
+                            </div> 
                         {% endfor %}
-                    </div>            
-                    <div class="mb-2">
-                        <button type="button" class="btn btn-primary bg-primary" onclick="simpleGeocoding()">
-                            Pesquisar
-                        </button>
-                    </div>
+                    </div>        
+ 
                     <!-- <button type="button" class="btn btn-primary btn-sm" onclick="simpleGeocoding()"><i class="bi bi-search"></i></button> -->
                     <div class="d-none">
                         {{form.latitude.label(class_="form-label")}}
@@ -125,17 +122,63 @@
 
 </script>
 
-
-<!-- Ao clicar em enter após preencher o endereço -->
 <script>
-    let elem = document.getElementById('endereco');
+    let enderecoInput = document.getElementById('endereco');
+    let suggestionsDiv = document.getElementById('endereco-suggestions');
 
-    elem.addEventListener("keydown", function (event) {
-    if ( event.which == 13 ) {
-        event.preventDefault();
-        simpleGeocoding();
-    }
+    enderecoInput.addEventListener("input", function () {
+        const address = enderecoInput.value;
+
+        if (address.length >= 5) {
+            fetchSuggestions(address);
+        } else {
+            suggestionsDiv.innerHTML = '';
+        }
     });
+
+    enderecoInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            const selectedSuggestion = suggestionsDiv.querySelector('.suggestion.selected');
+            if (selectedSuggestion) {
+                selectSuggestion(JSON.parse(selectedSuggestion.getAttribute('data-suggestion')));
+            }
+        }
+    });
+
+    async function fetchSuggestions(address) {
+        const url = 'https://nominatim.openstreetmap.org/search.php?q=' + address + '&dedupe=0&format=jsonv2';
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            suggestionsDiv.innerHTML = '';
+
+            data.forEach(item => {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'suggestion';
+                suggestion.textContent = item.display_name;
+                suggestion.setAttribute('data-suggestion', JSON.stringify(item));
+                suggestion.addEventListener('click', function () {
+                    selectSuggestion(item);
+                });
+                suggestionsDiv.appendChild(suggestion);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function selectSuggestion(item) {
+        enderecoInput.value = item.display_name;
+        const lat = item.lat;
+        const lng = item.lon;
+        map.setView([lat, lng], 15);
+        marker = L.marker([lat, lng]);
+        adicionarMarcador(marker);
+        suggestionsDiv.innerHTML = '';
+    }
 </script>
 
 {% endblock conteudo %}
