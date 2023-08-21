@@ -9,13 +9,14 @@ class Interessado(db.Model):
     txtInteressado = db.Column('txt_interessado_int', db.String(100), nullable=False)
     txtCpf = db.Column('txt_cpf_int', db.String(11), nullable=False)
     txtTelefone = db.Column('txt_telefone_int', db.String(11), nullable=False)
+    isNoticianteVitima = db.Column('bol_vitima_int', db.Boolean)
 
     ocorrencia = db.relationship("Ocorrencia", back_populates="interessado") 
 
-    def __init__(self, ocorrencia, txtInteressado, txtCpf, txtTelefone):
+    def __init__(self, ocorrencia, txtInteressado, txtCpf, txtTelefone, isNoticianteVitima):
         self.ocorrencia = ocorrencia
         self.txtInteressado = txtInteressado
         self.txtCpf = txtCpf
         self.txtTelefone = txtTelefone
-
+        self.isNoticianteVitima = isNoticianteVitima
 

@@ -125,6 +125,7 @@ class ocorrenciaController():
             txtInteressado = form.txtInteressado.data
             txtCpf = form.txtCpf.data
             txtTelefone = form.txtTelefone.data
+            isNoticianteVitima = form.isNoticianteVitima.data
             dataInicio = datetime.datetime.now()
 
             if not subtipoOcorrencia:
@@ -145,8 +146,9 @@ class ocorrenciaController():
             numOcorrencia = str(dataInicio.year) + str(current_user.id) + str(dataInicio.day) + str(dataInicio.month) + str(dataInicio.hour) + str(dataInicio.minute) + str(dataInicio.second)
 
             ocorrencia = Ocorrencia(subtipoOcorrencia, current_user.id, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, dataInicio)
+
             ocorrenciaHistorico = OcorrenciaHistorico(ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.AGUARDANDO_DESPACHO.value, current_user.id, dataInicio)
-            interessado = Interessado(ocorrencia, txtInteressado, txtCpf, txtTelefone)
+            interessado = Interessado(ocorrencia, txtInteressado, txtCpf, txtTelefone, isNoticianteVitima)
 
             db.session.add(ocorrenciaHistorico)
             db.session.add(interessado)
