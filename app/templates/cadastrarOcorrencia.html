@@ -38,12 +38,15 @@
                                         </div>
                                         {% endfor %}
                                     </div>
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
-                                        <label class="form-check-label" for="flexCheckChecked">
-                                          Noticiante é a vítima?
-                                        </label>
-                                      </div>
+                                    <div class="mb-3">
+                                        {{form.isNoticianteVitima.label(class_="form-label")}}
+                                        {{form.isNoticianteVitima}}
+                                        {% for error in form.isNoticianteVitima.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
                                     <div class="mb-3">
                                         {{form.txtCpf.label(class_="form-label")}}
                                         {{form.txtCpf(class_="form-control")}}
