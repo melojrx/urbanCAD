@@ -126,6 +126,9 @@ class ocorrenciaController():
             txtCpf = form.txtCpf.data
             txtTelefone = form.txtTelefone.data
             isNoticianteVitima = form.isNoticianteVitima.data
+            isNoticianteEstrangeiro = form.isNoticianteEstrangeiro.data
+            txtRg = form.txtRg.data
+            txtPassaporte = form.txtPassaporte.data
             dataInicio = datetime.datetime.now()
 
             if not subtipoOcorrencia:
@@ -148,7 +151,7 @@ class ocorrenciaController():
             ocorrencia = Ocorrencia(subtipoOcorrencia, current_user.id, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, dataInicio)
 
             ocorrenciaHistorico = OcorrenciaHistorico(ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.AGUARDANDO_DESPACHO.value, current_user.id, dataInicio)
-            interessado = Interessado(ocorrencia, txtInteressado, txtCpf, txtTelefone, isNoticianteVitima)
+            interessado = Interessado(ocorrencia, txtInteressado, txtCpf, txtTelefone, isNoticianteVitima, isNoticianteEstrangeiro, txtRg, txtPassaporte)
 
             db.session.add(ocorrenciaHistorico)
             db.session.add(interessado)
@@ -167,4 +170,4 @@ class ocorrenciaController():
             id = request.form['id']
             listSubtipoOcorrencia = SubtipoOcorrencia.query.filter(SubtipoOcorrencia.idTipoOcorrencia==id).all()
             form.subtipoOcorrencia.choices = [(0, "Selecione...")]+[(row.id, row.txtSubtipoOcorrencia) for row in listSubtipoOcorrencia]
-        return jsonify({'htmlresponse': render_template('loadSubtipoOcorrencia.html', listSubtipoOcorrencia=listSubtipoOcorrencia, form=form)})         
+        return jsonify({'htmlresponse': render_template('loadSubtipoOcorrencia.html', listSubtipoOcorrencia=listSubtipoOcorrencia, form=form)})

@@ -48,6 +48,24 @@
                                         {% endfor %}
                                     </div>
                                     <div class="mb-3">
+                                        {{form.isNoticianteEstrangeiro.label(class_="form-label")}}
+                                        {{form.isNoticianteEstrangeiro}}
+                                        {% for error in form.isNoticianteEstrangeiro.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div id="passaporte" class="mb-3">
+                                        {{form.txtPassaporte.label(class_="form-label")}}
+                                        {{form.txtPassaporte(class_="form-control")}}
+                                        {% for error in form.txtPassaporte.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                        {% endfor %}  
+                                    </div>                     
+                                    <div id="cpf" class="mb-3">
                                         {{form.txtCpf.label(class_="form-label")}}
                                         {{form.txtCpf(class_="form-control")}}
                                         {% for error in form.txtCpf.errors %}
@@ -55,7 +73,16 @@
                                             {{error}}
                                         </div>
                                         {% endfor %}
-                                    </div>                  
+                                    </div>
+                                    <div id="rg" class="mb-3">
+                                        {{form.txtRg.label(class_="form-label")}}
+                                        {{form.txtRg(class_="form-control")}}
+                                        {% for error in form.txtRg.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>                                                   
                                     <div class="mb-2">
                                         {{form.txtTelefone.label(class_="form-label")}}
                                         {{form.txtTelefone(class_="form-control")}}
@@ -139,6 +166,23 @@
         });
     }); 
 
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#passaporte').hide();
+        $('#isNoticianteEstrangeiro').change(function () {
+            if ($(this).prop('checked')) {
+                $('#passaporte').show();
+                $('#cpf').hide();
+                $('#rg').hide();
+            } else {
+                $('#passaporte').hide();
+                $('#rg').show();
+                $('#cpf').show();
+            }
+        });
+    }); 
 </script>
 
 <script>

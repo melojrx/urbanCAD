@@ -59,11 +59,21 @@ class OcorrenciaForm(Form):
    
     txtCpf = StringField(
         'CPF do Interessado',
-        render_kw={'placeholder': 'Digite apenas números', 'class': 'form-control'}, 
+        render_kw={'placeholder': 'CPF', 'class': 'form-control'}, 
         validators = [
             Length(max=11, min=11, message='O CPF deve ter conter exatamente 11 caracteres'),
             ValidaCpf()
     ])
+
+    txtRg = StringField(
+        'RG do Interessado',
+        render_kw={'placeholder': 'RG', 'class': 'form-control'}, 
+    )
+
+    txtPassaporte = StringField(
+        'Passaporte do Interessado',
+        render_kw={'placeholder': 'Passaporte', 'class': 'form-control'}, 
+    )
 
     txtTelefone = StringField(
         'Telefone do Interessado',
@@ -75,4 +85,8 @@ class OcorrenciaForm(Form):
 
     isNoticianteVitima = BooleanField(
         'Noticiante é a vítima?'
+    )
+
+    isNoticianteEstrangeiro = BooleanField(
+        'Noticiante é estrangeiro?'
     )

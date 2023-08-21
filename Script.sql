@@ -243,4 +243,7 @@ INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat
 -- #           ALTER TABLES           #
 -- ####################################
 
+ALTER TABLE cad.tb_interessado_int ADD txt_rg_int varchar(15) null;
+ALTER TABLE cad.tb_interessado_int ADD txt_passaporte_int varchar(15)  null;
 ALTER TABLE cad.tb_interessado_int ADD bol_vitima_int boolean null DEFAULT false;
+ALTER TABLE cad.tb_interessado_int ADD bol_estrangeiro_int boolean null DEFAULT false;
