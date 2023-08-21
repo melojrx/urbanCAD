@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div class="border mt-2 rounded mb-2" id="form-cadastro-evento">
+
+    <main class="container-fluid">
+        <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.despachar') }}">
+            <div class="container-fluid " id="form_cad_evento">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title">Despacho de Ocorrências</h5>
+                    </div>
+                </div>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="d-none">
+                                    {{form.ocorrencia.label(class_="form-label")}}
+                                    {{form.ocorrencia(class_="form-control")}}
+                                    {% for error in form.ocorrencia.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="mb-3">
+                                    {{form.despacharPara.label(class_="form-label")}}
+                                    {{form.despacharPara(class_="form-control")}}
+                                    {% for error in form.despacharPara.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+                    {{ form.submit(class_="btn btn-primary") }}
+                    <button type="button" class="btn btn-danger"
+                        onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
+</div>
+
+{% endblock conteudo %}

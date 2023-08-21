@@ -146,7 +146,8 @@ class ocorrenciaController():
             numOcorrencia = str(dataInicio.year) + str(current_user.id) + str(dataInicio.day) + str(dataInicio.month) + str(dataInicio.hour) + str(dataInicio.minute) + str(dataInicio.second)
 
             ocorrencia = Ocorrencia(subtipoOcorrencia, current_user.id, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, dataInicio)
-            ocorrenciaHistorico = OcorrenciaHistorico(ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.AGUARDANDO_ATENDIMENTO.value, current_user.id, dataInicio)
+
+            ocorrenciaHistorico = OcorrenciaHistorico(ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.AGUARDANDO_DESPACHO.value, current_user.id, dataInicio)
             interessado = Interessado(ocorrencia, txtInteressado, txtCpf, txtTelefone, isNoticianteVitima)
 
             db.session.add(ocorrenciaHistorico)

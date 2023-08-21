@@ -79,6 +79,13 @@ CREATE SEQUENCE cad.tipo_ocorrencia_seq
   START 1
   CACHE 1;
 
+  CREATE SEQUENCE cad.despacho_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
 -- ################
 -- #    TABLES    #
 -- ################
@@ -190,6 +197,19 @@ CREATE TABLE cad.tb_interessado_int (
 	CONSTRAINT interessado_pkey PRIMARY KEY (id_interessado_int)
 );
 ALTER TABLE cad.tb_interessado_int ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_int) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
+
+CREATE TABLE cad.tb_despacho_des (
+	id_despacho_des integer NOT NULL DEFAULT nextval('cad.despacho_seq'::regclass),
+  id_ocorrencia_des integer NOT NULL,
+  id_instituicao_des integer NOT NULL,
+  id_usuario_des integer NOT NULL,
+  dat_inicio_des timestamp without time zone NOT NULL,
+	dat_fim_des timestamp without time zone,
+	CONSTRAINT despacho_pkey PRIMARY KEY (id_despacho_des)
+);
+ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_des) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
+ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT instituicao_fkey FOREIGN KEY (id_instituicao_des) REFERENCES cad.tb_instituicao_ins (id_instituicao_ins);
+ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_des) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
 
 -- ####################################
 -- #        INSERTS PARA TESTES       #
