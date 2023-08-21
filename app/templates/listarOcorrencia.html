@@ -73,9 +73,11 @@
                         <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal" data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
                             <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}" width="30%"></i>
                         </a>
-                        <a href="{{ url_for('despacho.prepareDespachar', idOcorrencia=row.ocorrencia.id) }}" class="btn btn-danger btn-sm" role="button" title="Despachar">
-                            <i class="bi bi-box-arrow-up-right"></i>
-                        </a>                        
+                        {% if row.statusOCorrencia.id == 1 %}
+                            <a href="{{ url_for('despacho.prepareDespachar', idOcorrencia=row.ocorrencia.id) }}" class="btn btn-danger btn-sm" role="button" title="Despachar">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                        {% endif %}                    
                     </td>
                 </tr>
                 {% endfor %}
