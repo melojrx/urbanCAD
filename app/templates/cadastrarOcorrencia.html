@@ -19,77 +19,99 @@
         <main class="container-fluid">
             <form method="POST" enctype='multipart/form-data' action="{{ url_for('ocorrencia.cadastrarOcorrencia') }}">
                 <div class="container-fluid " id="form_cad_evento">
-                    <div class="container-fluid p-0 mb-1 mt-2">
-                        <h6 class="titulo-filtra-demandas"> <strong> <i class="bi bi-file-earmark-diff-fill" style="font-size: 2rem;"></i> Cadastro de ocorrências </strong></h6>
-                        <hr class="mt-1">
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Cadastro de Ocorrências</h5>
+                            <p class="card-text">Nova ocorrência</p>
+                          </div>
                     </div>
-                    <div class="mb-2">
-                        {{form.txtInteressado.label(class_="form-label")}}
-                        {{form.txtInteressado(class_="form-control")}}
-                        {% for error in form.txtInteressado.errors %}
-                        <div class="important">
-                            {{error}}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        {{form.txtInteressado.label(class_="form-label")}}
+                                        {{form.txtInteressado(class_="form-control")}}
+                                        {% for error in form.txtInteressado.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
+                                        <label class="form-check-label" for="flexCheckChecked">
+                                          Noticiante é a vítima?
+                                        </label>
+                                      </div>
+                                    <div class="mb-3">
+                                        {{form.txtCpf.label(class_="form-label")}}
+                                        {{form.txtCpf(class_="form-control")}}
+                                        {% for error in form.txtCpf.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>                  
+                                    <div class="mb-2">
+                                        {{form.txtTelefone.label(class_="form-label")}}
+                                        {{form.txtTelefone(class_="form-control")}}
+                                        {% for error in form.txtTelefone.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div id="map" ></div>
+                                </div>
+                            </div>
                         </div>
-                        {% endfor %}
                     </div>
-                    <div class="mb-2">
-                        {{form.txtCpf.label(class_="form-label")}}
-                        {{form.txtCpf(class_="form-control")}}
-                        {% for error in form.txtCpf.errors %}
-                        <div class="important">
-                            {{error}}
+                    <div class="card mb-2">
+                        <div class="card-body d-flex flex-column" >
+                            <div class="mb-2">
+                                {{ form.endereco.label(class_="form-label") }}
+                                {{ form.endereco(class_="form-control", id="endereco") }}
+                                <div id="endereco-suggestions"></div>
+                                {% for error in form.endereco.errors %}
+                                    <div class="important">
+                                        {{ error }}
+                                    </div> 
+                                {% endfor %}
+                            </div>            
+                            <div class="mb-3 d-flex justify-content-end">
+                                <button type="button" class="btn btn-primary bg-primary" onclick="simpleGeocoding()">
+                                    Pesquisar
+                                </button>
+                            </div>
+                            <!-- <button type="button" class="btn btn-primary btn-sm" onclick="simpleGeocoding()"><i class="bi bi-search"></i></button> -->
+                            <div class="d-none">
+                                {{form.latitude.label(class_="form-label")}}
+                                {{form.latitude(class_="form-control")}}
+                            </div>
+                            <div class="mb-3">
+                                {{form.problema.label(class_="form-label")}}
+                                {{form.problema(class_="form-control")}}
+                                {% for error in form.problema.errors %}
+                                <div class="important">
+                                    {{error}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                {{form.tipoOcorrencia.label(class_="form-label")}}
+                                {{form.tipoOcorrencia(class_="form-select")}}
+                                {% for error in form.tipoOcorrencia.errors %}
+                                <div class="important">
+                                    {{error}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3" id="showSubtipoOcorrencia"></div>
                         </div>
-                        {% endfor %}
-                    </div>                  
-                    <div class="mb-2">
-                        {{form.txtTelefone.label(class_="form-label")}}
-                        {{form.txtTelefone(class_="form-control")}}
-                        {% for error in form.txtTelefone.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div>
-                        {% endfor %}
                     </div>
-                    <div class="mb-2">
-                        {{form.problema.label(class_="form-label")}}
-                        {{form.problema(class_="form-control")}}
-                        {% for error in form.problema.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="mb-2">
-                        {{ form.endereco.label(class_="form-label") }}
-                        {{ form.endereco(class_="form-control", id="endereco") }}
-                        <div id="endereco-suggestions"></div>
-                        {% for error in form.endereco.errors %}
-                            <div class="important">
-                                {{ error }}
-                            </div> 
-                        {% endfor %}
-                    </div>        
- 
-                    <!-- <button type="button" class="btn btn-primary btn-sm" onclick="simpleGeocoding()"><i class="bi bi-search"></i></button> -->
-                    <div class="d-none">
-                        {{form.latitude.label(class_="form-label")}}
-                        {{form.latitude(class_="form-control")}}
-
-                        {{form.longitude.label(class_="form-label")}}
-                        {{form.longitude(class_="form-control")}}
-                    </div>
-                    <div id="map" class="container-fluid mb-3"></div>
-            
-                    <div class="mb-2">
-                        {{form.tipoOcorrencia.label(class_="form-label")}}
-                        {{form.tipoOcorrencia(class_="form-select")}}
-                        {% for error in form.tipoOcorrencia.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="mb-2" id="showSubtipoOcorrencia"></div>
                     <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
                         <button type="submit" class="btn btn-primary  ">Cadastrar</button>
                         <button type="button" class="btn btn-danger"
