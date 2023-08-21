@@ -1,6 +1,6 @@
 from wtforms.widgets import TextArea
 from ..util.validaCpfUtil import ValidaCpf
-from wtforms import Form, StringField, SelectField
+from wtforms import Form, StringField, SelectField, BooleanField
 from wtforms.validators import DataRequired, InputRequired, Length
 
 class OcorrenciaForm(Form):
@@ -71,4 +71,8 @@ class OcorrenciaForm(Form):
         validators = [
             DataRequired(message='*Campo Requerido'),
             Length(max=11, min=11, message='O Telefone deve ter conter exatamente 11 caracteres'),
-    ])      
+    ])
+
+    isNoticianteVitima = BooleanField(
+        'Noticiante é a vítima?'
+    )
