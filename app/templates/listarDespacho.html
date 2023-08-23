@@ -27,6 +27,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Orgão Responsável</th>
+                        <th scope="col">Ocorrência</th>
                         <th scope="col">Data</th>
                     </tr>
                 </thead>
@@ -34,6 +35,7 @@
                     {% for row in listDespacho.items %}
                     <tr>
                         <td>{{ row.instituicao.txtSigla}}</td>
+                        <td>{{ row.ocorrencia.txtProblema}}</td>
                         <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
                     {% endfor %}
                 </tbody>
