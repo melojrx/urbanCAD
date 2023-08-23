@@ -25,7 +25,7 @@ body {
 }
 
 .urban_logo a:hover {
-    color: #3a51d5;
+    color: #1480FB;
     transition: all .3s;
 }
 
@@ -76,6 +76,10 @@ body {
     font-weight: bold;
     text-decoration: none;
 }
+.link-sidebar:hover{
+    background-color: #0BA8FD;
+    transition: all .3s;
+}
 
 .titulo-menu-gov {
     font-size: 1em;
@@ -97,7 +101,8 @@ body {
 .bi-pin-map-fill,
 .bi-file-earmark-diff-fill,
 .bi-list-ul,
-.bi-bank {
+.bi-bank,
+.bi-pencil-square {
     font-size: 2.2em;
     padding-right: 8px;
 }
@@ -116,7 +121,6 @@ body {
     font-weight: 600;
 }
 
-
 /* Main da home */
 
 .main_base {
@@ -129,71 +133,13 @@ body {
     
   }
 
-.painel-direito-home {
-    border: 1px solid #3333;
-    height: auto;
-    max-width: 550px;
-    margin: 8px auto;
-    border-radius: 8px;
+/* Lista Detecção */
+
+.img_deteccao:hover {
+    transform: scale(1.5);
+    transition: all .3s;
 }
 
-.nome_usuario {
-    display: flex;
-    align-items: center;
-    border: 1px solid #3333;
-}
-
-.col.m-1 {
-    display: flex;
-    align-items: center;
-
-}
-
-#img {
-    max-width: 550px;
-    width: 100%;
-    margin-top: 20px;
-}
-
-#form_cad_evento {
-    padding: 10px;
-
-}
-
-.botao_demanda {
-    padding: 15px;
-}
-
-.botao_demanda i {
-    padding-right: 5px;
-}
-
-.bi-patch-plus {
-    padding-right: 5px;
-}
-
-.bi-search {
-    margin-right: 2px;
-}
-
-/* Visualizar demanda */
-
-.div-titulo-minha-demanda {
-    border-bottom: #3333;
-    margin-bottom: 5px;
-}
-
-.bi-arrow-left-circle {
-    margin-right: 3px;
-    padding-right: 3px;
-}
-
-.titulo-minha-demanda {
-    font-size: 1.5em;
-    font-weight: 500;
-    padding-top: 10px;
-    text-align: center;
-}
 
 /* Paginação */
 
@@ -202,33 +148,9 @@ body {
     justify-content: space-between;
 }
 
-/* Ajuste para Tela de Celular */
 
-@media screen and (max-width:520px) {
-    .alertastatusevento {
-        font-size: 0.8em;
-        transition: all .3s;
-    }
-}
 
-@media screen and (max-width:443px) {
-    .alertastatusevento {
-        font-size: 0.6em;
-        transition: all .3s;
-    }
-}
 
-@media screen and (max-width:359px) {
-    .alertastatusevento {
-        font-size: 0.5em;
-        transition: all .3s;
-    }
-}
 
-/* Ajustar Layout para telas de notebook */
 
-@media screen and (min-width:1279px) {
-    #div-iden-cidade {
-        margin-top: -5px;
-    }
-}
+
