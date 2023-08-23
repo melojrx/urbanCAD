@@ -1,126 +1,138 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid">
+<div class="container-fluid border mt-2 rounded mb-2">
 
-    <div class="container-fluid border mt-2 rounded p-4 mb-2">
+    <div class="container-fluid mt-2">
 
-        <div class="container-fluid p-0 mb-1 mt-1">
-          <h6 class="titulo-filtra-demandas"> <strong><i class="bi bi-pin-map-fill"></i>&nbsp;&nbsp; Listagem de Detecções
-            </strong></h6>
-          <hr class="mt-1">
+      <div class="card mb-2">
+        <div class="card-body">
+            <h5 class="card-title">Gerenciamento de detecções</h5>
+            <p class="card-text">Filtragem de detecções</p>
+          </div>
+      </div>
+
+      <div class="card mb-2">
+      <form action="{{url_for('maleta.searchDeteccao')}}" method="GET">
+        <div class="card-header">
+          <p class="card-text" style="font-weight: 600;">Consulta detecções</p>
         </div>
-
-        <form action="{{url_for('maleta.searchDeteccao')}}" method="GET">
+        <div class="card-body" style="font-size: 0.8rem;">
           <div class="row">
-              <div class="col-3 m-1">
-                  {{form.dataInicioSearch.label(class_="form-label m-1")}}
-                  {{form.dataInicioSearch(class="form-control form-control-sm m-1")}}
-              </div>
-              <div class="col-3 m-1">
-                {{form.horaInicioSearch.label(class_="form-label m-1")}}
-                {{form.horaInicioSearch(class="form-control form-control-sm m-1")}}
-              </div>              
-              <div class="col-3 m-1">
-                  {{form.dataFimSearch.label(class_="form-label m-1")}}
-                  {{form.dataFimSearch(class="form-control form-control-sm m-1")}}
-              </div>
-              <div class="col-3 m-1">
-                {{form.horaFimSearch.label(class_="form-label m-1")}}
-                {{form.horaFimSearch(class="form-control form-control-sm m-1")}}
-              </div>               
-              <div class="col-3 m-1">
-                {{form.isPlacaSearch.label(class_="form-label m-1")}}
-                {{ form.isPlacaSearch}}
-              </div>              
-              <div class="col-3 m-1">
-                  {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
-                  <button type="button" class="btn btn-outline-danger btn-sm m-1"
-                      onclick="window.location.href='{{url_for('maleta.listarDeteccao')}}';">Limpar
-                  </button>
-              </div>     
-          </div>    
+            <div class="col-2 m-1">
+                {{form.dataInicioSearch.label(class_="form-label m-1")}}
+                {{form.dataInicioSearch(class="form-control form-control-sm m-1")}}
+            </div>
+            <div class="col-2 m-1">
+              {{form.horaInicioSearch.label(class_="form-label m-1")}}
+              {{form.horaInicioSearch(class="form-control form-control-sm m-1")}}
+            </div>              
+            <div class="col-2 m-1">
+                {{form.dataFimSearch.label(class_="form-label m-1")}}
+                {{form.dataFimSearch(class="form-control form-control-sm m-1")}}
+            </div>
+            <div class="col-2 m-1">
+              {{form.horaFimSearch.label(class_="form-label m-1")}}
+              {{form.horaFimSearch(class="form-control form-control-sm m-1")}}
+            </div> 
+          </div> 
+          <div class="row">           
+            <div class="col-3 m-1">
+              {{form.isPlacaSearch.label(class_="form-label")}}
+              {{ form.isPlacaSearch(class_="m-1")}}
+            </div>              
+            <div class="col-3 m-1">
+                {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
+                <button type="button" class="btn btn-outline-danger btn-sm m-1"
+                    onclick="window.location.href='{{url_for('maleta.listarDeteccao')}}';">Limpar
+                </button>
+            </div>
+          </div>     
+        </div>   
       </form>
-    </div>
+      </div>
    
-    {% if listDeteccao.items %}
-    <div class="table-responsive">
-        <table class="table border table-striped table-hover table-borderless">
-            <thead>
-                <tr>
-                    <th scope="col">Código</th>
-                    <th scope="col">Latitude</th>
-                    <th scope="col">Longitude</th>
-                    <th scope="col">Timestamp</th>
-                    <th scope="col">Placa</th>
-                    <th scope="col" width="30%"> Imagem</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in listDeteccao.items %}
-                <tr>
-                    <td>{{ row.code }}</td>
-                    <td>{{ row.gps_data_lat }}</td>
-                    <td>{{ row.gps_data_long }}</td>
-                    <td>{{ row.gps_data_timestamp }}</td>
-                    <td>{{ row.plate if row.plate else "---" }}</td>
-                    <td>
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#enlargedImageModal" data-imgsrc="{{row.fileBase64}}">
-                            <img class="figure-img rounded" src="data:image/jpeg;base64,{{row.fileBase64}}" width="30%">
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    
-    <div class="modal fade" id="enlargedImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-          <div class="modal-content">
-            <div class="modal-body text-center">
-              <img class="img-fluid" id="enlargedImg" src="" alt="Enlarged Image">
+      <div class="card mb-2">
+        {% if listDeteccao.items %}
+        <div class="table-responsive" style="font-size: 0.9rem;">
+            <table class="table border table-striped table-hover table-bordered">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col">Código</th>
+                        <th scope="col">Latitude</th>
+                        <th scope="col">Longitude</th>
+                        <th scope="col">Timestamp</th>
+                        <th scope="col">Placa</th>
+                        <th scope="col" width="30%"> Imagem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in listDeteccao.items %}
+                    <tr>
+                        <td>{{ row.code }}</td>
+                        <td>{{ row.gps_data_lat }}</td>
+                        <td>{{ row.gps_data_long }}</td>
+                        <td>{{ row.gps_data_timestamp }}</td>
+                        <td>{{ row.plate if row.plate else "---" }}</td>
+                        <td>
+                            <button type="button" class="btn btn-link img_deteccao" data-toggle="modal" data-target="#enlargedImageModal" data-imgsrc="{{row.fileBase64}}">
+                                <img class="figure-img rounded " src="data:image/jpeg;base64,{{row.fileBase64}}" width="30%">
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+
+      <div class="modal fade" id="enlargedImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+              <div class="modal-body text-center">
+                <img class="img-fluid" id="enlargedImg" src="" alt="Enlarged Image">
+              </div>
             </div>
           </div>
-        </div>
       </div>         
 
-    <!-- Pagination Links-->
-    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-        <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.prev_num) }}" class="btn btn-outline-primary 
-            {% if listDeteccao.page == 1 %}disabled{% endif %}">
-            &laquo;
-        </a><!-- Loop through the number of pages to display a link for each-->
-        {% for page_num in listDeteccao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-        <!-- Check for the active page and set the link to "Active"-->
-        {% if listDeteccao.page == page_num %}
-        <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-primary">
-            {{ page_num }}
-        </a>
-        {% else %}
-        <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-outline-primary">
-            {{ page_num }}
-        </a>
-        {% endif %}
-        {% else %}
-        ...
-        {% endif %}
-        {% endfor %} <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.next_num) }}" class="btn btn-outline-primary 
-            {% if listDeteccao.page == listDeteccao.pages %}disabled{% endif %}">
-            &raquo;
-        </a>
+      <!-- Pagination Links-->
+      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+          <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.prev_num) }}" class="btn btn-outline-primary 
+              {% if listDeteccao.page == 1 %}disabled{% endif %}">
+              &laquo;
+          </a><!-- Loop through the number of pages to display a link for each-->
+          {% for page_num in listDeteccao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+          {% if page_num %}
+          <!-- Check for the active page and set the link to "Active"-->
+          {% if listDeteccao.page == page_num %}
+          <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-primary">
+              {{ page_num }}
+          </a>
+          {% else %}
+          <a href="{{ url_for('maleta.listarDeteccao', page=page_num) }}" class="btn btn-outline-primary">
+              {{ page_num }}
+          </a>
+          {% endif %}
+          {% else %}
+          ...
+          {% endif %}
+          {% endfor %} <a href="{{ url_for('maleta.listarDeteccao', page=listDeteccao.next_num) }}" class="btn btn-outline-primary 
+              {% if listDeteccao.page == listDeteccao.pages %}disabled{% endif %}">
+              &raquo;
+          </a>
+      </div>
+      <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+          Página {{ listDeteccao.page }} de {{ listDeteccao.pages }}
+      </p>
+      <!-- End Pagination Links-->
+      {% else %}
+      <p class="text-center">Nenhum registro encontrado.</p>
+      {% endif %}
+      
     </div>
-    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-        Página {{ listDeteccao.page }} de {{ listDeteccao.pages }}
-    </p>
-    <!-- End Pagination Links-->
-    {% else %}
-    <p class="text-center">Nenhum registro encontrado.</p>
-    {% endif %}
-    
-</div>
 
+</div>
 <script>
     $('#enlargedImageModal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget); // Botão que acionou o modal
