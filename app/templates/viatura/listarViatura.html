@@ -1,50 +1,64 @@
 {% extends 'base.html' %}
 {% block conteudo %}
-<div class="container-fluid">
 
-  <div class="container border mt-2 rounded p-4 mb-2">
-      <div class="row d-flex">
-        <div class="col m-0">
-          <h6 class="titulo-filtra-demandas m-0"><strong><i class="bi bi-list-ul"></i>&nbsp;&nbsp; Listagem de Viaturas</strong></h6>
-        </div>
-        <!-- Botão Cadastrar Viatura -->
-        <div class="col d-flex justify-content-md-end p-1 mt-1">
-          <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('viatura.prepareCadastrar') }}';">Nova Viatura</button>
-        </div>
+<div class="container-fluid border mt-2 rounded mb-2">
+
+  <div class="container-fluid mt-2">
+
+    <div class="card mb-2">
+      <div class="card-body">
+          <div class="row d-flex align-items-center">
+              <div class="col-9">
+                  <h5 class="card-title">Gerenciamento de Viaturas</h5>
+                  <p class="card-text">Gerencie aqui as Viaturas do sistema</p>
+              </div>
+              <div class="col-3 d-flex justify-content-end">
+                   <!-- Botão Cadastrar VTR -->
+                   <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('viatura.prepareCadastrar') }}';">Nova Viatura</button>
+              </div>
+          </div>
       </div>
+    </div>
     
-      <hr class="mt-1" />
+    <div class="card mb-2">
+          <div class="card-header">
+              <p class="card-text" style="font-weight: 600;">Consulta Viaturas</p>
+          </div>
+          <div class="card-body" style="font-size: 0.8rem !important;">
+            <!-- Parametros para consulta -->
+          </div>    
+    </div>
     <!-- Lista Viaturas -->
-      <div class="table-resposive">
-        <table class="table border table-striped table-hover table-borderless">
-          {% if listSolicitacaoHistorico != None %}
-            <thead>
-              <tr>
-                <th scope="col">Código</th>
-                <th scope="col">Placa</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Instituição</th>
-                <th scope="col">Tipo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for viatura in listViatura.items %}
-                <tr>
-                  <td>{{ viatura.txtCodigo }}</td>
-                  <td>{{ viatura.txtplaca }}</td>
-                  <td>{{ viatura.txtDescricao }}</td>
-                  <td>{{ viatura.instituicao.txtInstituicao }}</td>
-                  <td>{{ viatura.tipoPatrulha.txtTipoPatrulha }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          {% else %}
+    <div class="table-resposive">
+      <table class="table border table-striped table-hover table-borderless">
+        {% if listSolicitacaoHistorico != None %}
+          <thead>
             <tr>
-              <td>Nenhuma solicitação cadastrada</td>
+              <th scope="col">Código</th>
+              <th scope="col">Placa</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Instituição</th>
+              <th scope="col">Tipo</th>
             </tr>
-          {% endif %}
-        </table>
-      </div>
+          </thead>
+          <tbody>
+            {% for viatura in listViatura.items %}
+              <tr>
+                <td>{{ viatura.txtCodigo }}</td>
+                <td>{{ viatura.txtplaca }}</td>
+                <td>{{ viatura.txtDescricao }}</td>
+                <td>{{ viatura.instituicao.txtInstituicao }}</td>
+                <td>{{ viatura.tipoPatrulha.txtTipoPatrulha }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        {% else %}
+          <tr>
+            <td>Nenhuma solicitação cadastrada</td>
+          </tr>
+        {% endif %}
+      </table>
+    </div>
       
       <!-- Pagination Links-->
       <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
@@ -78,5 +92,6 @@
     </p>
   <!-- End Pagination Links-->
   </div>
+
 </div>
 {% endblock %}
