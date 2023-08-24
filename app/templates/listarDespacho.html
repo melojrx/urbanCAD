@@ -1,26 +1,22 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid">
+<div class="container-fluid border mt-2 rounded mb-2">
 
-    <div class="container-fluid border mt-2 rounded mb-2">
+    <div class="container-fluid mt-2">
 
-        <div class="container-fluid p-0 mb-1 mt-2">
-            <h6 class="titulo-filtra-demandas"> <strong> <i class="bi bi-file-earmark-diff-fill"
-                        style="font-size: 2rem;"></i> Registros de despachos </strong></h6>
-            <hr class="mt-1">
-        </div>
-    </div>
-
-    <div class="container-fluid border mt-1 rounded p-4 mb-2">
-
-        <div class="row d-flex">
-            <div class="col m-0">
-                <h6 class="titulo-filtra-demandas m-0"><strong><i class="bi bi-list-ul"></i>&nbsp;&nbsp; Listagem de
-                        Despachos</strong></h6>
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row d-flex align-items-center">
+                    <div class="col">
+                        <h5 class="card-title">Gerenciamento de Despachos</h5>
+                        <p class="card-text">Listagem de despachos</p>
+                    </div>
+                </div>
             </div>
         </div>
-
+   
+        <!-- Listagem de Despachos -->
         {% if listDespacho.items %}
         <div class="table-responsive mt-2">
             <table class="table border table-striped table-hover table-borderless">
@@ -80,4 +76,5 @@
 
     </div>
 
+</div>
     {% endblock conteudo %}
