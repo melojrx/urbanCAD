@@ -150,16 +150,6 @@ ul {
     }
 }
 
-@media screen and (max-width: 390px) {
-    .img_appstore,
-    .img_googleplay
-     {
-       display: none;
-       
-      
-    }
-}
-
 /* Footer */
 
 .footer-bg {
