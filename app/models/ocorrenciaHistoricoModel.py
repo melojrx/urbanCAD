@@ -17,7 +17,7 @@ class OcorrenciaHistorico(db.Model):
     dataInicio = db.Column('dat_inicio_ohi', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_ohi', db.DateTime, nullable=True)
 
-    ocorrencia = db.relationship(Ocorrencia) 
+    ocorrencia = db.relationship(Ocorrencia, back_populates='ocorrenciaHistorico') 
     statusOCorrencia= db.relationship(StatusOcorrencia)
     usuario = db.relationship(User)
     listObservacao = db.relationship(OcorrenciaObservacao, back_populates="ocorrenciaHistorico")

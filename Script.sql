@@ -4,6 +4,15 @@
 
 CREATE SCHEMA cad;
 
+## OBSERVAÇÃO: Antes de rodar o script abaixo, é necessário criar a tb_regionais_reg através da importação do POSTGIS
+-- Lições:
+-- 1. O arquivo .shp de regionais da sefin está no formato SIRGAS 2000 / UMT zone 24s
+-- 2. Foi preciso salvar um novo arquivo .shp no formato EPSG:4326 WSG 84
+-- 3. Na consulta foi necessário inverter o lat com o long para poder trazer
+-- 4. Para converter entre os formatos, clica com o botao diretito em cima da camada -> exportar -> guardar elementos como -> selecionar o SRC e salvar o arquivo shp
+-- 5. Depois importa os dados
+-- 6. faz o passo 3 para testar
+
 -- ################
 -- #  SEQUENCES   #
 -- ################
@@ -80,6 +89,41 @@ CREATE SEQUENCE cad.tipo_ocorrencia_seq
   CACHE 1;
 
   CREATE SEQUENCE cad.despacho_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.grupo_despacho_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.usuario_grupo_despacho_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.despacho_historico_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.status_despacho_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.ocorrencia_grupo_despacho_seq
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
@@ -198,18 +242,73 @@ CREATE TABLE cad.tb_interessado_int (
 );
 ALTER TABLE cad.tb_interessado_int ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_int) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
 
+CREATE TABLE cad.tb_grupo_despacho_gde (
+	id_grupo_despacho_gde integer NOT NULL DEFAULT nextval('cad.grupo_despacho_seq'::regclass),
+  id_regional_gde integer NOT NULL,
+  txt_nome_gde varchar(100) NOT NULL,
+  dat_inicio_gde timestamp without time zone NOT NULL,
+	dat_fim_gde timestamp without time zone,
+	CONSTRAINT grupo_despacho_pkey PRIMARY KEY (id_grupo_despacho_gde)
+);
+ALTER TABLE cad.tb_grupo_despacho_gde ADD CONSTRAINT regional_fkey FOREIGN KEY (id_regional_gde) REFERENCES cad.tb_regionais_reg (id);
+
+CREATE TABLE cad.tb_ocorrencia_grupo_despacho_ogd (
+	id_ocorrencia_grupo_despacho_ogd integer NOT NULL DEFAULT nextval('cad.ocorrencia_grupo_despacho_seq'::regclass),
+  id_ocorrencia_ogd integer NOT NULL,
+  id_grupo_despacho_ogd integer NOT NULL,
+  id_usuario_ogd integer NOT NULL,
+  dat_inicio_ogd timestamp without time zone NOT NULL,
+	dat_fim_ogd timestamp without time zone,
+	CONSTRAINT ocorrencia_grupo_despacho_pkey PRIMARY KEY (id_ocorrencia_grupo_despacho_ogd)
+);
+ALTER TABLE cad.tb_ocorrencia_grupo_despacho_ogd ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_ogd) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
+ALTER TABLE cad.tb_ocorrencia_grupo_despacho_ogd ADD CONSTRAINT grupo_despacho_fkey FOREIGN KEY (id_grupo_despacho_ogd) REFERENCES cad.tb_grupo_despacho_gde (id_grupo_despacho_gde);
+ALTER TABLE cad.tb_ocorrencia_grupo_despacho_ogd ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_ogd) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
+
 CREATE TABLE cad.tb_despacho_des (
 	id_despacho_des integer NOT NULL DEFAULT nextval('cad.despacho_seq'::regclass),
   id_ocorrencia_des integer NOT NULL,
-  id_instituicao_des integer NOT NULL,
+  id_viatura_des integer NOT NULL,
   id_usuario_des integer NOT NULL,
   dat_inicio_des timestamp without time zone NOT NULL,
 	dat_fim_des timestamp without time zone,
 	CONSTRAINT despacho_pkey PRIMARY KEY (id_despacho_des)
 );
 ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_des) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
-ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT instituicao_fkey FOREIGN KEY (id_instituicao_des) REFERENCES cad.tb_instituicao_ins (id_instituicao_ins);
+ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT viatura_fkey FOREIGN KEY (id_viatura_des) REFERENCES cad.tb_viatura_via (id_viatura_via);
 ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_des) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
+
+CREATE TABLE cad.tb_usuario_grupo_despacho_ugd (
+	id_usuario_grupo_despacho_ugd integer NOT NULL DEFAULT nextval('cad.usuario_grupo_despacho_seq'::regclass),
+  id_grupo_despacho_ugd integer NOT NULL,
+  id_usuario_ugd integer NOT NULL,
+  dat_inicio_ugd timestamp without time zone NOT NULL,
+	dat_fim_ugd timestamp without time zone,
+	CONSTRAINT usuario_grupo_despacho_pkey PRIMARY KEY (id_usuario_grupo_despacho_ugd)
+);
+ALTER TABLE cad.tb_usuario_grupo_despacho_ugd ADD CONSTRAINT grupo_despacho_fkey FOREIGN KEY (id_grupo_despacho_ugd) REFERENCES cad.tb_grupo_despacho_gde (id_grupo_despacho_gde);
+ALTER TABLE cad.tb_usuario_grupo_despacho_ugd ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_ugd) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
+
+CREATE TABLE cad.tb_status_despacho_sde( ----
+	id_status_despacho_sde integer NOT NULL DEFAULT nextval('cad.status_despacho_seq'::regclass),
+	txt_status_despacho_sde varchar(50) NOT NULL,
+	dat_inicio_sde timestamp without time zone NOT NULL,
+	dat_fim_sde timestamp without time zone,
+	CONSTRAINT status_despacho_pkey PRIMARY KEY (id_status_despacho_sde)
+);
+
+CREATE TABLE cad.tb_despacho_historico_dhi (
+	id_despacho_historico_dhi integer NOT NULL DEFAULT nextval('cad.despacho_historico_seq'::regclass),
+  id_despacho_dhi integer NOT NULL,
+	id_status_despacho_dhi integer NOT NULL,
+  id_usuario_dhi integer NOT NULL,
+	dat_inicio_dhi timestamp without time zone NOT null default now(),
+	dat_fim_dhi timestamp without time zone default null,
+	CONSTRAINT despacho_historico_pkey PRIMARY KEY (id_despacho_historico_dhi)
+);
+ALTER TABLE cad.tb_despacho_historico_dhi ADD CONSTRAINT despacho_fkey FOREIGN KEY (id_despacho_dhi) REFERENCES cad.tb_despacho_des (id_despacho_des);
+ALTER TABLE cad.tb_despacho_historico_dhi ADD CONSTRAINT status_fkey FOREIGN KEY (id_status_despacho_dhi) REFERENCES cad.tb_status_despacho_sde (id_status_despacho_sde);
+ALTER TABLE cad.tb_despacho_historico_dhi ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_dhi) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
 
 -- ####################################
 -- #        INSERTS PARA TESTES       #
@@ -217,7 +316,6 @@ ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usua
 
 INSERT INTO cad.tb_tipo_ocorrencia_toc(txt_tipo_ocorrencia_toc, dat_inicio_toc, dat_fim_toc)VALUES('Acidente', now(), null);
 INSERT INTO cad.tb_tipo_ocorrencia_toc(txt_tipo_ocorrencia_toc, dat_inicio_toc, dat_fim_toc)VALUES('Assalto', now(), null);
-
 
 INSERT INTO cad.tb_subtipo_ocorrencia_soc(id_tipo_ocorrencia_soc, txt_subtipo_ocorrencia_soc, dat_inicio_soc, dat_fim_soc)VALUES(1, 'Com vítimas fatais', now(), null);
 INSERT INTO cad.tb_subtipo_ocorrencia_soc(id_tipo_ocorrencia_soc, txt_subtipo_ocorrencia_soc, dat_inicio_soc, dat_fim_soc)VALUES(1, 'Sem vítimas fatais', now(), null);
@@ -238,6 +336,21 @@ INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat
 INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Cavalo', now(), null);
 INSERT INTO cad.tb_tipo_patrulha_tpa (txt_tipo_patrulha_tpa, dat_inicio_tpa, dat_fim_tpa) VALUES('Andando', now(), null);
 
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(1, 'Região 1', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(2, 'Região 10', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(3, 'Região 11', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(4, 'Região 12', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(5, 'Região 2', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(6, 'Região 3', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(7, 'Região 4', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(8, 'Região 5', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(9, 'Região 6', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(10, 'Região 7', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(11, 'Região 8', now(), null);
+INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(12, 'Região 9', now(), null);
+
+INSERT INTO cad.tb_status_despacho_sde (txt_status_despacho_sde, dat_inicio_sde, dat_fim_sde) VALUES('Em atendimento', now(), null);
+INSERT INTO cad.tb_status_despacho_sde (txt_status_despacho_sde, dat_inicio_sde, dat_fim_sde) VALUES('Concluído', now(), null);
 
 -- ####################################
 -- #           ALTER TABLES           #
@@ -247,3 +360,11 @@ ALTER TABLE cad.tb_interessado_int ADD txt_rg_int varchar(15) null;
 ALTER TABLE cad.tb_interessado_int ADD txt_passaporte_int varchar(15)  null;
 ALTER TABLE cad.tb_interessado_int ADD bol_vitima_int boolean null DEFAULT false;
 ALTER TABLE cad.tb_interessado_int ADD bol_estrangeiro_int boolean null DEFAULT false;
+
+
+
+-- ####################################
+-- #             POSTGIS              #
+-- ####################################
+
+CREATE EXTENSION postgis;

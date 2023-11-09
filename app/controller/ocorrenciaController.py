@@ -1,13 +1,16 @@
 import datetime
 import geocoder
-
+from sqlalchemy import text
 from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
+from app.forms.grupoDespachoForm import GrupoDespachoForm
 from ..database import db
 from app.models.ocorrenciaModel import Ocorrencia
 from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
+from app.models.ocorrenciaGrupoDespachoModel import OcorrenciaGrupoDespacho
 from app.models.subtipoOcorrenciaModel import SubtipoOcorrencia
 from app.models.tipoOcorrenciaModel import TipoOcorrencia
 from app.models.interessadoModel import Interessado
+from app.models.grupoDespachoModel import GrupoDespacho
 from ..enum import statusOcorrenciaEnum
 from ..rotas.ocorrenciaRout import ocorrencia_bp
 from .roleRequired import roles_required
@@ -171,3 +174,65 @@ class ocorrenciaController():
             listSubtipoOcorrencia = SubtipoOcorrencia.query.filter(SubtipoOcorrencia.idTipoOcorrencia==id).all()
             form.subtipoOcorrencia.choices = [(0, "Selecione...")]+[(row.id, row.txtSubtipoOcorrencia) for row in listSubtipoOcorrencia]
         return jsonify({'htmlresponse': render_template('loadSubtipoOcorrencia.html', listSubtipoOcorrencia=listSubtipoOcorrencia, form=form)})
+    
+
+    @ocorrencia_bp.route('/prepareAtribuirOcorrencia/<idOcorrencia>/<lat>/<long>', methods=['GET'])
+    @login_required
+    def prepareAtribuirOcorrencia(idOcorrencia, lat, long):
+        
+        try:
+
+            global listGrupoOcorrencia
+            form = GrupoDespachoForm(request.form)
+            listGrupoOcorrencia = GrupoDespacho.query.filter(GrupoDespacho.dataFim.is_(None)).all()
+            form.grupoDespacho.choices = [(0, "Selecione...")]+[(row.id, row.txtNome) for row in listGrupoOcorrencia]
+
+            sql = text("SELECT gde.*"  
+                        " from cad.tb_grupo_despacho_gde gde"
+                        " join cad.tb_regionais_reg reg on gde.id_regional_gde = reg.id"
+                        " WHERE ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
+            results = db.engine.execute(sql, param1=long, param2=lat)
+            
+
+            grupoDespacho = None
+            if results:
+                for row in results:
+                    id = row["id_grupo_despacho_gde"]
+                    nome = row["txt_nome_gde"]
+                    grupoDespacho = GrupoDespacho(id, nome)
+                    form.idOcorrencia.data = idOcorrencia
+            form.grupoDespacho.data = grupoDespacho.id
+
+            return render_template('atribuirGrupoDespacho.html', form=form, grupoDespacho=grupoDespacho)  
+        
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
+
+    @ocorrencia_bp.route('/cadastrarGrupoDespacho', methods=['POST'])
+    @login_required
+    def cadastrarGrupoDespacho():
+
+        try:
+            
+            form = GrupoDespachoForm(request.form)
+            idGrupoDespacho = form.grupoDespacho.data
+            idOcorrencia = form.idOcorrencia.data
+            dataInicio = datetime.datetime.now()
+
+            ocorrenciaGrupoDespacho = OcorrenciaGrupoDespacho(idOcorrencia, idGrupoDespacho, current_user.id, dataInicio)
+            ocorrenciaHistorico = db.session.query(OcorrenciaHistorico).join(Ocorrencia).filter(and_(Ocorrencia.id==idOcorrencia, OcorrenciaHistorico.dataFim.is_(None))).first()
+            ocorrenciaHistorico.dataFim = dataInicio
+          
+            newOcorrenciaHistorico = OcorrenciaHistorico(ocorrenciaHistorico.ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, current_user.id, dataInicio)
+
+            db.session.add(ocorrenciaGrupoDespacho)
+            db.session.add(newOcorrenciaHistorico)
+            db.session.commit()
+
+            return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))

@@ -101,10 +101,10 @@
                 </a>
                 {% if row.statusOCorrencia.id == 1 %}
                 <a
-                  href="{{ url_for('despacho.prepareDespachar', idOcorrencia=row.ocorrencia.id) }}"
+                  href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
                   class="btn btn-danger btn-sm"
                   role="button"
-                  title="Despachar"
+                  title="Enviar para Grupo de Despacho"
                 >
                   <i class="bi bi-box-arrow-up-right"></i>
                 </a>
