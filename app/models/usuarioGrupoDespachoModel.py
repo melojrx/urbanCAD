@@ -4,7 +4,7 @@ from app.models.userModel import User
 from ..database import db
 
 
-class OcorrenciaGrupoDespacho(db.Model):
+class UsuarioGrupoDespacho(db.Model):
     __tablename__ = 'tb_usuario_grupo_despacho_ugd'
     __table_args__ = {"schema":"cad"}
     
@@ -14,12 +14,10 @@ class OcorrenciaGrupoDespacho(db.Model):
     dataInicio = db.Column('dat_inicio_ugd', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_ugd', db.DateTime, nullable=True)
 
-    ocorrencia = db.relationship(Ocorrencia) 
     grupoDespacho= db.relationship(GrupoDespacho)
     usuario = db.relationship(User)
 
-    def __init__(self, ocorrencia, idGrupoDespacho, idUsuario, dataInicio):
-        self.ocorrencia = ocorrencia
+    def __init__(self, idGrupoDespacho, idUsuario, dataInicio):
         self.idGrupoDespacho = idGrupoDespacho
         self.idUsuario = idUsuario
         self.dataInicio = dataInicio

@@ -322,9 +322,10 @@ INSERT INTO cad.tb_subtipo_ocorrencia_soc(id_tipo_ocorrencia_soc, txt_subtipo_oc
 INSERT INTO cad.tb_subtipo_ocorrencia_soc(id_tipo_ocorrencia_soc, txt_subtipo_ocorrencia_soc, dat_inicio_soc, dat_fim_soc)VALUES(2, 'Com reféns', now(), null);
 INSERT INTO cad.tb_subtipo_ocorrencia_soc(id_tipo_ocorrencia_soc, txt_subtipo_ocorrencia_soc, dat_inicio_soc, dat_fim_soc)VALUES(2, 'Sem reféns', now(), null);
 
-INSERT INTO cad.tb_status_ocorrencia_sto (txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES('Aguardando Despacho', now(), null);
-INSERT INTO cad.tb_status_ocorrencia_sto (txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES('Em andamento', now(), null);
-INSERT INTO cad.tb_status_ocorrencia_sto (txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES('Finalizado', now(), null);
+INSERT INTO cad.tb_status_ocorrencia_sto (id_status_ocorrencia_sto, txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES(1,'Aguardando Despacho', now(), null);
+INSERT INTO cad.tb_status_ocorrencia_sto (id_status_ocorrencia_sto,txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES(2,'Enviado para Despacho', now(), null);
+INSERT INTO cad.tb_status_ocorrencia_sto (id_status_ocorrencia_sto,txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES(3,'Em andamento', now(), null);
+INSERT INTO cad.tb_status_ocorrencia_sto (id_status_ocorrencia_sto,txt_status_ocorrencia_sto, dat_inicio_sto, dat_fim_sto) VALUES(4,'Finalizado', now(), null);
 
 INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, txt_sigla_ins, dat_inicio_ins, dat_fim_ins) VALUES('Trânsito', 'AMC', now(), null);
 INSERT INTO cad.tb_instituicao_ins (txt_instituicao_ins, txt_sigla_ins, dat_inicio_ins, dat_fim_ins) VALUES('Polícia Militar', 'PM', now(), null);
@@ -349,8 +350,9 @@ INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_
 INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(11, 'Região 8', now(), null);
 INSERT INTO cad.tb_grupo_despacho_gde(id_regional_gde, txt_nome_gde, dat_inicio_gde, dat_fim_gde) VALUES(12, 'Região 9', now(), null);
 
-INSERT INTO cad.tb_status_despacho_sde (txt_status_despacho_sde, dat_inicio_sde, dat_fim_sde) VALUES('Em atendimento', now(), null);
-INSERT INTO cad.tb_status_despacho_sde (txt_status_despacho_sde, dat_inicio_sde, dat_fim_sde) VALUES('Concluído', now(), null);
+INSERT INTO cad.tb_status_despacho_sde (id_status_despacho_sde, txt_status_despacho_sde, dat_inicio_sde, dat_fim_sde) VALUES(1, 'Aguardando atendimento', now(), null);
+INSERT INTO cad.tb_status_despacho_sde (id_status_despacho_sde, txt_status_despacho_sde, dat_inicio_sde, dat_fim_sde) VALUES(2, 'Em andamento', now(), null);
+INSERT INTO cad.tb_status_despacho_sde (id_status_despacho_sde, txt_status_despacho_sde, dat_inicio_sde, dat_fim_sde) VALUES(3, 'Concluído', now(), null);
 
 -- ####################################
 -- #           ALTER TABLES           #

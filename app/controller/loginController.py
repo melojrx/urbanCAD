@@ -63,9 +63,13 @@ class loginController:
         form = LoginForm(request.form)
         if request.method == 'POST' and form.validate(): 
             user = User.query.filter_by(email=form.email.data).first()
-            session["roles"] = 'URBANCAD_GOVERNO'
             login_user(user)
-            return redirect(url_for('ocorrencia.iniciar')) 
+            if "admin" in user.email:
+                session["roles"] = 'URBANCAD_ADMIN'
+                return redirect(url_for('ocorrencia.iniciar')) 
+            if "gd" in user.email:
+                session["roles"] = 'URBANCAD_DESPACHO'
+                return redirect(url_for('despacho.prepareSearchDespacho')) 
         else:
              return render_template('login.html', form=form)
         # ------------------------------------------------

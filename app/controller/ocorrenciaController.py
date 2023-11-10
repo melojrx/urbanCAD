@@ -38,9 +38,9 @@ class ocorrenciaController():
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
 
-    @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
     @ocorrencia_bp.route('/prepareSearchOcorrencia', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
     def prepareSearchOcorrencia():
         page = request.args.get('page', 1, type=int)
         form = OcorrenciaSearchForm(request.form)
@@ -48,9 +48,9 @@ class ocorrenciaController():
         return render_template('listarOcorrencia.html', listOcorrenciaHistorico=listOcorrenciaHistorico, form=form)
 
 
-    @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
     @ocorrencia_bp.route('/searchOcorrencia', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
     def searchOcorrencia():
 
         form = OcorrenciaSearchForm(request.form)
@@ -94,15 +94,16 @@ class ocorrenciaController():
 
         return render_template('listarOcorrencia.html', listOcorrenciaHistorico=listOcorrenciaHistorico, form=form)
 
-    @ocorrencia_bp.route('/minhasOcorrencias', methods=['GET'])
-    @login_required
-    def minhasOcorrencias():
-        page = request.args.get('page', 1, type=int)
-        listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idUsuario==current_user.id, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
-        return render_template('minhasOcorrencias.html', listOcorrenciaHistorico=listOcorrenciaHistorico)
+    # @ocorrencia_bp.route('/minhasOcorrencias', methods=['GET'])
+    # @login_required
+    # def minhasOcorrencias():
+    #     page = request.args.get('page', 1, type=int)
+    #     listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idUsuario==current_user.id, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+    #     return render_template('minhasOcorrencias.html', listOcorrenciaHistorico=listOcorrenciaHistorico)
 
     @ocorrencia_bp.route('/prepareCadastrarOcorrencia', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
     def prepareCadastrarOcorrencia():
 
         global listTipoOcorrencia 
@@ -114,6 +115,7 @@ class ocorrenciaController():
     
     @ocorrencia_bp.route('/cadastrarOcorrencia', methods=['POST'])
     @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
     def cadastrarOcorrencia():
 
         try:
@@ -178,6 +180,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/prepareAtribuirOcorrencia/<idOcorrencia>/<lat>/<long>', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
     def prepareAtribuirOcorrencia(idOcorrencia, lat, long):
         
         try:
@@ -212,6 +215,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/cadastrarGrupoDespacho', methods=['POST'])
     @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
     def cadastrarGrupoDespacho():
 
         try:
@@ -225,7 +229,7 @@ class ocorrenciaController():
             ocorrenciaHistorico = db.session.query(OcorrenciaHistorico).join(Ocorrencia).filter(and_(Ocorrencia.id==idOcorrencia, OcorrenciaHistorico.dataFim.is_(None))).first()
             ocorrenciaHistorico.dataFim = dataInicio
           
-            newOcorrenciaHistorico = OcorrenciaHistorico(ocorrenciaHistorico.ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, current_user.id, dataInicio)
+            newOcorrenciaHistorico = OcorrenciaHistorico(ocorrenciaHistorico.ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.ENVIADO_PARA_DESPACHO.value, current_user.id, dataInicio)
 
             db.session.add(ocorrenciaGrupoDespacho)
             db.session.add(newOcorrenciaHistorico)
@@ -235,4 +239,4 @@ class ocorrenciaController():
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
+            return redirect(url_for('ocorrencia.prepareSearchOcorrencia')) 

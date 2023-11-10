@@ -1,4 +1,3 @@
-from app.models.statusDespachoModel import StatusDespacho
 from app.models.ocorrenciaModel import Ocorrencia
 from app.models.grupoDespachoModel import GrupoDespacho
 from app.models.userModel import User
@@ -16,7 +15,6 @@ class OcorrenciaGrupoDespacho(db.Model):
     dataInicio = db.Column('dat_inicio_ogd', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_ogd', db.DateTime, nullable=True)
 
-    ocorrencia = db.relationship(Ocorrencia) 
     grupoDespacho= db.relationship(GrupoDespacho)
     usuario = db.relationship(User)
 
