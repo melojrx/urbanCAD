@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid">
+
+    <div class="container-fluid border mt-1 rounded p-4 mb-2">
+
+        {% if listDespachoHistorico.items %}
+        <div class="table-responsive mt-2">
+            <table class="table border table-striped table-hover table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">Tipo Ocorrência</th>
+                        <th scope="col">Nº da Ocorrência</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Despachado para</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in listDespachoHistorico.items %}
+                    <tr>
+                        <td>{{ row.despacho.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}</td>
+                        <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
+                        <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
+                        <td>{{ row.despacho.viatura.instituicao.txtSigla ~ ' - ' ~ row.despacho.viatura.tipoPatrulha.txtTipoPatrulha ~ ' ' ~ row.despacho.viatura.txtPlaca }}</td>
+                        <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                        <td>
+                            <a
+                            href="{{ url_for('despacho.atenderDespacho', idDespachoHistorico=row.id) }}"
+                            class="btn btn-danger btn-sm"
+                            role="button"
+                            title="Atender">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                          </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination Links-->
+        <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+            <a href="{{ url_for('despacho.meusDespachos', page=listDespachoHistorico.prev_num) }}" class="btn btn-outline-primary 
+            {% if listDespachoHistorico.page == 1 %}disabled{% endif %}">
+                &laquo;
+            </a><!-- Loop through the number of pages to display a link for each-->
+            {% for page_num in listDespachoHistorico.iter_pages(left_edge=1, right_edge=1, left_current=1,
+            right_current=2) %}
+            {% if page_num %}
+            <!-- Check for the active page and set the link to "Active"-->
+            {% if listDespachoHistorico.page == page_num %}
+            <a href="{{ url_for('despacho.meusDespachos', page=page_num) }}" class="btn btn-primary">
+                {{ page_num }}
+            </a>
+            {% else %}
+            <a href="{{ url_for('despacho.meusDespachos', page=page_num) }}" class="btn btn-outline-primary">
+                {{ page_num }}
+            </a>
+            {% endif %}
+            {% else %}
+            ...
+            {% endif %}
+            {% endfor %} <a href="{{ url_for('despacho.meusDespachos', page=listDespachoHistorico.next_num) }}"
+                class="btn btn-outline-primary 
+            {% if listDespachoHistorico.page == listDespachoHistorico.pages %}disabled{% endif %}">
+                &raquo;
+            </a>
+        </div>
+        <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+            Página {{ listDespachoHistorico.page }} de {{ listDespachoHistorico.pages }}
+        </p>
+        <!-- End Pagination Links-->
+        {% else %}
+        <p class="text-center">Nenhum registro encontrado.</p>
+        {% endif %}
+
+    </div>
+
+
+    {% endblock conteudo %}

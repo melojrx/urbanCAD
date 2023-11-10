@@ -29,7 +29,6 @@
                         <th scope="col">Despachado por</th>
                         <th scope="col">Despachado para</th>
                         <th scope="col">Data</th>
-                        <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,9 +38,8 @@
                         <td>{{ row.ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</td>
                         <td>{{ row.despachoHistorico.statusDespacho.txtStatusDespacho}}</td>
                         <td>{{ row.user.name}}</td>
-                        <td>verificar</td>
-                        <td>verificar</td>
-                        <td> Atender* </td>
+                        <td>{{ row.viatura.instituicao.txtSigla ~ ' - ' ~ row.viatura.tipoPatrulha.txtTipoPatrulha ~ ' ' ~ row.viatura.txtPlaca }}</td>
+                        <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
                     {% endfor %}
                 </tbody>
             </table>

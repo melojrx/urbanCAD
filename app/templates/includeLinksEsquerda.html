@@ -2,16 +2,16 @@
   <div class="urban-gov-menu-gov">
     <i class="bi bi-house-fill"></i>
     <span class="titulo-menu-gov">Inicio</span>
-  </div> 
-</a>  
+  </div>
+</a>
 <div class="menu-categorias">
   <span class="categorias-menu-gov">ATENDIMENTO</span>
-</div>  
+</div>
 <a href="#" class="link-sidebar">
   <div class="urban-gov-menu-gov">
     <i class="bi bi-geo-alt-fill"></i>
     <span class="titulo-menu-gov">Monitoramento</span>
-  </div> 
+  </div>
 </a>
 {% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
 <a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}" class="link-sidebar">
@@ -27,11 +27,18 @@
   </div>
 </a>
 {% endif %}
+<a href="{{url_for('despacho.meusDespachos')}}" class="link-sidebar">
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-pencil-square"></i>
+    <span class="titulo-menu-gov">Meus Despachos</span>
+  </div>
+</a>
+
 
 {% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
 <div class="menu-categorias">
   <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
-</div>  
+</div>
 <a href="{{url_for('viatura.listarViaturas')}}" class="link-sidebar">
   <div class="urban-gov-menu-gov">
     <i class="bi bi-car-front-fill"></i>

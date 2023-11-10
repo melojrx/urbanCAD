@@ -21,7 +21,23 @@ class instituicaoController():
     global ROWS_PER_PAGE 
     ROWS_PER_PAGE = 10
 
-    ## REVER
+    @despacho_bp.route('/prepareSearchDespacho', methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')
+    def prepareSearchDespacho():
+        page = request.args.get('page', 1, type=int)
+        listDespacho = (Despacho.query.join(Ocorrencia)
+                        .join(OcorrenciaHistorico)
+                        .filter(and_(OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, OcorrenciaHistorico.dataFim.is_(None)))
+                        .order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE))
+        
+        listDespachar = (OcorrenciaHistorico.query.join(Ocorrencia)
+                        .join(OcorrenciaGrupoDespacho)
+                        .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+                        .filter(and_(OcorrenciaGrupoDespacho.idUsuario == current_user.id, OcorrenciaHistorico.dataFim.is_(None), Despacho.id.is_(None)))
+                        .order_by(OcorrenciaHistorico.dataInicio.desc())).paginate(page=page, per_page=ROWS_PER_PAGE)
+        return render_template('listarDespacho.html', listDespacho=listDespacho, listDespachar=listDespachar)
+
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')    
@@ -37,7 +53,6 @@ class instituicaoController():
                                        ) for row in listViatura]
         return render_template('despacho.html', form=form)
 
-    ## REVER
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')    
@@ -67,21 +82,35 @@ class instituicaoController():
             flash('Erro: {}'.format(e), 'error') 
             return render_template('despacho.html', form=form)
 
-        return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))   
-     
-    @despacho_bp.route('/prepareSearchDespacho', methods=['GET'])
+        return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
+    
+    @despacho_bp.route('/atenderDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')
-    def prepareSearchDespacho():
-        page = request.args.get('page', 1, type=int)
-        listDespacho = (Despacho.query.join(Ocorrencia)
-                        .join(OcorrenciaHistorico)
-                        .filter(and_(OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, OcorrenciaHistorico.dataFim.is_(None)))
-                        .order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE))
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
+    def atenderDespacho(idDespachoHistorico):
+
+        try:
+            datInicio = datetime.datetime.now()
+
+            despachoHistorico = db.session.query(DespachoHistorico).filter(and_(DespachoHistorico.id==idDespachoHistorico, DespachoHistorico.dataFim.is_(None))).first()
+            despachoHistorico.dataFim = datInicio
+          
+            newDespachoHistorico = DespachoHistorico(despachoHistorico.despacho, statusDespachoEnum.StatusDespachoEnum.EM_ANDAMENTO.value, current_user.id, datInicio)
+            
+            db.session.add(newDespachoHistorico)
+            db.session.commit()
+
+            flash('Despacho atendido com sucesso', 'sucess')
+            redirect(url_for('despacho.meusDespachos'))
+        except Exception as e:
+            db.session.rollback();
+            flash('Erro: {}'.format(e), 'error') 
+            redirect(url_for('despacho.meusDespachos')) 
         
-        listDespachar = (OcorrenciaHistorico.query.join(Ocorrencia)
-                        .join(OcorrenciaGrupoDespacho)
-                        .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-                        .filter(and_(OcorrenciaGrupoDespacho.idUsuario == current_user.id, OcorrenciaHistorico.dataFim.is_(None), Despacho.id.is_(None)))
-                        .order_by(OcorrenciaHistorico.dataInicio.desc())).paginate(page=page, per_page=ROWS_PER_PAGE)
-        return render_template('listarDespacho.html', listDespacho=listDespacho, listDespachar=listDespachar)
+
+    @despacho_bp.route('/meusDespachos', methods=['GET'])
+    @login_required
+    def meusDespachos():
+        page = request.args.get('page', 1, type=int)
+        listDespachoHistorico = DespachoHistorico.query.filter(and_(DespachoHistorico.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        return render_template('meusDespachos.html', listDespachoHistorico=listDespachoHistorico)
