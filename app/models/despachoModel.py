@@ -15,7 +15,9 @@ class Despacho(db.Model):
     dataFim = db.Column('dat_fim_des', db.DateTime, nullable=True)
 
     ocorrencia = db.relationship(Ocorrencia)
-    viatura = db.relationship(Viatura) 
+    viatura = db.relationship(Viatura)
+    user = db.relationship(User)
+    despachoHistorico = db.relationship('DespachoHistorico', primaryjoin="(Despacho.id == DespachoHistorico.idDespacho) & (DespachoHistorico.dataFim == None)", back_populates='despacho', uselist=False)
 
     def __init__(self, idOcorrencia, idViatura, idUsuario, dataInicio):
         self.idOcorrencia = idOcorrencia

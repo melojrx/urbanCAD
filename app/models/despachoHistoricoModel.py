@@ -15,7 +15,7 @@ class DespachoHistorico(db.Model):
     dataInicio = db.Column('dat_inicio_dhi', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_dhi', db.DateTime, nullable=True)
 
-    despacho = db.relationship(Despacho) 
+    despacho = db.relationship(Despacho, back_populates='despachoHistorico') 
     statusDespacho= db.relationship(StatusDespacho)
     usuario = db.relationship(User)
 

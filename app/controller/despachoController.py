@@ -29,13 +29,18 @@ class instituicaoController():
         form = DespachoForm(request.form)
         form.ocorrencia.data = idOcorrencia
         listViatura = Viatura.query.filter(Viatura.dataFim.is_(None)).all()
-        form.despacharPara.choices = [(str(row.id), str(row.txtPlaca)) for row in listViatura]
+        form.despacharPara.choices = [(str(row.id), str(row.instituicao.txtSigla)
+                                      + " - " + str(row.tipoPatrulha.txtTipoPatrulha)
+                                      + " " + str(row.txtDescricao)
+                                      + " " + str(row.txtCodigo)
+                                      + " " + str(row.txtPlaca)
+                                       ) for row in listViatura]
         return render_template('despacho.html', form=form)
 
     ## REVER
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN ,URBANCAD_GOVERNO')    
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')    
     def despachar():
 
         try:
@@ -46,7 +51,7 @@ class instituicaoController():
 
             for row in listViatura:
                 despacho = Despacho(idOcorrencia, row, current_user.id, datInicio)
-                despachoHistorico = DespachoHistorico(despacho, statusDespachoEnum.StatusDespachoEnum.AGUARDANDO_ATENDIMENTO, current_user.id, datInicio)
+                despachoHistorico = DespachoHistorico(despacho, statusDespachoEnum.StatusDespachoEnum.AGUARDANDO_ATENDIMENTO.value, current_user.id, datInicio)
                 db.session.add(despachoHistorico)
 
             ocorrenciaHistorico = db.session.query(OcorrenciaHistorico).join(Ocorrencia).filter(and_(Ocorrencia.id==idOcorrencia, OcorrenciaHistorico.dataFim.is_(None))).first()

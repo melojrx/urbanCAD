@@ -1,7 +1,6 @@
 from app.models.interessadoModel import Interessado
 from app.models.userModel import User
 from app.models.subtipoOcorrenciaModel import SubtipoOcorrencia
-# from app.models.ocorrenciaGrupoDespachoModel import OcorrenciaGrupoDespacho
 from ..database import db
 
 class Ocorrencia(db.Model):
@@ -23,8 +22,7 @@ class Ocorrencia(db.Model):
     usuario = db.relationship(User)
     subcategoria = db.relationship(SubtipoOcorrencia)
     interessado = db.relationship(Interessado, back_populates="ocorrencia", uselist=False)
-    # grupoDespachoOcorrencia = db.relationship('OcorrenciaGrupoDespacho')
-    ocorrenciaHistorico = db.relationship('OcorrenciaHistorico', primaryjoin="(Ocorrencia.id == OcorrenciaHistorico.idOcorrencia) & (OcorrenciaHistorico.dataFim == None)", back_populates='ocorrencia')
+    ocorrenciaHistorico = db.relationship('OcorrenciaHistorico', primaryjoin="(Ocorrencia.id == OcorrenciaHistorico.idOcorrencia) & (OcorrenciaHistorico.dataFim == None)", back_populates='ocorrencia', uselist=False)
 
     # NÃO APAGAR OS CÓDIGOS COMENTADOS ABAIXO.
     # NÃO ESTÃO SENDO USANDOS DE PROPÓSITO POR QUESTÕES DE PEFORMANCE.
