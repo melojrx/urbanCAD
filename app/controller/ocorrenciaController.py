@@ -162,6 +162,7 @@ class ocorrenciaController():
             db.session.add(interessado)
             db.session.commit()
 
+            flash('Ocorrência Cadastrada com sucesso', 'sucess')
             return redirect(url_for('ocorrencia.iniciar'))
         except Exception as e:
             db.session.rollback()
@@ -235,6 +236,7 @@ class ocorrenciaController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
+            flash('Ocorrencia enviada para Grupo de Despacho com sucesso', 'sucess')
             return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
         except Exception as e:
             db.session.rollback()
