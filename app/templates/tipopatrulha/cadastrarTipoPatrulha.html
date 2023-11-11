@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid border mt-2 rounded mb-2">
+
+    <div class="container-fluid mt-2">
+        <form method="POST" enctype='multipart/form-data' action="{{ url_for('tipopatrulha.cadastrarTipoPatrulha') }}">
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                        <h5 class="card-title">Gerenciamento de Tipo de Patrulha</h5>
+                        <p class="card-text">Cadastro de Tipos de Patrulha</p>
+                    </div>
+                    <div class="col-3 d-flex justify-content-end">
+                        <!-- Botão Voltar -->
+                        <button class="btn btn-danger me-2" type="button"
+                        onclick="window.location.href='{{url_for('tipopatrulha.listarTipoPatrulha')}}';">Voltar</button>
+                        <!-- Botão Cadastrar VTR -->
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="form-group mb-3 row justify-content-between">
+                    <div class="col">
+                        {{form.descricao.label(class_="form-label")}}
+                        {{form.descricao(class_="form-control")}}
+                        {% for error in form.descricao.errors %}
+                            <div class="important">
+                                {{error}}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+
+</div>
+{% endblock conteudo %}

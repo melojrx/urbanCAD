@@ -1,6 +1,9 @@
 import datetime
 from sqlalchemy import and_
 
+from app.models.grupoDespachoModel import GrupoDespacho
+from app.models.usuarioGrupoDespachoModel import UsuarioGrupoDespacho
+
 from ..database import db
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_required, current_user
@@ -33,8 +36,10 @@ class instituicaoController():
         
         listDespachar = (OcorrenciaHistorico.query.join(Ocorrencia)
                         .join(OcorrenciaGrupoDespacho)
+                        .join(GrupoDespacho)
+                        .join(UsuarioGrupoDespacho)
                         .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-                        .filter(and_(OcorrenciaGrupoDespacho.idUsuario == current_user.id, OcorrenciaHistorico.dataFim.is_(None), Despacho.id.is_(None)))
+                        .filter(and_(UsuarioGrupoDespacho.idUsuario == current_user.id, OcorrenciaHistorico.dataFim.is_(None), Despacho.id.is_(None)))
                         .order_by(OcorrenciaHistorico.dataInicio.desc())).paginate(page=page, per_page=ROWS_PER_PAGE)
         return render_template('listarDespacho.html', listDespacho=listDespacho, listDespachar=listDespachar)
 

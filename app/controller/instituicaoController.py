@@ -12,25 +12,26 @@ class instituicaoController():
     global ROWS_PER_PAGE 
     ROWS_PER_PAGE = 10
 
-    @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
     @instituicao_bp.route('/prepareSearchInstituicao', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN')
     def prepareSearchInstituicao():
         page = request.args.get('page', 1, type=int)
         form = InstituicaoForm(request.form)
         listInstituicao = Instituicao.query.filter(Instituicao.dataFim.is_(None)).order_by(Instituicao.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
         return render_template('listarInstituicao.html', listInstituicao=listInstituicao, form=form)
 
-    @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
+    
     @instituicao_bp.route('/prepareCadastrarInstituicao', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN')
     def prepareCadastrarInstituicao():
         form = InstituicaoForm(request.form)
         return render_template('cadastrarInstituicao.html', form=form)    
     
-    @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
     @instituicao_bp.route('/cadastrarInstituicao', methods=['POST'])
     @login_required
+    @roles_required('URBANCAD_ADMIN')
     def cadastrarInstituicao():
 
         try:

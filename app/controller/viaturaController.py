@@ -1,4 +1,6 @@
 import datetime
+
+from app.controller.roleRequired import roles_required
 from ..database import db
 from flask_login import login_required
 from ..models.viaturaModel import Viatura
@@ -11,10 +13,11 @@ from flask import render_template, request, redirect, url_for, flash
 class viaturaController:    
 
     global ROWS_PER_PAGE 
-    ROWS_PER_PAGE = 5
+    ROWS_PER_PAGE = 10
 
     @viatura_bp.route('/listarViaturas', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN')
     def listarViaturas():
         try:
             page = request.args.get('page', 1, type=int)
@@ -28,6 +31,7 @@ class viaturaController:
 
     @viatura_bp.route('/prepareCadastrar', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN')
     def prepareCadastrar():
         form = ViaturaForm(request.form)
 
@@ -42,6 +46,7 @@ class viaturaController:
 
     @viatura_bp.route('/cadastrar' , methods=['POST'])
     @login_required
+    @roles_required('URBANCAD_ADMIN')
     def cadastrar():
 
         form = ViaturaForm(request.form)

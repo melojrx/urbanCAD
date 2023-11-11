@@ -24,6 +24,7 @@ from .rotas.despachoRout import despacho_bp
 from .rotas.instituicaoRout import instituicao_bp
 from .rotas.maletaRout import maleta_bp
 from .rotas.ocorrenciaRout import ocorrencia_bp
+from .rotas.tipoPatrulhaRout import tipopatrulha_bp
 from .rotas.viaturaRout import viatura_bp
 
 app.register_blueprint(public)
@@ -32,6 +33,7 @@ app.register_blueprint(despacho_bp)
 app.register_blueprint(instituicao_bp)
 app.register_blueprint(maleta_bp)
 app.register_blueprint(ocorrencia_bp)
+app.register_blueprint(tipopatrulha_bp)
 app.register_blueprint(viatura_bp)
 # print(list(app.url_map.iter_rules()), sep='\n')
 
