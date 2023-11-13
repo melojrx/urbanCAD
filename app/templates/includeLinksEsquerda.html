@@ -7,25 +7,21 @@
 <div class="menu-categorias">
   <span class="categorias-menu-gov">ATENDIMENTO</span>
 </div>
-<a href="#" class="link-sidebar">
-  <div class="urban-gov-menu-gov">
-    <i class="bi bi-geo-alt-fill"></i>
-    <span class="titulo-menu-gov">Monitoramento</span>
-  </div>
-</a>
 {% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
-<a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}" class="link-sidebar">
-  <div class="urban-gov-menu-gov">
-    <i class="bi bi-file-earmark-diff-fill"></i>
-    <span class="titulo-menu-gov">Ocorrências</span>
-  </div>
-</a>
-<a href="{{url_for('despacho.prepareSearchDespacho')}}" class="link-sidebar">
-  <div class="urban-gov-menu-gov">
-    <i class="bi bi-pencil-square"></i>
-    <span class="titulo-menu-gov">Despachos</span>
-  </div>
-</a>
+  <a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}" class="link-sidebar">
+    <div class="urban-gov-menu-gov">
+      <i class="bi bi-file-earmark-diff-fill"></i>
+      <span class="titulo-menu-gov">Ocorrências</span>
+    </div>
+  </a>
+{% endif %}
+{% if ('URBANCAD_DESPACHO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
+  <a href="{{url_for('despacho.prepareSearchDespacho')}}" class="link-sidebar">
+    <div class="urban-gov-menu-gov">
+      <i class="bi bi-pencil-square"></i>
+      <span class="titulo-menu-gov">Despachos</span>
+    </div>
+  </a>
 {% endif %}
 <a href="{{url_for('despacho.meusDespachos')}}" class="link-sidebar">
   <div class="urban-gov-menu-gov">
@@ -35,7 +31,7 @@
 </a>
 
 
-{% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
+{% if ('URBANCAD_ADMIN' in session["roles"]) %}
 <div class="menu-categorias">
   <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
 </div>

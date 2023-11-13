@@ -31,7 +31,7 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/prepareCadastrarGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')
     def prepareCadastrarGrupoDespacho():
 
         try:
@@ -48,13 +48,13 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/cadastrarGrupoDespacho' , methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')
     def cadastrarGrupoDespacho():
 
         form = GrupoDespachoForm(request.form)
         dataInicio = datetime.datetime.now()
         try:
-            grupoDespacho = GrupoDespacho(form.regionais.data , form.nome.data, dataInicio)
+            grupoDespacho = GrupoDespacho(None, form.regionais.data , form.nome.data, dataInicio)
             db.session.add(grupoDespacho)
             db.session.commit()
             flash('Grupo de Despacho com sucesso', 'sucess')

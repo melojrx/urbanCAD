@@ -27,7 +27,7 @@ class tipoPatrulhaController:
 
         return render_template('tipopatrulha/listarTipoPatrulha.html', listTipoPatrulha=listTipoPatrulha)
 
-    @tipopatrulha_bp.route('/prepareCadastrar', methods=['GET'])
+    @tipopatrulha_bp.route('/prepareCadastrarTipoPatrulha', methods=['GET'])
     @login_required
     @roles_required('URBANCAD_ADMIN')
     def prepareCadastrarTipoPatrulha():
@@ -37,7 +37,7 @@ class tipoPatrulhaController:
         return render_template('tipopatrulha/cadastrarTipoPatrulha.html', form=form)
 
 
-    @tipopatrulha_bp.route('/cadastrar' , methods=['POST'])
+    @tipopatrulha_bp.route('/cadastrarTipoPatrulha' , methods=['POST'])
     @login_required
     @roles_required('URBANCAD_ADMIN')
     def cadastrarTipoPatrulha():

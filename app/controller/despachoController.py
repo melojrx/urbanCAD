@@ -2,10 +2,11 @@ import datetime
 from sqlalchemy import and_
 
 from app.models.grupoDespachoModel import GrupoDespacho
+from app.models.userModel import User
 from app.models.usuarioGrupoDespachoModel import UsuarioGrupoDespacho
 
 from ..database import db
-from flask import flash, redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import login_required, current_user
 from ..enum import statusOcorrenciaEnum
 from ..enum import statusDespachoEnum
@@ -28,24 +29,45 @@ class instituicaoController():
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')
     def prepareSearchDespacho():
+
         page = request.args.get('page', 1, type=int)
-        listDespacho = (Despacho.query.join(Ocorrencia)
-                        .join(OcorrenciaHistorico)
-                        .filter(and_(OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, OcorrenciaHistorico.dataFim.is_(None)))
-                        .order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE))
+
+        querySearchDespacho = (Despacho.query.join(Ocorrencia).join(OcorrenciaHistorico)
+                        .filter(and_(OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, OcorrenciaHistorico.dataFim.is_(None))))
         
-        listDespachar = (OcorrenciaHistorico.query.join(Ocorrencia)
-                        .join(OcorrenciaGrupoDespacho)
-                        .join(GrupoDespacho)
-                        .join(UsuarioGrupoDespacho)
-                        .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-                        .filter(and_(UsuarioGrupoDespacho.idUsuario == current_user.id, OcorrenciaHistorico.dataFim.is_(None), Despacho.id.is_(None)))
-                        .order_by(OcorrenciaHistorico.dataInicio.desc())).paginate(page=page, per_page=ROWS_PER_PAGE)
+        querySearchADespachar = (OcorrenciaHistorico.query.join(Ocorrencia)
+            .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+            .filter(and_(OcorrenciaHistorico.dataFim.is_(None), Despacho.id.is_(None))))
+
+        if not 'URBANCAD_ADMIN' in session["roles"]:
+            querySearchDespacho.join(OcorrenciaGrupoDespacho).join(User).filter(User.id == current_user.id)
+            querySearchADespachar.join(OcorrenciaGrupoDespacho).join(GrupoDespacho).join(UsuarioGrupoDespacho).filter(UsuarioGrupoDespacho.idUsuario == current_user.id)
+
+        listDespacho = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)         
+        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+
+        # querySearchADespachar = (
+        #     OcorrenciaHistorico.query
+        #     .join(Ocorrencia)
+        #     .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+        #     .join(OcorrenciaGrupoDespacho)
+        #     .join(GrupoDespacho)
+        #     .join(UsuarioGrupoDespacho)
+        #     .filter(
+        #         OcorrenciaHistorico.dataFim.is_(None),
+        #         Despacho.id.is_(None),
+        #         UsuarioGrupoDespacho.idUsuario == current_user.id
+        #     )
+        # )
+        
+        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+
+
         return render_template('listarDespacho.html', listDespacho=listDespacho, listDespachar=listDespachar)
 
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')    
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
     def prepareDespachar(idOcorrencia):
         form = DespachoForm(request.form)
         form.ocorrencia.data = idOcorrencia
@@ -60,7 +82,7 @@ class instituicaoController():
 
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')    
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
     def despachar():
 
         try:
@@ -115,6 +137,7 @@ class instituicaoController():
 
     @despacho_bp.route('/meusDespachos', methods=['GET'])
     @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')
     def meusDespachos():
         page = request.args.get('page', 1, type=int)
         listDespachoHistorico = DespachoHistorico.query.filter(and_(DespachoHistorico.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)

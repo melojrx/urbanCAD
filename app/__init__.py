@@ -12,7 +12,7 @@ def home():
 app = Flask(__name__)
 app.wsgi_app = WhiteNoise(app.wsgi_app, root='app/static/', prefix='static/')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#app.debug = True
+# app.debug = True
 # app.config['SQLALCHEMY_ECHO'] = True
 
 login_manager = LoginManager(app)

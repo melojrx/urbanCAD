@@ -13,7 +13,8 @@ class GrupoDespacho(db.Model):
 
     regional = db.relationship(Regional)
 
-    def __init__(self, idRegional, txtNome, dataInicio):
+    def __init__(self, id, idRegional, txtNome, dataInicio):
+        self.id = id
         self.idRegional = idRegional
         self.txtNome = txtNome
         self.dataInicio = dataInicio

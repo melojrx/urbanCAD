@@ -205,9 +205,10 @@ class ocorrenciaController():
             grupoDespacho = None
             if results:
                 for row in results:
+                    print('row["id_grupo_despacho_gde"]', row["id_grupo_despacho_gde"])
                     id = row["id_grupo_despacho_gde"]
                     nome = row["txt_nome_gde"]
-                    grupoDespacho = GrupoDespacho(id, nome)
+                    grupoDespacho = GrupoDespacho(id, None, nome, None)
                     form.idOcorrencia.data = idOcorrencia
             form.grupoDespacho.data = grupoDespacho.id
 
