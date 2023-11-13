@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid border mt-2 rounded mb-2">
+
+  <div class="container-fluid mt-2">
+
+    <div class="card mb-2">
+      <div class="card-body">
+          <div class="row d-flex align-items-center">
+              <div class="col-9">
+                  <h5 class="card-title">Gerenciamento de Grupos de Despacho</h5>
+                  <p class="card-text">Gerencie aqui os Grupos de Despacho</p>
+              </div>
+              <div class="col-3 d-flex justify-content-end">
+                   <!-- Botão Cadastrar VTR -->
+                   <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('grupodespacho.prepareCadastrarGrupoDespacho') }}';">Cadastrar</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    
+    <div class="card mb-2">
+          <div class="card-header">
+              <p class="card-text" style="font-weight: 600;">Consulta  Grupo de Despacho</p>
+          </div>
+          <div class="card-body" style="font-size: 0.8rem !important;">
+            <!-- Parametros para consulta -->
+          </div>    
+    </div>
+    <!-- Lista Viaturas -->
+    <div class="table-resposive">
+      <table class="table border table-striped table-hover table-borderless">
+        {% if listGrupoDespacho != None %}
+          <thead>
+            <tr>
+              <th scope="col">Grupo de Despacho</th>
+              <th scope="col">Regional</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in listGrupoDespacho.items %}
+              <tr>
+                <td>{{ row.txtNome }}</td>
+                <td>{{ row.regional.txtRegiao }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        {% else %}
+          <tr>
+            <td>Nenhuma solicitação cadastrada</td>
+          </tr>
+        {% endif %}
+      </table>
+    </div>
+      
+      <!-- Pagination Links-->
+      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+        <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=listGrupoDespacho.prev_num) }}" class="btn btn-outline-primary 
+            {% if listGrupoDespacho.page == 1 %}disabled{% endif %}">
+            &laquo;
+        </a><!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in listGrupoDespacho.iter_pages(left_edge=1, right_edge=1, left_current=1,
+        right_current=2)
+        %}{% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if listGrupoDespacho.page == page_num %}
+        <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=page_num) }}" class="btn btn-primary">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=page_num) }}" class="btn btn-outline-primary">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %} <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=listGrupoDespacho.next_num) }}" class="btn btn-outline-primary 
+            {% if listGrupoDespacho.page == listGrupoDespacho.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
+    </div>
+    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+        Página {{ listGrupoDespacho.page }} de {{ listGrupoDespacho.pages }}
+    </p>
+  <!-- End Pagination Links-->
+  </div>
+
+</div>
+{% endblock %}

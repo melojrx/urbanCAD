@@ -32,6 +32,9 @@ class loginController:
                flash('Ops. Não nos parece um CPF válido', 'error')
                return render_template('register.html', form=form)
 
+            if email:
+                email = email.lower()
+
             try:
                 
                 user = User(name, email, txtcpf, pwd)

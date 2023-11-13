@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid border mt-2 rounded mb-2">
+
+    <div class="container-fluid mt-2">
+        <form method="POST" enctype='multipart/form-data' action="{{ url_for('usuariogrupodespacho.cadastrarUsuarioGrupoDespacho') }}">
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                        <h5 class="card-title">Gerenciamento de Usuário por Grupo de Despacho</h5>
+                        <p class="card-text">Cadastro de Usuário por Grupo de Despacho</p>
+                    </div>
+                    <div class="col-3 d-flex justify-content-end">
+                        <!-- Botão Voltar -->
+                        <button class="btn btn-danger me-2" type="button"
+                        onclick="window.location.href='{{url_for('usuariogrupodespacho.listarUsuarioGrupoDespacho')}}';">Voltar</button>
+                        <!-- Botão Cadastrar VTR -->
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="form-group mb-3 row justify-content-between">
+                    <div class="col">
+                        {{form.usuarios.label(class_="form-label")}}
+                        {{form.usuarios(class_="form-select")}}
+                        {% for error in form.usuarios.errors %}
+                        <div class="important">
+                            {{error}}
+                        </div>
+                        {% endfor %}    
+                    </div>
+                    <div class="col">        
+                        {{form.gruposDeDespacho.label(class_="form-label")}}
+                        {{form.gruposDeDespacho(class_="form-select")}}
+                        {% for error in form.gruposDeDespacho.errors %}
+                        <div class="important">
+                            {{error}}
+                        </div>
+                        {% endfor %}
+                    </div>    
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+
+</div>
+{% endblock conteudo %}

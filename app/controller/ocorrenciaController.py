@@ -2,7 +2,7 @@ import datetime
 import geocoder
 from sqlalchemy import text
 from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
-from app.forms.grupoDespachoForm import GrupoDespachoForm
+from app.forms.ocorrenciaGrupoDespachoForm import OcorrenciaGrupoDespachoForm
 from ..database import db
 from app.models.ocorrenciaModel import Ocorrencia
 from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
@@ -187,7 +187,7 @@ class ocorrenciaController():
         try:
 
             global listGrupoOcorrencia
-            form = GrupoDespachoForm(request.form)
+            form = OcorrenciaGrupoDespachoForm(request.form)
             listGrupoOcorrencia = GrupoDespacho.query.filter(GrupoDespacho.dataFim.is_(None)).all()
             form.grupoDespacho.choices = [(0, "Selecione...")]+[(row.id, row.txtNome) for row in listGrupoOcorrencia]
 
@@ -214,14 +214,14 @@ class ocorrenciaController():
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
 
-    @ocorrencia_bp.route('/cadastrarGrupoDespacho', methods=['POST'])
+    @ocorrencia_bp.route('/atribuirGrupoDespacho', methods=['POST'])
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
-    def cadastrarGrupoDespacho():
+    def atribuirGrupoDespacho():
 
         try:
             
-            form = GrupoDespachoForm(request.form)
+            form = OcorrenciaGrupoDespachoForm(request.form)
             idGrupoDespacho = form.grupoDespacho.data
             idOcorrencia = form.idOcorrencia.data
             dataInicio = datetime.datetime.now()
