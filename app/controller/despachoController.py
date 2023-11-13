@@ -31,35 +31,52 @@ class instituicaoController():
     def prepareSearchDespacho():
 
         page = request.args.get('page', 1, type=int)
-
-        querySearchDespacho = (Despacho.query.join(Ocorrencia).join(OcorrenciaHistorico)
-                        .filter(and_(OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, OcorrenciaHistorico.dataFim.is_(None))))
         
-        querySearchADespachar = (OcorrenciaHistorico.query.join(Ocorrencia)
-            .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-            .filter(and_(OcorrenciaHistorico.dataFim.is_(None), Despacho.id.is_(None))))
+        querySearchDespacho = None
+        querySearchADespachar = None
 
-        if not 'URBANCAD_ADMIN' in session["roles"]:
-            querySearchDespacho.join(OcorrenciaGrupoDespacho).join(User).filter(User.id == current_user.id)
-            querySearchADespachar.join(OcorrenciaGrupoDespacho).join(GrupoDespacho).join(UsuarioGrupoDespacho).filter(UsuarioGrupoDespacho.idUsuario == current_user.id)
+        if not 'URBANCAD_ADMIN' in session["roles"]:    
+            querySearchDespacho = (Despacho.query.join(Ocorrencia)
+                        .join(OcorrenciaHistorico)
+                        .join(OcorrenciaGrupoDespacho).join(User)
+                        .filter(
+                            OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
+                            User.id == current_user.id,
+                            OcorrenciaHistorico.dataFim.is_(None))
+                        )
 
-        listDespacho = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)         
-        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+            querySearchADespachar = (OcorrenciaHistorico.query
+                .join(Ocorrencia)
+                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+                .join(OcorrenciaGrupoDespacho)
+                .join(GrupoDespacho)
+                .join(UsuarioGrupoDespacho)
+                .filter(
+                    OcorrenciaHistorico.dataFim.is_(None),
+                    Despacho.id.is_(None),
+                    UsuarioGrupoDespacho.idUsuario == current_user.id
+                )
+            )
+        else:
+            querySearchDespacho = (Despacho.query.join(Ocorrencia)
+                        .join(OcorrenciaHistorico)
+                        .filter(
+                            OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
+                            OcorrenciaHistorico.dataFim.is_(None))
+                        )
 
-        # querySearchADespachar = (
-        #     OcorrenciaHistorico.query
-        #     .join(Ocorrencia)
-        #     .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-        #     .join(OcorrenciaGrupoDespacho)
-        #     .join(GrupoDespacho)
-        #     .join(UsuarioGrupoDespacho)
-        #     .filter(
-        #         OcorrenciaHistorico.dataFim.is_(None),
-        #         Despacho.id.is_(None),
-        #         UsuarioGrupoDespacho.idUsuario == current_user.id
-        #     )
-        # )
-        
+            querySearchADespachar = (OcorrenciaHistorico.query
+                .join(Ocorrencia)
+                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+                .filter(
+                    OcorrenciaHistorico.dataFim.is_(None),
+                    Despacho.id.is_(None)
+                    )
+            )
+
+            
+
+        listDespacho = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)                   
         listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
 
 
