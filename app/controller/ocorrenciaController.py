@@ -196,6 +196,10 @@ class ocorrenciaController():
                         " join cad.tb_regionais_reg reg on gde.id_regional_gde = reg.id"
                         " WHERE ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
             results = db.engine.execute(sql, param1=long, param2=lat)
+
+            if(not results.rowcount):
+                flash('Nenhum grupo de trabalho cadastrado para a Região da ocorrência. Cadastre o Grupo de Despacho', 'error')
+                return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
             
 
             grupoDespacho = None
