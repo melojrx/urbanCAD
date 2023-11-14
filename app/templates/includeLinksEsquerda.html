@@ -78,6 +78,16 @@
   </div>
 </a>
 {% endif %}
+
+{% if ('URBANCAD_AGENTEA' in session["roles"]) %}
+<a href="{{ url_for('composicao.listarComposicao') }}" class="link-sidebar">
+  <div class="urban-gov-menu-gov">
+    <i class="bi bi-pin-map-fill"></i>
+    <span class="titulo-menu-gov">Formar Composição</span>
+  </div>
+</a>
+{% endif %}
+
 <div class="footer-sidebar mt-auto">
   <footer class="container-fluid text-center border-top ">
     <p class="fw-semibold mt-1">&copy; 2023 Todos os direitos reservados.</p>

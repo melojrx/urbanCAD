@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid border mt-2 rounded mb-2">
+
+  <div class="container-fluid mt-2">
+
+    <div class="card mb-2">
+      <div class="card-body">
+          <div class="row d-flex align-items-center">
+              <div class="col-9">
+                  <h5 class="card-title">Gerenciamento de Composição</h5>
+                  <p class="card-text">Gerencie aqui os Agentes de uma Composição do sistema</p>
+              </div>
+              <div class="col-3 d-flex justify-content-end">
+                   <!-- Botão Cadastrar VTR -->
+                   <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('composicao.prepareCadastrarComposicao') }}';">Nova Composição</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    
+    <div class="card mb-2">
+          <div class="card-header">
+              <p class="card-text" style="font-weight: 600;">Consulta Composição</p>
+          </div>
+          <div class="card-body" style="font-size: 0.8rem !important;">
+            <!-- Parametros para consulta -->
+          </div>    
+    </div>
+    <!-- Lista Viaturas -->
+    <div class="table-resposive">
+      <table class="table border table-striped table-hover table-borderless">
+        {% if listComposicao %}
+          <thead>
+            <tr>
+              <th scope="col">Viatura</th>
+              <th scope="col">Agente</th>
+              <th scope="col">Instituição</th>
+              <th scope="col">Início</th>
+              <th scope="col">Finalização</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in listComposicao.items %}
+              <tr>
+                <td>{{ row.viatura.txtPlaca }}</td>
+                <td>{{ row.agente.usuario.name }}</td>
+                <td>{{ row.agente.instituicao.txtInstituicao }}</td>
+                <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                <td>{{ row.dataFim.strftime('%d/%m/%Y %H:%M') if row.dataFim else "" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        {% else %}
+          <tr>
+            <td>Nenhuma solicitação cadastrada</td>
+          </tr>
+        {% endif %}
+      </table>
+    </div>
+      
+      <!-- Pagination Links-->
+      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+        <a href="{{ url_for('composicao.listarComposicao', page=listComposicao.prev_num) }}" class="btn btn-outline-primary 
+            {% if listComposicao.page == 1 %}disabled{% endif %}">
+            &laquo;
+        </a><!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in listComposicao.iter_pages(left_edge=1, right_edge=1, left_current=1,
+        right_current=2)
+        %}{% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if listComposicao.page == page_num %}
+        <a href="{{ url_for('composicao.listarComposicao', page=page_num) }}" class="btn btn-primary">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('composicao.listarComposicao', page=page_num) }}" class="btn btn-outline-primary">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %} <a href="{{ url_for('composicao.listarComposicao', page=listComposicao.next_num) }}" class="btn btn-outline-primary 
+            {% if listComposicao.page == listComposicao.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
+    </div>
+    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+        Página {{ listComposicao.page }} de {{ listComposicao.pages }}
+    </p>
+  <!-- End Pagination Links-->
+  </div>
+
+</div>
+{% endblock %}

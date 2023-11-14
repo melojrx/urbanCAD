@@ -21,6 +21,7 @@ login_manager.login_message = u"Por favor, realize o login para acessar a págin
 
 from .rotas.agenteRout import agente_bp
 from .rotas.loginRout import login_bp
+from .rotas.composicaoRout import composicao_bp
 from .rotas.despachoRout import despacho_bp
 from .rotas.grupoDespachoRout import grupodespacho_bp
 from .rotas.instituicaoRout import instituicao_bp
@@ -32,6 +33,7 @@ from .rotas.usuarioGrupoDespachoRout import usuariogrupodespacho_bp
 
 app.register_blueprint(agente_bp)
 app.register_blueprint(public)
+app.register_blueprint(composicao_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(despacho_bp)
 app.register_blueprint(grupodespacho_bp)
