@@ -20,7 +20,7 @@ from app.models.viaturaModel import Viatura
 from .roleRequired import roles_required
 from ..rotas.despachoRout import despacho_bp
 
-class instituicaoController():
+class DespachoController():
 
     global ROWS_PER_PAGE 
     ROWS_PER_PAGE = 10

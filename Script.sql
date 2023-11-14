@@ -8,9 +8,9 @@ CREATE SCHEMA cad;
 -- #             POSTGIS              #
 -- ####################################
 
-CREATE EXTENSION postgis;
+-- CREATE EXTENSION postgis;
 
-## OBSERVAÇÃO: Antes de rodar o script abaixo, é necessário criar a tb_regionais_reg através da importação do POSTGIS
+-- OBSERVAÇÃO: Antes de rodar o script abaixo, é necessário criar a tb_regionais_reg através da importação do POSTGIS
 -- Lições:
 -- 1. O arquivo .shp de regionais da sefin está no formato SIRGAS 2000 / UMT zone 24s
 -- 2. Foi preciso salvar um novo arquivo .shp no formato EPSG:4326 WSG 84
@@ -20,11 +20,8 @@ CREATE EXTENSION postgis;
 -- 6. faz o passo 3 para testar
 
 -- cad.tb_regionais_reg definition
-
 -- Drop table
-
 -- DROP TABLE cad.tb_regionais_reg;
-
 CREATE TABLE cad.tb_regionais_reg (
 	id serial4 NOT NULL,
 	geom public.geometry(multipolygon, 4326) NULL,
@@ -170,6 +167,27 @@ CREATE SEQUENCE cad.tipo_ocorrencia_seq
   START 1
   CACHE 1;
 
+  CREATE SEQUENCE cad.agente_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.composicao_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
+  CREATE SEQUENCE cad.composicao_viatura_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
 -- ################
 -- #    TABLES    #
 -- ################
@@ -282,6 +300,37 @@ CREATE TABLE cad.tb_interessado_int (
 );
 ALTER TABLE cad.tb_interessado_int ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_int) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
 
+CREATE TABLE cad.tb_agente_age (
+	id_agente_age integer NOT NULL DEFAULT nextval('cad.agente_seq'::regclass),
+  id_instituicao_age integer NOT NULL,
+  id_usuario_age integer NOT NULL,
+	dat_inicio_age timestamp without time zone NOT NULL,
+	dat_fim_age timestamp without time zone,
+	CONSTRAINT agente_pkey PRIMARY KEY (id_agente_age)
+);
+ALTER TABLE cad.tb_agente_age ADD CONSTRAINT instituicao_fkey FOREIGN KEY (id_instituicao_age) REFERENCES cad.tb_instituicao_ins (id_instituicao_ins);
+ALTER TABLE cad.tb_agente_age ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_age) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
+
+CREATE TABLE cad.tb_composicao_viatura_cvi (
+	id_composicao_viatura_cvi integer NOT NULL DEFAULT nextval('cad.composicao_viatura_seq'::regclass),
+  id_viatura_cvi integer NOT NULL,
+	dat_inicio_cvi timestamp without time zone NOT NULL,
+	dat_fim_cvi timestamp without time zone,
+	CONSTRAINT composicao_viatura_pkey PRIMARY KEY (id_composicao_viatura_cvi)
+);
+ALTER TABLE cad.tb_composicao_viatura_cvi ADD CONSTRAINT viatura_fkey FOREIGN KEY (id_viatura_cvi) REFERENCES cad.tb_viatura_via (id_viatura_via);
+
+CREATE TABLE cad.tb_composicao_com (
+	id_composicao_com integer NOT NULL DEFAULT nextval('cad.composicao_seq'::regclass),
+  id_composicao_viatura_com integer NOT NULL,
+  id_agente_com integer NOT NULL,
+	dat_inicio_com timestamp without time zone NOT NULL,
+	dat_fim_com timestamp without time zone,
+	CONSTRAINT composicao_pkey PRIMARY KEY (id_composicao_com)
+);
+ALTER TABLE cad.tb_composicao_com ADD CONSTRAINT composicao_viatura_fkey FOREIGN KEY (id_composicao_viatura_com) REFERENCES cad.tb_composicao_viatura_cvi (id_composicao_viatura_cvi);
+ALTER TABLE cad.tb_composicao_com ADD CONSTRAINT agente_fkey FOREIGN KEY (id_agente_com) REFERENCES cad.tb_agente_age (id_agente_age);
+
 CREATE TABLE cad.tb_grupo_despacho_gde (
 	id_grupo_despacho_gde integer NOT NULL DEFAULT nextval('cad.grupo_despacho_seq'::regclass),
   id_regional_gde integer NOT NULL,
@@ -308,14 +357,14 @@ ALTER TABLE cad.tb_ocorrencia_grupo_despacho_ogd ADD CONSTRAINT usuario_fkey FOR
 CREATE TABLE cad.tb_despacho_des (
 	id_despacho_des integer NOT NULL DEFAULT nextval('cad.despacho_seq'::regclass),
   id_ocorrencia_des integer NOT NULL,
-  id_viatura_des integer NOT NULL,
+  id_composicao_viatura_des integer NOT NULL,
   id_usuario_des integer NOT NULL,
   dat_inicio_des timestamp without time zone NOT NULL,
 	dat_fim_des timestamp without time zone,
 	CONSTRAINT despacho_pkey PRIMARY KEY (id_despacho_des)
 );
 ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT ocorrencia_fkey FOREIGN KEY (id_ocorrencia_des) REFERENCES cad.tb_ocorrencia_oco (id_ocorrencia_oco);
-ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT viatura_fkey FOREIGN KEY (id_viatura_des) REFERENCES cad.tb_viatura_via (id_viatura_via);
+ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT composicao_viatura_fkey FOREIGN KEY (id_composicao_viatura_des) REFERENCES cad.tb_composicao_viatura_cvi (id_composicao_viatura_cvi);
 ALTER TABLE cad.tb_despacho_des ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_des) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
 
 CREATE TABLE cad.tb_usuario_grupo_despacho_ugd (
