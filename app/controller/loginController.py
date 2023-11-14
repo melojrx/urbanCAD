@@ -37,7 +37,7 @@ class loginController:
 
             try:
                 
-                user = User(name, email, txtcpf, pwd)
+                user = User(name, email, txtcpf)
                 db.session.add(user)
                 
                 url = 'http://10.82.85.8:8080/api/b2in/user/role'
