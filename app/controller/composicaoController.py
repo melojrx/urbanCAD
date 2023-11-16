@@ -1,6 +1,7 @@
 import datetime
 from operator import and_
 from app.forms.composicaoForm import ComposicaoForm
+from app.models.composicaoViaturaModel import ComposicaoViatura
 from app.models.viaturaModel import Viatura
 from app.models.composicaoModel import Composicao
 from app.controller.roleRequired import roles_required
@@ -50,17 +51,19 @@ class composicaoController:
     @login_required
     @roles_required('URBANCAD_AGENTE')
     def cadastrarComposicao():
-        flash('Funcionalidade em DEsenvolvimento', 'error')
-        return redirect(url_for('composicao.prepareCadastrarComposicao'))
-    #     form = AgenteForm(request.form)
-    #     dataInicio = datetime.datetime.now()
 
-    #     try:
-    #         agente = Agente(form.instituicao.data, form.usuario.data, dataInicio)
-    #         db.session.add(agente)
-    #         db.session.commit()
-    #         flash('Agente cadastrado com sucesso', 'sucess')
-    #         return redirect(url_for('agente.listarAgente'))
-    #     except Exception as e:
-    #         flash('Erro: {}'.format(e), 'error')
-    #         return redirect(url_for('agente.prepareCadastrarAgente'))         
+        form = ComposicaoForm(request.form)
+        dataInicio = datetime.datetime.now()
+
+        try:
+            composicaoViatura = ComposicaoViatura(form.viatura.data, dataInicio)
+            composicao = Composicao(composicaoViatura, form.agente.data, dataInicio)
+
+            db.session.add(composicao)
+            db.session.commit()
+            flash('Composição cadastrada com sucesso', 'sucess')
+            return redirect(url_for('composicao.listarComposicao'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('composicao.prepareCadastrarComposicao'))         

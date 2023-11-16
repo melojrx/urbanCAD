@@ -15,7 +15,7 @@ class Composicao(db.Model):
     composicaoViatura = db.relationship(ComposicaoViatura)
     agente = db.relationship(Agente)
 
-    def __init__(self, idComposicaoViatura, idAgente, dataInicio):
-        self.idComposicaoViatura = idComposicaoViatura
+    def __init__(self, composicaoViatura, idAgente, dataInicio):
+        self.composicaoViatura = composicaoViatura
         self.idAgente = idAgente
         self.dataInicio = dataInicio    

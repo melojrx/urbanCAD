@@ -1,17 +1,16 @@
 import datetime
-from sqlalchemy import and_
-
-from app.models.grupoDespachoModel import GrupoDespacho
-from app.models.userModel import User
-from app.models.usuarioGrupoDespachoModel import UsuarioGrupoDespacho
-
 from ..database import db
+from sqlalchemy import and_
+from sqlalchemy import text
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import login_required, current_user
 from ..enum import statusOcorrenciaEnum
 from ..enum import statusDespachoEnum
 from app.forms.despachoForm import DespachoForm
 from app.models.despachoModel import Despacho
+from app.models.grupoDespachoModel import GrupoDespacho
+from app.models.userModel import User
+from app.models.usuarioGrupoDespachoModel import UsuarioGrupoDespacho
 from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
 from app.models.ocorrenciaGrupoDespachoModel import OcorrenciaGrupoDespacho
 from app.models.ocorrenciaModel import Ocorrencia
@@ -88,13 +87,32 @@ class DespachoController():
     def prepareDespachar(idOcorrencia):
         form = DespachoForm(request.form)
         form.ocorrencia.data = idOcorrencia
-        listViatura = Viatura.query.filter(Viatura.dataFim.is_(None)).all()
-        form.despacharPara.choices = [(str(row.id), str(row.instituicao.txtSigla)
-                                      + " - " + str(row.tipoPatrulha.txtTipoPatrulha)
-                                      + " " + str(row.txtDescricao)
-                                      + " " + str(row.txtCodigo)
-                                      + " " + str(row.txtPlaca)
-                                       ) for row in listViatura]
+
+        ocorrencia = Ocorrencia.query.filter(Ocorrencia.id == idOcorrencia).first()
+        
+        sql = text("SELECT cvi.id_composicao_viatura_cvi, via.txt_codigo_via, via.txt_placa_via"  
+                    " FROM cad.tb_viatura_via via"
+                    " JOIN cad.tb_composicao_viatura_cvi cvi ON via.id_viatura_via = cvi.id_viatura_cvi"
+                    " JOIN cad.tb_composicao_com com ON cvi.id_composicao_viatura_cvi = com.id_composicao_viatura_com"
+                    " JOIN cad.tb_agente_age a ON com.id_agente_com = a.id_agente_age"
+                    " JOIN comum.tb_usuario_usu usu ON a.id_usuario_age = usu.id_usuario_usu"
+                    " JOIN cad.tb_usuario_grupo_despacho_ugd ugd ON usu.id_usuario_usu = ugd.id_usuario_ugd"
+                    " JOIN cad.tb_grupo_despacho_gde gde ON ugd.id_grupo_despacho_ugd = gde.id_grupo_despacho_gde"
+                    " JOIN cad.tb_regionais_reg reg ON gde.id_regional_gde = reg.id"
+                    " WHERE"
+                    " com.dat_fim_com is null AND"
+                    " a.dat_fim_age is null AND"
+                    " ugd.dat_fim_ugd is null AND"
+                    " gde.dat_fim_gde is null AND"
+                    " ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
+        result = db.engine.execute(sql, param1=ocorrencia.txtLong, param2=ocorrencia.txtLat)
+
+        if(not result.rowcount):
+            flash('Nenhuma viatura disponível para a região', 'error')
+            return redirect(url_for('despacho.prepareSearchDespacho'))
+
+        form.despacharPara.choices = [(row["id_composicao_viatura_cvi"], str(row["txt_codigo_via"]) + " " + str(row["txt_placa_via"])) for row in result]
+        
         return render_template('despacho.html', form=form)
 
     @despacho_bp.route('/despachar', methods=['POST'])

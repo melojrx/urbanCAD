@@ -60,5 +60,6 @@ class agenteController:
             flash('Agente cadastrado com sucesso', 'sucess')
             return redirect(url_for('agente.listarAgente'))
         except Exception as e:
+            db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('agente.prepareCadastrarAgente'))         

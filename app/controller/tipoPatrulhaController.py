@@ -45,9 +45,14 @@ class tipoPatrulhaController:
         form = TipoPatrulhaForm(request.form)
         dataInicio = datetime.datetime.now()
 
-        tipoPatrulha = TipoPatrulha(form.descricao.data, dataInicio)
+        try:
+            tipoPatrulha = TipoPatrulha(form.descricao.data, dataInicio)
 
-        db.session.add(tipoPatrulha)
-        db.session.commit()
-        flash('Tipo de Patrulha cadastrada com sucesso', 'sucess')
-        return redirect(url_for('tipopatrulha.listarTipoPatrulha'))        
+            db.session.add(tipoPatrulha)
+            db.session.commit()
+            flash('Tipo de Patrulha cadastrada com sucesso', 'sucess')
+            return redirect(url_for('tipopatrulha.listarTipoPatrulha'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('tipopatrulha.prepareCadastrarTipoPatrulha'))               

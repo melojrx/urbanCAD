@@ -192,8 +192,8 @@ class ocorrenciaController():
             form.grupoDespacho.choices = [(0, "Selecione...")]+[(row.id, row.txtNome) for row in listGrupoOcorrencia]
 
             sql = text("SELECT gde.*"  
-                        " from cad.tb_grupo_despacho_gde gde"
-                        " join cad.tb_regionais_reg reg on gde.id_regional_gde = reg.id"
+                        " FROM cad.tb_grupo_despacho_gde gde"
+                        " JOIN cad.tb_regionais_reg reg ON gde.id_regional_gde = reg.id"
                         " WHERE ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
             results = db.engine.execute(sql, param1=long, param2=lat)
 
@@ -205,7 +205,6 @@ class ocorrenciaController():
             grupoDespacho = None
             if results:
                 for row in results:
-                    print('row["id_grupo_despacho_gde"]', row["id_grupo_despacho_gde"])
                     id = row["id_grupo_despacho_gde"]
                     nome = row["txt_nome_gde"]
                     grupoDespacho = GrupoDespacho(id, None, nome, None)

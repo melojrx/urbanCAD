@@ -51,9 +51,13 @@ class viaturaController:
 
         form = ViaturaForm(request.form)
         dataInicio = datetime.datetime.now()
-
-        viatura = Viatura(form.instituicao.data, form.tipoPatrulha.data, form.codigo.data, form.placa.data,form.descricao.data, dataInicio)
-        db.session.add(viatura)
-        db.session.commit()
-        flash('Viatura cadastrada com sucesso', 'sucess')
-        return redirect(url_for('viatura.listarViaturas'))        
+        try:
+            viatura = Viatura(form.instituicao.data, form.tipoPatrulha.data, form.codigo.data, form.placa.data,form.descricao.data, dataInicio)
+            db.session.add(viatura)
+            db.session.commit()
+            flash('Viatura cadastrada com sucesso', 'sucess')
+            return redirect(url_for('viatura.listarViaturas')) 
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('viatura.prepareCadastrar'))          

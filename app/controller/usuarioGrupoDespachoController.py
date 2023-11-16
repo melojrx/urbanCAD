@@ -62,5 +62,6 @@ class UsuarioGrupoDespachoController:
             flash('Usuário cadastrado a um Grupo de Despacho com sucesso', 'sucess')
             return redirect(url_for('usuariogrupodespacho.listarUsuarioGrupoDespacho'))
         except Exception as e:
+            db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('usuariogrupodespacho.listarUsuarioGrupoDespacho'))               

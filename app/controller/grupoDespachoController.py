@@ -60,5 +60,6 @@ class GrupoDespachoController:
             flash('Grupo de Despacho com sucesso', 'sucess')
             return redirect(url_for('grupodespacho.listarGrupoDespacho'))
         except Exception as e:
+            db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('grupodespacho.listarGrupoDespacho'))               

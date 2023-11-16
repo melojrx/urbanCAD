@@ -44,7 +44,7 @@
           <tbody>
             {% for row in listComposicao.items %}
               <tr>
-                <td>{{ row.viatura.txtPlaca }}</td>
+                <td>{{ row.composicaoViatura.viatura.txtPlaca }}</td>
                 <td>{{ row.agente.usuario.name }}</td>
                 <td>{{ row.agente.instituicao.txtInstituicao }}</td>
                 <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
