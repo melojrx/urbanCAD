@@ -1,7 +1,6 @@
 import datetime
 from ..database import db
-from sqlalchemy import and_
-from sqlalchemy import text
+from sqlalchemy import and_, text, JSON
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import login_required, current_user
 from ..enum import statusOcorrenciaEnum
@@ -85,13 +84,16 @@ class DespachoController():
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
     def prepareDespachar(idOcorrencia):
+
         form = DespachoForm(request.form)
         form.ocorrencia.data = idOcorrencia
 
         ocorrencia = Ocorrencia.query.filter(Ocorrencia.id == idOcorrencia).first()
         
-        sql = text("SELECT cvi.id_composicao_viatura_cvi, via.txt_codigo_via, via.txt_placa_via"  
+        sql = text("SELECT cvi.id_composicao_viatura_cvi, via.txt_codigo_via, via.txt_placa_via, tpa.txt_tipo_patrulha_tpa, ins.txt_instituicao_ins"  
                     " FROM cad.tb_viatura_via via"
+                    " JOIN cad.tb_tipo_patrulha_tpa tpa ON via.id_tipo_patrulha_via = tpa.id_tipo_patrulha_tpa"
+                    " JOIN cad.tb_instituicao_ins ins ON via.id_instituicao_via = ins.id_instituicao_ins"
                     " JOIN cad.tb_composicao_viatura_cvi cvi ON via.id_viatura_via = cvi.id_viatura_cvi"
                     " JOIN cad.tb_composicao_com com ON cvi.id_composicao_viatura_cvi = com.id_composicao_viatura_com"
                     " JOIN cad.tb_agente_age a ON com.id_agente_com = a.id_agente_age"
@@ -111,9 +113,13 @@ class DespachoController():
             flash('Nenhuma viatura disponível para a região', 'error')
             return redirect(url_for('despacho.prepareSearchDespacho'))
 
-        form.despacharPara.choices = [(row["id_composicao_viatura_cvi"], str(row["txt_codigo_via"]) + " " + str(row["txt_placa_via"])) for row in result]
+        form.despacharPara.choices = [(row["id_composicao_viatura_cvi"], 
+                                       str(row["txt_tipo_patrulha_tpa"]) + " " + 
+                                       str(row["txt_instituicao_ins"]) + " " + 
+                                       str(row["txt_codigo_via"]) + " " + 
+                                       str(row["txt_placa_via"])) for row in result]
         
-        return render_template('despacho.html', form=form)
+        return render_template('despacho.html', form=form, ocorrencia=ocorrencia)
 
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required

@@ -2,17 +2,44 @@
 
 {% block conteudo %}
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+
 <div class="border mt-2 rounded mb-2" id="form-cadastro-evento">
 
     <div class="container-fluid mt-2">
-        <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.despachar') }}">
-            <div class="container-fluid " id="form_cad_evento">
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h5 class="card-title">Gerenciamento de despachos</h5>
-                        <p class="card-text">Despacho de ocorrências</p>
+        <div class="container-fluid">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">Gerenciamento de despachos</h5>
+                    <p class="card-text">Despacho de ocorrências</p>
+                    <div class="mb-3">
+                        Nº: {{ocorrencia.numOcorrencia}}
+                    </div>
+                    <div class="mb-3">
+                        Problema: {{ocorrencia.txtProblema}}
+                    </div>
+                    <div class="mb-3"> 
+                        Endereço: {{ocorrencia.txtEndereco}}
+                    </div>
+                    <div class="mb-3"> 
+                        Status: {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
+                    </div>
+                    <div class="mb-3"> 
+                        Tipo de Ocorrência: {{ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
+                    </div>
+                    <div class="mb-3"> 
+                        Subtipo de Ocorrência: {{ocorrencia.subcategoria.txtSubtipoOcorrencia}}
+                    </div>                                                
+                    <div class="mb-3">
+                        Início: {{ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M')}}
                     </div>
                 </div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <div class="container-fluid"></div>
+            <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.despachar') }}">
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="row">
@@ -25,7 +52,16 @@
                                         {{error}}
                                     </div>
                                     {% endfor %}
-                                </div>                               
+                                </div>
+                                <div class="d-none">
+                                    {{form.idRegiao.label(class_="form-label")}}
+                                    {{form.idRegiao(class_="form-control")}}
+                                    {% for error in form.idRegiao.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
+                                </div>                                                              
                                 <div class="mb-3">
                                     {{form.despacharPara.label(class_="form-label")}}
                                     {{form.despacharPara(class_="form-control")}}
@@ -39,16 +75,50 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
-                    {{ form.submit(class_="btn btn-primary") }}
-                    <button type="button" class="btn btn-danger"
-                        onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
-                    </button>
-                </div>
+            </form>
+            <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+                {{ form.submit(class_="btn btn-primary") }}
+                <button type="button" class="btn btn-danger"
+                    onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
+                </button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 </div>
+
+{% block scripts %}
+
+
+    <script>
+
+        var map = L.map('map').setView([-3.716638, -38.542298], 10)
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Faça uma requisição para o seu endpoint /regionaisjson usando axios
+        axios.get('/regionaisjson')
+            .then(function (response) {
+                var regions_data = response.data;
+                L.geoJson(regions_data, {
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(feature.properties.regiao);
+                    }
+                    // , style: function(feature) {
+                    //     switch (feature.properties.regiao) {
+                    //         case 'RA1': return {color: "#ff0000"};
+                    //         case 'RA2':   return {color: "#0000ff"};
+                    //     }
+                    // }
+                }).addTo(map);
+            })
+            .catch(function (error) {
+                console.error('Erro ao buscar dados:', error);
+            });
+    </script>
+
+{% endblock %}
 
 {% endblock conteudo %}

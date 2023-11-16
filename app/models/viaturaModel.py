@@ -1,3 +1,4 @@
+from app.models.tipoPatrulhaModel import TipoPatrulha
 from ..database import db
 
 class Viatura(db.Model):
@@ -14,7 +15,7 @@ class Viatura(db.Model):
     dataFim = db.Column('dat_fim_via', db.DateTime, nullable=True)
 
     instituicao = db.relationship("Instituicao")
-    tipoPatrulha = db.relationship("TipoPatrulha")
+    tipoPatrulha = db.relationship(TipoPatrulha)
 
 
     def __init__(self, idInstituicao, idTipoPatrulha, txtCodigo, txtPlaca, txtDescricao, dataInicio):
