@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid border mt-2 rounded mb-2">
+
+    <div class="container-fluid mt-2">
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                        <h5 class="card-title">Gerenciamento de Composição</h5>
+                    </div>
+                    <div class="col-3 d-flex justify-content-end">
+                        <!-- Botão Voltar -->
+                        <button class="btn btn-danger me-2" type="button"
+                        onclick="window.location.href='{{url_for('composicao.listarComposicao')}}';">Voltar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        DESEJA REALMENTE FINALIZAR A COMPOSIÇÃO?
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="form-group mb-3 row justify-content-between">
+                    <div class="col">
+                        Viatura: {{composicao.composicaoViatura.viatura}}
+                    </div>
+                    <div class="col">        
+                        Agente: {{composicao.agente.usuario.name}}
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-3 d-flex justify-content-end">
+        <button class="btn btn-danger me-2" type="button"
+        onclick="window.location.href='{{ url_for('composicao.finalizarComposicao', idComposicao=composicao.id) }}';">Finalizar</button>
+    </div>
+
+</div>
+{% endblock conteudo %}

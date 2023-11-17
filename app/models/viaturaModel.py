@@ -17,6 +17,8 @@ class Viatura(db.Model):
     instituicao = db.relationship("Instituicao")
     tipoPatrulha = db.relationship(TipoPatrulha)
 
+    def __str__(self):
+            return f"{self.tipoPatrulha.txtTipoPatrulha} {self.instituicao.txtInstituicao} {self.txtCodigo} {self.txtPlaca}"
 
     def __init__(self, idInstituicao, idTipoPatrulha, txtCodigo, txtPlaca, txtDescricao, dataInicio):
         self.idInstituicao = idInstituicao

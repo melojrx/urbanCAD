@@ -12,7 +12,7 @@ class endpoint():
     def regionaisjson():
         try:
             
-            sql = text("SELECT regiao_adm, ST_AsText(geom) as geom FROM cad.tb_regionais_reg")
+            sql = text("SELECT id, regiao_adm, ST_AsText(geom) as geom FROM cad.tb_regionais_reg")
             listRegionais = db.engine.execute(sql)
 
             if(not listRegionais.rowcount):
@@ -27,6 +27,7 @@ class endpoint():
                     "type": "Feature",
                     "geometry": polygon.__geo_interface__,
                     "properties": {
+                        "idRegiao": row["id"],
                         "regiao": row["regiao_adm"]
                     }
                 }

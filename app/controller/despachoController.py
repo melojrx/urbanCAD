@@ -119,6 +119,14 @@ class DespachoController():
                                        str(row["txt_codigo_via"]) + " " + 
                                        str(row["txt_placa_via"])) for row in result]
         
+        sqlRegional = text("SELECT id"  
+                    " FROM cad.tb_regionais_reg reg"
+                    " WHERE ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
+        resultRegional = db.engine.execute(sqlRegional, param1=ocorrencia.txtLong, param2=ocorrencia.txtLat)
+        row = resultRegional.fetchone()
+        if row:
+            form.idRegiao.data = row["id"]
+            
         return render_template('despacho.html', form=form, ocorrencia=ocorrencia)
 
     @despacho_bp.route('/despachar', methods=['POST'])

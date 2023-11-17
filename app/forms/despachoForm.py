@@ -4,8 +4,9 @@ from wtforms.validators import DataRequired, InputRequired
 class DespachoForm(Form):
 
     ocorrencia = StringField()
-    idRegiao = StringField()
     
+    idRegiao = StringField()
+
     despacharPara = SelectMultipleField(
         'Despachar Para:',
         [

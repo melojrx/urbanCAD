@@ -66,4 +66,37 @@ class composicaoController:
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('composicao.prepareCadastrarComposicao'))         
+            return redirect(url_for('composicao.prepareCadastrarComposicao'))
+
+    @composicao_bp.route('/prepareFinalizarComposicao/<idComposicao>' , methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_AGENTE')
+    def prepareFinalizarComposicao(idComposicao):
+        try:
+            composicao = Composicao.query.filter(Composicao.id == idComposicao).first()
+            return render_template('composicao/finalizarComposicao.html', composicao=composicao)
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('composicao.listarComposicao'))
+
+    @composicao_bp.route('/finalizarComposicao/<idComposicao>' , methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_AGENTE')
+    def finalizarComposicao(idComposicao):
+        try:
+            dataInicio = datetime.datetime.now()
+
+            composicao = Composicao.query.filter(Composicao.id == idComposicao).first()
+            composicao.dataFim = dataInicio
+            composicao.composicaoViatura.dataFim = dataInicio
+
+            db.session.add(composicao)
+            db.session.commit()
+
+            flash('Composição finalizada com sucesso', 'sucess')
+            return redirect(url_for('composicao.listarComposicao'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('composicao.listarComposicao'))                   

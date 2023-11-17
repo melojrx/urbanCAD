@@ -93,25 +93,36 @@
     <script>
 
         var map = L.map('map').setView([-3.716638, -38.542298], 10)
+        var idRegiao = document.getElementById("idRegiao").value 
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Faça uma requisição para o seu endpoint /regionaisjson usando axios
         axios.get('/regionaisjson')
             .then(function (response) {
                 var regions_data = response.data;
-                L.geoJson(regions_data, {
+
+                var blueLayer = L.geoJson(regions_data, {
                     onEachFeature: function (feature, layer) {
                         layer.bindPopup(feature.properties.regiao);
+                    },
+                    style: function (feature) {
+                        return { color: "#0000ff" };
                     }
-                    // , style: function(feature) {
-                    //     switch (feature.properties.regiao) {
-                    //         case 'RA1': return {color: "#ff0000"};
-                    //         case 'RA2':   return {color: "#0000ff"};
-                    //     }
-                    // }
+                }).addTo(map);
+
+                var redLayer = L.geoJson(regions_data, {
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(feature.properties.regiao);
+                    },
+                    style: function (feature) {
+                        if (idRegiao && feature.properties.idRegiao == idRegiao) {
+                            return { color: "#ff0000" };
+                        } else {
+                            return { color: "transparent" };
+                        }
+                    }
                 }).addTo(map);
             })
             .catch(function (error) {

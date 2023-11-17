@@ -39,6 +39,7 @@
               <th scope="col">Instituição</th>
               <th scope="col">Início</th>
               <th scope="col">Finalização</th>
+              <th scope="col">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -49,6 +50,15 @@
                 <td>{{ row.agente.instituicao.txtInstituicao }}</td>
                 <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
                 <td>{{ row.dataFim.strftime('%d/%m/%Y %H:%M') if row.dataFim else "" }}</td>
+                <td>
+                    <a
+                    href="{{ url_for('composicao.prepareFinalizarComposicao', idComposicao=row.id) }}"
+                    class="btn btn-danger btn-sm"
+                    role="button"
+                    title="Finalizar">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                  </a>
+                </td>
               </tr>
             {% endfor %}
           </tbody>
