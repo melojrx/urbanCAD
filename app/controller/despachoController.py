@@ -153,6 +153,8 @@ class DespachoController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
+            flash('Despacho Realizado com sucesso', 'sucess')
+            return redirect(url_for('despacho.prepareSearchDespacho'))
         except Exception as e:
             db.session.rollback();
             flash('Erro: {}'.format(e), 'error') 

@@ -24,7 +24,7 @@
                         <td>{{ row.despacho.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}</td>
                         <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
                         <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
-                        <td>{{ row.despacho.viatura.instituicao.txtSigla ~ ' - ' ~ row.despacho.viatura.tipoPatrulha.txtTipoPatrulha ~ ' ' ~ row.despacho.viatura.txtPlaca }}</td>
+                        <td>{{ row.despacho.composicaoViatura.viatura }}</td>
                         <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
                         <td>
                             <a

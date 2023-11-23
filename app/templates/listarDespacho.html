@@ -29,7 +29,7 @@
                         <th scope="col">Despachado por</th>
                         <th scope="col">Despachado para</th>
                         <th scope="col">Data</th>
-                    </tr>
+                                            </tr>
                 </thead>
                 <tbody>
                     {% for row in listDespacho.items %}
@@ -38,9 +38,9 @@
                         <td>{{ row.ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</td>
                         <td>{{ row.despachoHistorico.statusDespacho.txtStatusDespacho}}</td>
                         <td>{{ row.user.name}}</td>
-                        <td>{{ row.viatura.instituicao.txtSigla ~ ' - ' ~ row.viatura.tipoPatrulha.txtTipoPatrulha ~ ' ' ~ row.viatura.txtPlaca }}</td>
+                        <td>{{ row.composicaoViatura.viatura }}</td>
                         <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                    {% endfor %}
+                                            {% endfor %}
                 </tbody>
             </table>
         </div>
