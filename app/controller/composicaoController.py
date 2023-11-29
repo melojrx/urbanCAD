@@ -3,7 +3,6 @@ from operator import and_
 from app.forms.composicaoForm import ComposicaoForm
 from app.models.composicaoViaturaModel import ComposicaoViatura
 from app.models.viaturaModel import Viatura
-from app.models.composicaoModel import Composicao
 from app.controller.roleRequired import roles_required
 from app.models.agenteModel import Agente
 from app.models.userModel import User
@@ -24,7 +23,7 @@ class composicaoController:
         try:
             page = request.args.get('page', 1, type=int)
             
-            listComposicao = Composicao.query.join(Agente).join(User).filter(and_(User.id == current_user.id, Composicao.dataFim.is_(None))).paginate(page=page, per_page=ROWS_PER_PAGE)    
+            listComposicao = ComposicaoViatura.query.join(Agente).join(User).filter(and_(User.id == current_user.id, ComposicaoViatura.dataFim.is_(None))).paginate(page=page, per_page=ROWS_PER_PAGE)    
 
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
@@ -42,7 +41,7 @@ class composicaoController:
         form.agente.choices = [(0, "Selecione...")]+[(row.id, row.usuario.name) for row in listAgente]
 
         listViatura = Viatura.query.filter(Viatura.dataFim.is_(None)).all()
-        form.viatura.choices = [(0, "Selecione...")]+[(row.id, row.txtPlaca) for row in listViatura]
+        form.viatura.choices = [(0, "Selecione...")]+[(row.id, row) for row in listViatura]
 
         return render_template('composicao/cadastrarComposicao.html', form=form)
 
@@ -56,10 +55,10 @@ class composicaoController:
         dataInicio = datetime.datetime.now()
 
         try:
-            composicaoViatura = ComposicaoViatura(form.viatura.data, dataInicio)
-            composicao = Composicao(composicaoViatura, form.agente.data, dataInicio)
+            composicaoViatura = ComposicaoViatura(form.viatura.data, form.agente.data, dataInicio)
+            # composicao = Composicao(composicaoViatura, form.agente.data, dataInicio)
 
-            db.session.add(composicao)
+            db.session.add(composicaoViatura)
             db.session.commit()
             flash('Composição cadastrada com sucesso', 'sucess')
             return redirect(url_for('composicao.listarComposicao'))
@@ -68,30 +67,29 @@ class composicaoController:
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('composicao.prepareCadastrarComposicao'))
 
-    @composicao_bp.route('/prepareFinalizarComposicao/<idComposicao>' , methods=['GET'])
+    @composicao_bp.route('/prepareFinalizarComposicao/<idComposicaoViatura>' , methods=['GET'])
     @login_required
     @roles_required('URBANCAD_AGENTE')
-    def prepareFinalizarComposicao(idComposicao):
+    def prepareFinalizarComposicao(idComposicaoViatura):
         try:
-            composicao = Composicao.query.filter(Composicao.id == idComposicao).first()
-            return render_template('composicao/finalizarComposicao.html', composicao=composicao)
+            composicaoViatura = ComposicaoViatura.query.filter(ComposicaoViatura.id == idComposicaoViatura).first()
+            return render_template('composicao/finalizarComposicao.html', composicaoViatura=composicaoViatura)
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('composicao.listarComposicao'))
 
-    @composicao_bp.route('/finalizarComposicao/<idComposicao>' , methods=['GET'])
+    @composicao_bp.route('/finalizarComposicao/<idComposicaoViatura>' , methods=['GET'])
     @login_required
     @roles_required('URBANCAD_AGENTE')
-    def finalizarComposicao(idComposicao):
+    def finalizarComposicao(idComposicaoViatura):
         try:
             dataInicio = datetime.datetime.now()
 
-            composicao = Composicao.query.filter(Composicao.id == idComposicao).first()
-            composicao.dataFim = dataInicio
-            composicao.composicaoViatura.dataFim = dataInicio
+            composicaoViatura = ComposicaoViatura.query.filter(ComposicaoViatura.id == idComposicaoViatura).first()
+            composicaoViatura.dataFim = dataInicio
 
-            db.session.add(composicao)
+            db.session.add(composicaoViatura)
             db.session.commit()
 
             flash('Composição finalizada com sucesso', 'sucess')

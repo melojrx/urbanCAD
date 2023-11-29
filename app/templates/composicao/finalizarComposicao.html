@@ -23,10 +23,10 @@
             <div class="card-body">
                 <div class="form-group mb-3 row justify-content-between">
                     <div class="col">
-                        Viatura: {{composicao.composicaoViatura.viatura}}
+                        Viatura: {{composicaoViatura.viatura}}
                     </div>
                     <div class="col">        
-                        Agente: {{composicao.agente.usuario.name}}
+                        Agente: {{composicaoViatura.agente.usuario.name}}
                     </div>    
                 </div>
             </div>
@@ -35,7 +35,7 @@
 
     <div class="col-3 d-flex justify-content-end">
         <button class="btn btn-danger me-2" type="button"
-        onclick="window.location.href='{{ url_for('composicao.finalizarComposicao', idComposicao=composicao.id) }}';">Finalizar</button>
+        onclick="window.location.href='{{ url_for('composicao.finalizarComposicao', idComposicaoViatura=composicaoViatura.id) }}';">Finalizar</button>
     </div>
 
 </div>

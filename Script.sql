@@ -174,12 +174,12 @@ CREATE SEQUENCE cad.tipo_ocorrencia_seq
   START 1
   CACHE 1;
 
-  CREATE SEQUENCE cad.composicao_seq
+  /* CREATE SEQUENCE cad.composicao_seq
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
   START 1
-  CACHE 1;
+  CACHE 1; */
 
   CREATE SEQUENCE cad.composicao_viatura_seq
   INCREMENT 1
@@ -314,22 +314,22 @@ ALTER TABLE cad.tb_agente_age ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuari
 CREATE TABLE cad.tb_composicao_viatura_cvi (
 	id_composicao_viatura_cvi integer NOT NULL DEFAULT nextval('cad.composicao_viatura_seq'::regclass),
   id_viatura_cvi integer NOT NULL,
+  id_agente_cvi integer NOT NULL,
 	dat_inicio_cvi timestamp without time zone NOT NULL,
 	dat_fim_cvi timestamp without time zone,
 	CONSTRAINT composicao_viatura_pkey PRIMARY KEY (id_composicao_viatura_cvi)
 );
 ALTER TABLE cad.tb_composicao_viatura_cvi ADD CONSTRAINT viatura_fkey FOREIGN KEY (id_viatura_cvi) REFERENCES cad.tb_viatura_via (id_viatura_via);
+ALTER TABLE cad.tb_composicao_viatura_cvi ADD CONSTRAINT agente_fkey FOREIGN KEY (id_agente_cvi) REFERENCES cad.tb_agente_age (id_agente_age);
 
-CREATE TABLE cad.tb_composicao_com (
+/* CREATE TABLE cad.tb_composicao_com (
 	id_composicao_com integer NOT NULL DEFAULT nextval('cad.composicao_seq'::regclass),
   id_composicao_viatura_com integer NOT NULL,
-  id_agente_com integer NOT NULL,
 	dat_inicio_com timestamp without time zone NOT NULL,
 	dat_fim_com timestamp without time zone,
 	CONSTRAINT composicao_pkey PRIMARY KEY (id_composicao_com)
 );
-ALTER TABLE cad.tb_composicao_com ADD CONSTRAINT composicao_viatura_fkey FOREIGN KEY (id_composicao_viatura_com) REFERENCES cad.tb_composicao_viatura_cvi (id_composicao_viatura_cvi);
-ALTER TABLE cad.tb_composicao_com ADD CONSTRAINT agente_fkey FOREIGN KEY (id_agente_com) REFERENCES cad.tb_agente_age (id_agente_age);
+ALTER TABLE cad.tb_composicao_com ADD CONSTRAINT composicao_viatura_fkey FOREIGN KEY (id_composicao_viatura_com) REFERENCES cad.tb_composicao_viatura_cvi (id_composicao_viatura_cvi); */
 
 CREATE TABLE cad.tb_grupo_despacho_gde (
 	id_grupo_despacho_gde integer NOT NULL DEFAULT nextval('cad.grupo_despacho_seq'::regclass),

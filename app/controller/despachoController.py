@@ -1,4 +1,7 @@
 import datetime
+from app.models.agenteModel import Agente
+
+from app.models.composicaoViaturaModel import ComposicaoViatura
 from ..database import db
 from sqlalchemy import and_, text, JSON
 from flask import flash, redirect, render_template, request, session, url_for
@@ -95,14 +98,14 @@ class DespachoController():
                     " JOIN cad.tb_tipo_patrulha_tpa tpa ON via.id_tipo_patrulha_via = tpa.id_tipo_patrulha_tpa"
                     " JOIN cad.tb_instituicao_ins ins ON via.id_instituicao_via = ins.id_instituicao_ins"
                     " JOIN cad.tb_composicao_viatura_cvi cvi ON via.id_viatura_via = cvi.id_viatura_cvi"
-                    " JOIN cad.tb_composicao_com com ON cvi.id_composicao_viatura_cvi = com.id_composicao_viatura_com"
-                    " JOIN cad.tb_agente_age a ON com.id_agente_com = a.id_agente_age"
+                    # " JOIN cad.tb_composicao_com com ON cvi.id_composicao_viatura_cvi = com.id_composicao_viatura_com"
+                    " JOIN cad.tb_agente_age a ON cvi.id_agente_cvi = a.id_agente_age"
                     " JOIN comum.tb_usuario_usu usu ON a.id_usuario_age = usu.id_usuario_usu"
                     " JOIN cad.tb_usuario_grupo_despacho_ugd ugd ON usu.id_usuario_usu = ugd.id_usuario_ugd"
                     " JOIN cad.tb_grupo_despacho_gde gde ON ugd.id_grupo_despacho_ugd = gde.id_grupo_despacho_gde"
                     " JOIN cad.tb_regionais_reg reg ON gde.id_regional_gde = reg.id"
                     " WHERE"
-                    " com.dat_fim_com is null AND"
+                    " cvi.dat_fim_cvi is null AND"
                     " a.dat_fim_age is null AND"
                     " ugd.dat_fim_ugd is null AND"
                     " gde.dat_fim_gde is null AND"
@@ -159,12 +162,10 @@ class DespachoController():
             db.session.rollback();
             flash('Erro: {}'.format(e), 'error') 
             return render_template('despacho.html', form=form)
-
-        return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
-    
+   
     @despacho_bp.route('/atenderDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')    
     def atenderDespacho(idDespachoHistorico):
 
         try:
@@ -179,17 +180,17 @@ class DespachoController():
             db.session.commit()
 
             flash('Despacho atendido com sucesso', 'sucess')
-            redirect(url_for('despacho.meusDespachos'))
+            return redirect(url_for('despacho.meusDespachos'))
         except Exception as e:
             db.session.rollback();
             flash('Erro: {}'.format(e), 'error') 
-            redirect(url_for('despacho.meusDespachos')) 
+            return redirect(url_for('despacho.meusDespachos')) 
         
 
     @despacho_bp.route('/meusDespachos', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')
     def meusDespachos():
         page = request.args.get('page', 1, type=int)
-        listDespachoHistorico = DespachoHistorico.query.filter(and_(DespachoHistorico.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
         return render_template('meusDespachos.html', listDespachoHistorico=listDespachoHistorico)

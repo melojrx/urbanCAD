@@ -45,14 +45,14 @@
           <tbody>
             {% for row in listComposicao.items %}
               <tr>
-                <td>{{ row.composicaoViatura.viatura.txtPlaca }}</td>
+                <td>{{ row.viatura.txtPlaca }}</td>
                 <td>{{ row.agente.usuario.name }}</td>
                 <td>{{ row.agente.instituicao.txtInstituicao }}</td>
                 <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                <td>{{ row.dataFim.strftime('%d/%m/%Y %H:%M') if row.dataFim else "" }}</td>
+                <td>{{row.dataFim.strftime('%d/%m/%Y %H:%M') if row.dataFim else "" }}</td>
                 <td>
                     <a
-                    href="{{ url_for('composicao.prepareFinalizarComposicao', idComposicao=row.id) }}"
+                    href="{{ url_for('composicao.prepareFinalizarComposicao', idComposicaoViatura=row.id) }}"
                     class="btn btn-danger btn-sm"
                     role="button"
                     title="Finalizar">
