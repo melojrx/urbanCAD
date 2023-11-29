@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<div class="border mt-2 rounded mb-2" id="form-cadastro-evento">
+
+    <div class="container-fluid">
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5 class="card-title">Ocorrência</h5>
+                <div class="mb-3">
+                    Nº: {{despachoHistorico.despacho.ocorrencia.numOcorrencia}}
+                </div>
+                <div class="mb-3">
+                    Problema: {{despachoHistorico.despacho.ocorrencia.txtProblema}}
+                </div>
+                <div class="mb-3">
+                    Endereço: {{despachoHistorico.despacho.ocorrencia.txtEndereco}}
+                </div>
+                <div class="mb-3">
+                    Status:
+                    {{despachoHistorico.despacho.ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
+                </div>
+                <div class="mb-3">
+                    Tipo de Ocorrência:
+                    {{despachoHistorico.despacho.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
+                </div>
+                <div class="mb-3">
+                    Subtipo de Ocorrência:
+                    {{despachoHistorico.despacho.ocorrencia.subcategoria.txtSubtipoOcorrencia}}
+                </div>
+                <div class="mb-3">
+                    Início: {{despachoHistorico.despacho.ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M')}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5 class="card-title">Despacho</h5>
+                <div class="mb-3">
+                    Viaturaº: {{despachoHistorico.despacho.composicaoViatura.viatura}}
+                </div>
+                <div class="mb-3">
+                    Agente: {{despachoHistorico.despacho.composicaoViatura.agente.usuario.name}}
+                </div>
+                <div class="mb-3">
+                    Status:
+                    {{despachoHistorico.statusDespacho.txtStatusDespacho}}
+                </div>                
+                <div class="mb-3">
+                    Início: {{despachoHistorico.dataInicio.strftime('%d/%m/%Y %H:%M')}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5 class="card-title">Observações</h5>
+                {% for obs in despachoHistorico.listObservacao %}
+                    <span class="font-weight-bold">{{obs.usuario.name}}</span> em 
+                    <span class="fw-normal">{{obs.dataInicio.strftime('%d/%m/%Y %H:%M')}}: </span> 
+                    <span class="fw-normal">{{obs.txtObservacao}}</span> <br>
+                {%endfor%}
+            </div>
+        </div>                    
+    </div>
+
+    <div class="container-fluid">
+        <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.cadastrarObservacao') }}">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div>
+                                {{form.idDespachoHistorico(class_="form-control")}}
+                            </div>                            
+                            <div class="mb-3">
+                                {{form.observacao.label(class_="form-label")}}
+                                {{form.observacao(class_="form-control")}}
+                                {% for error in form.observacao.errors %}
+                                <div class="important">
+                                    {{error}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mb-3">
+                                {{form.file.label(class_="form-label")}}
+                                {{form.file(class_="form-control")}}
+                                {% for error in form.file.errors %}
+                                <div class="important">
+                                    {{error}}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+                {{ form.submit(class_="btn btn-primary") }}
+                <button type="button" class="btn btn-danger"
+                    onclick="window.location.href='{{url_for('despacho.meusDespachos')}}';">Voltar
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock conteudo %}

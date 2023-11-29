@@ -188,6 +188,13 @@ CREATE SEQUENCE cad.tipo_ocorrencia_seq
   START 1
   CACHE 1;
 
+  CREATE SEQUENCE cad.despacho_observacao_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+
 -- ################
 -- #    TABLES    #
 -- ################
@@ -398,6 +405,18 @@ CREATE TABLE cad.tb_despacho_historico_dhi (
 ALTER TABLE cad.tb_despacho_historico_dhi ADD CONSTRAINT despacho_fkey FOREIGN KEY (id_despacho_dhi) REFERENCES cad.tb_despacho_des (id_despacho_des);
 ALTER TABLE cad.tb_despacho_historico_dhi ADD CONSTRAINT status_fkey FOREIGN KEY (id_status_despacho_dhi) REFERENCES cad.tb_status_despacho_sde (id_status_despacho_sde);
 ALTER TABLE cad.tb_despacho_historico_dhi ADD CONSTRAINT usuario_fkey FOREIGN KEY (id_usuario_dhi) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
+
+CREATE TABLE cad.tb_despacho_observacao_dob (
+	id_despacho_observacao_dob integer NOT NULL DEFAULT nextval('cad.despacho_observacao_seq'::regclass),
+  id_despacho_historico_dob integer NOT NULL,
+  id_usuario_dob integer NOT NULL,
+	txt_despacho_observacao_dob varchar(500) NOT NULL,
+	dat_inicio_dob timestamp without time zone NOT NULL,
+	dat_fim_dob timestamp without time zone,
+	CONSTRAINT despacho_observacao_pkey PRIMARY KEY (id_despacho_observacao_dob)
+);
+ALTER TABLE cad.tb_despacho_observacao_dob ADD CONSTRAINT despacho_observacao_fkey FOREIGN KEY (id_despacho_historico_dob) REFERENCES cad.tb_despacho_historico_dhi (id_despacho_historico_dhi);
+ALTER TABLE cad.tb_despacho_observacao_dob ADD CONSTRAINT usuario_observacao_fkey FOREIGN KEY (id_usuario_dob) REFERENCES comum.tb_usuario_usu (id_usuario_usu);
 
 -- ####################################
 -- #        INSERTS PARA TESTES       #

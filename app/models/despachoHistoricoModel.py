@@ -1,3 +1,4 @@
+from app.models.despachoObservacaoModel import DespachoObservacao
 from app.models.statusDespachoModel import StatusDespacho
 from app.models.despachoModel import Despacho
 from app.models.userModel import User
@@ -18,6 +19,7 @@ class DespachoHistorico(db.Model):
     despacho = db.relationship(Despacho, back_populates='despachoHistorico') 
     statusDespacho= db.relationship(StatusDespacho)
     usuario = db.relationship(User)
+    listObservacao = db.relationship(DespachoObservacao)
 
     def __init__(self, despacho, idStatusDespacho, idUsuario, dataInicio):
         self.despacho = despacho

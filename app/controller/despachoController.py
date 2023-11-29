@@ -1,7 +1,9 @@
 import datetime
+from app.forms.despachoObservacaoForm import DespachoObservacaoForm
 from app.models.agenteModel import Agente
 
 from app.models.composicaoViaturaModel import ComposicaoViatura
+from app.models.despachoObservacaoModel import DespachoObservacao
 from ..database import db
 from sqlalchemy import and_, text, JSON
 from flask import flash, redirect, render_template, request, session, url_for
@@ -186,6 +188,40 @@ class DespachoController():
             flash('Erro: {}'.format(e), 'error') 
             return redirect(url_for('despacho.meusDespachos')) 
         
+    @despacho_bp.route('/gerenciarDespacho/<idDespachoHistorico>', methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')    
+    def gerenciarDespacho(idDespachoHistorico):
+
+        try:
+            form = DespachoObservacaoForm(request.form)
+            despachoHistorico = db.session.query(DespachoHistorico).filter(DespachoHistorico.id==idDespachoHistorico).first()
+            form.idDespachoHistorico.data = despachoHistorico.id
+                                          
+            return render_template('gerenciarDespacho.html', form=form, despachoHistorico=despachoHistorico)
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error') 
+            return redirect(url_for('despacho.meusDespachos')) 
+
+    @despacho_bp.route('/cadastrarObservacao', methods=['POST'])
+    @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')    
+    def cadastrarObservacao():
+
+        try:
+            form = DespachoObservacaoForm(request.form)
+            datInicio = datetime.datetime.now()
+            despachoObservacao = DespachoObservacao(form.idDespachoHistorico.data, current_user.id, form.observacao.data, datInicio)
+
+            db.session.add(despachoObservacao)
+            db.session.commit()
+
+            return redirect(url_for('despacho.gerenciarDespacho', idDespachoHistorico=form.idDespachoHistorico.data))
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error') 
+            return redirect(url_for('despacho.gerenciarDespacho', idDespachoHistorico=form.idDespachoHistorico.data))    
 
     @despacho_bp.route('/meusDespachos', methods=['GET'])
     @login_required
