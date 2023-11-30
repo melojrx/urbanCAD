@@ -411,6 +411,7 @@ CREATE TABLE cad.tb_despacho_observacao_dob (
   id_despacho_historico_dob integer NOT NULL,
   id_usuario_dob integer NOT NULL,
 	txt_despacho_observacao_dob varchar(500) NOT NULL,
+  img_file_dob bytea NOT NULL,
 	dat_inicio_dob timestamp without time zone NOT NULL,
 	dat_fim_dob timestamp without time zone,
 	CONSTRAINT despacho_observacao_pkey PRIMARY KEY (id_despacho_observacao_dob)

@@ -211,8 +211,9 @@ class DespachoController():
 
         try:
             form = DespachoObservacaoForm(request.form)
+            file = request.files['file']
             datInicio = datetime.datetime.now()
-            despachoObservacao = DespachoObservacao(form.idDespachoHistorico.data, current_user.id, form.observacao.data, datInicio)
+            despachoObservacao = DespachoObservacao(form.idDespachoHistorico.data, current_user.id, form.observacao.data, file.read(), datInicio)
 
             db.session.add(despachoObservacao)
             db.session.commit()
@@ -230,3 +231,26 @@ class DespachoController():
         page = request.args.get('page', 1, type=int)
         listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
         return render_template('meusDespachos.html', listDespachoHistorico=listDespachoHistorico)
+    
+    @despacho_bp.route('/finalizarDespacho/<idDespachoHistorico>', methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE')    
+    def finalizarDespacho(idDespachoHistorico):
+        try:
+
+            datInicio = datetime.datetime.now()
+
+            despachoHistorico = db.session.query(DespachoHistorico).filter(and_(DespachoHistorico.id==idDespachoHistorico, DespachoHistorico.dataFim.is_(None))).first()
+            despachoHistorico.dataFim = datInicio
+          
+            newDespachoHistorico = DespachoHistorico(despachoHistorico.despacho, statusDespachoEnum.StatusDespachoEnum.CONCLUIDO.value, current_user.id, datInicio)
+            
+            db.session.add(newDespachoHistorico)
+            db.session.commit()
+
+            flash('Despacho finalizado com sucesso', 'sucess')
+            return redirect(url_for('despacho.meusDespachos'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error') 
+            return redirect(url_for('despacho.meusDespachos'))

@@ -65,6 +65,9 @@
                     <span class="font-weight-bold">{{obs.usuario.name}}</span> em 
                     <span class="fw-normal">{{obs.dataInicio.strftime('%d/%m/%Y %H:%M')}}: </span> 
                     <span class="fw-normal">{{obs.txtObservacao}}</span> <br>
+                    {% if (obs.fileBase64) %}
+                        <img class="figure-img rounded" src="data:image/jpeg;base64,{{obs.fileBase64}}" width="100%">
+                    {% endif %}
                 {%endfor%}
             </div>
         </div>                    
@@ -102,6 +105,10 @@
                 </div>
             </div>
             <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+                {% if (despachoHistorico.idStatusDespacho == 2) %}
+                    <button class="btn btn-danger me-2" type="button"
+                        onclick="window.location.href='{{ url_for('despacho.finalizarDespacho', idDespachoHistorico=despachoHistorico.id) }}';">Finalizar</button>
+                {% endif %}
                 {{ form.submit(class_="btn btn-primary") }}
                 <button type="button" class="btn btn-danger"
                     onclick="window.location.href='{{url_for('despacho.meusDespachos')}}';">Voltar
