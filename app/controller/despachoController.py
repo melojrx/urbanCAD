@@ -39,9 +39,12 @@ class DespachoController():
         querySearchADespachar = None
 
         if not 'URBANCAD_ADMIN' in session["roles"]:    
-            querySearchDespacho = (Despacho.query.join(Ocorrencia)
+            querySearchDespacho = (Ocorrencia.query.join(Despacho)
                         .join(OcorrenciaHistorico)
-                        .join(OcorrenciaGrupoDespacho).join(User)
+                        .join(OcorrenciaGrupoDespacho)
+                        .join(GrupoDespacho)
+                        .join(UsuarioGrupoDespacho)
+                        .join(User)
                         .filter(
                             OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
                             User.id == current_user.id,
@@ -61,7 +64,7 @@ class DespachoController():
                 )
             )
         else:
-            querySearchDespacho = (Despacho.query.join(Ocorrencia)
+            querySearchDespacho = (Ocorrencia.query.join(Despacho)
                         .join(OcorrenciaHistorico)
                         .filter(
                             OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
@@ -79,11 +82,11 @@ class DespachoController():
 
             
 
-        listDespacho = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)                   
+        listOcorrenciaDespachada = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)                   
         listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
 
 
-        return render_template('listarDespacho.html', listDespacho=listDespacho, listDespachar=listDespachar)
+        return render_template('listarDespacho.html', listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
 
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required

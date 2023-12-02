@@ -19,7 +19,8 @@ class DespachoObservacao(db.Model):
     
     @property
     def fileBase64(self):
-        return b64encode(self.file).decode()
+        if self.file:
+            return b64encode(self.file).decode()
 
     def __init__(self, idDespachoHistorico, idUsuario, txtObservacao, file, dataInicio):
         self.idDespachoHistorico = idDespachoHistorico

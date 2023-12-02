@@ -17,68 +17,49 @@
         </div>
    
         <!-- LISTAGEM DE DESPACHOS REALIZADOS -->
-        {% if listDespacho.items %}
-        LISTAGEM DE DESPACHOS REALIZADOS
-        <div class="table-responsive mt-2">
-            <table class="table border table-striped table-hover table-borderless">
-                <thead>
-                    <tr>
-                        <th scope="col">Ocorrência</th>
-                        <th scope="col">Status da Ocorrência</th>
-                        <th scope="col">Status do Despacho</th>
-                        <th scope="col">Despachado por</th>
-                        <th scope="col">Despachado para</th>
-                        <th scope="col">Data</th>
+        {% if listOcorrenciaDespachada.items %}
+            LISTAGEM DE DESPACHOS REALIZADOS
+            <div class="container-fluid">
+                {% for row in listOcorrenciaDespachada.items %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Ocorrência Nº: {{ row.numOcorrencia}}</h5>
+                                <div class="table-responsive mt-2">
+                                    <table class="table border table-striped table-hover table-borderless">
+                                        <tr>
+                                            <th scope="col">Ocorrência</th>
+                                            <th scope="col">Status da Ocorrência</th>
+                                            <th scope="col">Data</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ row.txtProblema}}</td>
+                                            <td>{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</td>
+                                            <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                                        </tr>
+                                        <tr>
+                                            <table class="table border table-striped table-hover table-borderless">
+                                                    {% for row in row.listDespacho %}
+                                                        <tr>
+                                                            <th scope="col">Status do Despacho</th>
+                                                            <th scope="col">Responsável</th>
+                                                            <th scope="col">Viatura</th>
+                                                            <th scope="col">Data</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ row.despachoHistorico.statusDespacho.txtStatusDespacho}}</td>
+                                                            <td>{{ row.composicaoViatura.agente.usuario.name}}</td>
+                                                            <td>{{ row.composicaoViatura.viatura}}</td>
+                                                            <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                                                        </tr>
+                                                    {%endfor%}
+                                                </table>
                                             </tr>
-                </thead>
-                <tbody>
-                    {% for row in listDespacho.items %}
-                    <tr>
-                        <td>{{ row.ocorrencia.txtProblema}}</td>
-                        <td>{{ row.ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</td>
-                        <td>{{ row.despachoHistorico.statusDespacho.txtStatusDespacho}}</td>
-                        <td>{{ row.user.name}}</td>
-                        <td>{{ row.composicaoViatura.viatura }}</td>
-                        <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                                            {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination Links-->
-        <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-            <a href="{{ url_for('despacho.prepareSearchDespacho', page=listDespacho.prev_num) }}" class="btn btn-outline-primary 
-            {% if listDespacho.page == 1 %}disabled{% endif %}">
-                &laquo;
-            </a><!-- Loop through the number of pages to display a link for each-->
-            {% for page_num in listDespacho.iter_pages(left_edge=1, right_edge=1, left_current=1,
-            right_current=2) %}
-            {% if page_num %}
-            <!-- Check for the active page and set the link to "Active"-->
-            {% if listDespacho.page == page_num %}
-            <a href="{{ url_for('despacho.prepareSearchDespacho', page=page_num) }}" class="btn btn-primary">
-                {{ page_num }}
-            </a>
-            {% else %}
-            <a href="{{ url_for('despacho.prepareSearchDespacho', page=page_num) }}" class="btn btn-outline-primary">
-                {{ page_num }}
-            </a>
-            {% endif %}
-            {% else %}
-            ...
-            {% endif %}
-            {% endfor %} <a href="{{ url_for('despacho.prepareSearchDespacho', page=listDespacho.next_num) }}"
-                class="btn btn-outline-primary 
-            {% if listDespacho.page == listDespacho.pages %}disabled{% endif %}">
-                &raquo;
-            </a>
-        </div>
-        <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-            Página {{ listDespacho.page }} de {{ listDespacho.pages }}
-        </p>
-        <!-- End Pagination Links-->
-        {% else %}
-        <p class="text-center">Nenhum registro de Despacho encontrado.</p>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>                    
+                    </div>
+                {%endfor%}
         {% endif %}
 
 
