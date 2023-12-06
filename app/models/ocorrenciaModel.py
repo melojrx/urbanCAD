@@ -18,6 +18,7 @@ class Ocorrencia(db.Model):
     dataInicio = db.Column('dat_inicio_oco', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_oco', db.DateTime, nullable=True)
     fileBase64 = None
+    exibeFinalizarOcorrencia = False
     
     usuario = db.relationship(User)
     subcategoria = db.relationship(SubtipoOcorrencia)
