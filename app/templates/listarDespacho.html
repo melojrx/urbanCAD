@@ -17,10 +17,10 @@
         </div>
    
         <!-- LISTAGEM DE DESPACHOS REALIZADOS -->
-        {% if listOcorrenciaDespachada.items %}
+        {% if listOcorrenciaDespachada %}
             LISTAGEM DE DESPACHOS REALIZADOS
             <div class="container-fluid">
-                {% for row in listOcorrenciaDespachada.items %}
+                {% for row in listOcorrenciaDespachada %}
                     <div class="card mb-2">
                         <div class="card-body">
                             <h5 class="card-title">Ocorrência Nº: {{ row.numOcorrencia}}</h5>
@@ -30,11 +30,16 @@
                                             <th scope="col">Ocorrência</th>
                                             <th scope="col">Status da Ocorrência</th>
                                             <th scope="col">Data</th>
+                                            <th scope="col">Finalizar</th>
                                         </tr>
                                         <tr>
                                             <td>{{ row.txtProblema}}</td>
                                             <td>{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</td>
-                                            <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                                            <td>{{ row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                                            <td>
+                                                <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia %}disabled{% endif %}
+                                                type="button" onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <table class="table border table-striped table-hover table-borderless">

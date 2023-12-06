@@ -75,7 +75,7 @@ class loginController:
                 return redirect(url_for('despacho.prepareSearchDespacho')) 
             if "agente" in user.email:
                 session["roles"] = 'URBANCAD_AGENTE'
-                return redirect(url_for('composicao.listarComposicao'))             
+                return redirect(url_for('despacho.meusDespachos'))             
         else:
              return render_template('login.html', form=form)
         # ------------------------------------------------

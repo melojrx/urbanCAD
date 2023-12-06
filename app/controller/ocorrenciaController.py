@@ -245,4 +245,27 @@ class ocorrenciaController():
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('ocorrencia.prepareSearchOcorrencia')) 
+            return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
+
+    @ocorrencia_bp.route('/finalizarOcorrencia/<idOcorrenciaHistorico>', methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')    
+    def finalizarOcorrencia(idOcorrenciaHistorico):
+        try:
+
+            datInicio = datetime.datetime.now()
+
+            ocorrenciaHistorico = db.session.query(OcorrenciaHistorico).filter(OcorrenciaHistorico.id==idOcorrenciaHistorico).first()
+            ocorrenciaHistorico.dataFim = datInicio
+          
+            newOcorrenciaHistorico = OcorrenciaHistorico(ocorrenciaHistorico.ocorrencia, statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, current_user.id, datInicio)
+            
+            db.session.add(newOcorrenciaHistorico)
+            db.session.commit()
+
+            flash('Ocorrência finalizada com sucesso', 'sucess')
+            return redirect(url_for('despacho.prepareSearchDespacho'))
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error') 
+            return redirect(url_for('despacho.prepareSearchDespacho'))         

@@ -19,7 +19,6 @@ from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
 from app.models.ocorrenciaGrupoDespachoModel import OcorrenciaGrupoDespacho
 from app.models.ocorrenciaModel import Ocorrencia
 from app.models.despachoHistoricoModel import DespachoHistorico
-from app.models.viaturaModel import Viatura
 from .roleRequired import roles_required
 from ..rotas.despachoRout import despacho_bp
 
@@ -82,8 +81,15 @@ class DespachoController():
 
             
 
-        listOcorrenciaDespachada = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)                   
+        listOcorrenciaDespachada = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
+
+        # O código abaixo habilita o botão de finalizar Ocorrência caso todos os despachos estejam Concluídos      
+        for ocorrencia in listOcorrenciaDespachada:
+                if all(row.despachoHistorico.idStatusDespacho == statusDespachoEnum.StatusDespachoEnum.CONCLUIDO.value for row in ocorrencia.listDespacho):
+                    ocorrencia.exibeFinalizarOcorrencia = True
+
         listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+
 
 
         return render_template('listarDespacho.html', listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
