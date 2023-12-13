@@ -102,6 +102,22 @@
                     </form>
                 </div>
             </div>
-        </div>    
+        </div>  
+        
+        <!-- Máscara de CPF -->
+        <script>
+            $(document).ready(function () {
+            // Aplicar a máscara de CPF
+            $(".cpf").mask("000.000.000-00", { reverse: true });
+        
+            // Remover pontos e traço antes de enviar o formulário
+            $("form").submit(function (event) {
+                var cpfField = $(".cpf");
+                var cpfValue = cpfField.val().replace(/[^\d]/g, ""); // Deixa apenas os dígitos
+                cpfField.val(cpfValue);
+            });
+            });
+        </script>
+
 </body>
 </html>
