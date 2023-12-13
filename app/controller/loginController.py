@@ -55,6 +55,7 @@ class loginController:
                     return render_template('login.html', form=form)
                 else:
                     db.session.commit()
+                    flash('Usuário cadastrado com sucesso', 'sucess')
                     return redirect(url_for('login.login')) 
             except Exception as e:
                 db.session.rollback()
