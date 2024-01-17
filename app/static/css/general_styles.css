@@ -24,11 +24,6 @@ body {
     margin: 0 10px;
 }
 
-.urban_logo a:hover {
-    color: #1480FB;
-    transition: all .3s;
-}
-
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -57,7 +52,6 @@ body {
     display: flex;
     color: black;
     font-weight: bold;
-    margin-top: 20px;
     justify-content: flex-start;
     align-items: center;
     margin-left: 20px;
@@ -75,10 +69,6 @@ body {
     color: black;
     font-weight: bold;
     text-decoration: none;
-}
-.link-sidebar:hover{
-    background-color: #0BA8FD;
-    transition: all .3s;
 }
 
 .titulo-menu-gov {
@@ -102,8 +92,14 @@ body {
 .bi-file-earmark-diff-fill,
 .bi-list-ul,
 .bi-bank,
-.bi-pencil-square {
-    font-size: 2.2em;
+.bi-pencil-square,
+.bi-newspaper,
+.bi-ev-front-fill,
+.bi-diagram-3-fill,
+.bi-person-lines-fill,
+.bi-person-fill,
+.bi-globe-americas {
+    font-size: 1.8em;
     padding-right: 8px;
 }
 

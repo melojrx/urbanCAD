@@ -1,86 +1,97 @@
-<a href="{{url_for('ocorrencia.iniciar')}}" class="link-sidebar">
+<a href="{{url_for('ocorrencia.iniciar')}}" class="mt-2" >
   <div class="urban-gov-menu-gov">
     <i class="bi bi-house-fill"></i>
-    <span class="titulo-menu-gov">Inicio</span>
+    <span class="titulo-menu-gov">Dashboard</span>
   </div>
 </a>
 <div class="menu-categorias">
   <span class="categorias-menu-gov">ATENDIMENTO</span>
 </div>
 {% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
-  <a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}" class="link-sidebar">
+  <a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}">
     <div class="urban-gov-menu-gov">
-      <i class="bi bi-file-earmark-diff-fill"></i>
+      <i class="bi bi-geo-alt-fill"></i>
       <span class="titulo-menu-gov">Ocorrências</span>
     </div>
   </a>
 {% endif %}
 {% if ('URBANCAD_DESPACHO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
-  <a href="{{url_for('despacho.prepareSearchDespacho')}}" class="link-sidebar">
-    <div class="urban-gov-menu-gov">
-      <i class="bi bi-pencil-square"></i>
-      <span class="titulo-menu-gov">Despachos</span>
-    </div>
-  </a>
+
+      <a href="{{url_for('despacho.prepareSearchDespacho')}}"  class="accordion accordion-flush" id="accordionExample" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+      aria-expanded="true" aria-controls="collapseOne">
+        <div class="urban-gov-menu-gov">
+          <i class="bi bi-newspaper"></i>
+          <span class="titulo-menu-gov">Despachos</span>
+        </div>
+      </a>
+    
+      <a href="{{url_for('despacho.meusDespachos')}}" id="collapseOne"  data-bs-parent="#accordionExample" class="accordion-collapse collapse">
+        <div class="urban-gov-menu-gov">
+          <i class="bi bi-newspaper"></i>
+          <span class="titulo-menu-gov">Meus Despachos</span>
+        </div>
+      </a>
+ 
+
 {% endif %}
-<a href="{{url_for('despacho.meusDespachos')}}" class="link-sidebar">
+<!-- <a href="{{url_for('despacho.meusDespachos')}}" >
   <div class="urban-gov-menu-gov">
     <i class="bi bi-pencil-square"></i>
     <span class="titulo-menu-gov">Meus Despachos</span>
   </div>
-</a>
+</a> -->
 
 
 {% if ('URBANCAD_ADMIN' in session["roles"]) %}
 <div class="menu-categorias">
   <span class="categorias-menu-gov">ADMINISTRAÇÃO</span>
 </div>
-<a href="{{url_for('viatura.listarViaturas')}}" class="link-sidebar">
+<a href="{{url_for('viatura.listarViaturas')}}" >
   <div class="urban-gov-menu-gov">
     <i class="bi bi-car-front-fill"></i>
     <span class="titulo-menu-gov">Viaturas</span>
   </div>
 </a>
-<a href="{{ url_for('instituicao.prepareSearchInstituicao') }}" class="link-sidebar">
+<a href="{{ url_for('instituicao.prepareSearchInstituicao') }}" >
   <div class="urban-gov-menu-gov">
     <i class="bi bi-bank"></i>
     <span class="titulo-menu-gov">Instituições</span>
   </div>
 </a>
-<a href="{{ url_for('tipopatrulha.listarTipoPatrulha') }}" class="link-sidebar">
+<a href="{{ url_for('tipopatrulha.listarTipoPatrulha') }}" >
   <div class="urban-gov-menu-gov">
-    <i class="bi bi-bank"></i>
+    <i class="bi bi-ev-front-fill"></i>
     <span class="titulo-menu-gov">Tipo de Patrulha</span>
   </div>
 </a>
-<a href="{{ url_for('grupodespacho.listarGrupoDespacho') }}" class="link-sidebar">
+<a href="{{ url_for('grupodespacho.listarGrupoDespacho') }}" >
   <div class="urban-gov-menu-gov">
-    <i class="bi bi-bank"></i>
+    <i class="bi bi-diagram-3-fill"></i>
     <span class="titulo-menu-gov">Grupo de Despacho</span>
   </div>
 </a>
-<a href="{{ url_for('usuariogrupodespacho.listarUsuarioGrupoDespacho') }}" class="link-sidebar">
+<a href="{{ url_for('usuariogrupodespacho.listarUsuarioGrupoDespacho') }}" >
   <div class="urban-gov-menu-gov">
-    <i class="bi bi-bank"></i>
+    <i class="bi bi-person-lines-fill"></i>
     <span class="titulo-menu-gov">Usuário Grupo de Despacho</span>
   </div>
 </a>
-<a href="{{url_for('agente.listarAgente')}}" class="link-sidebar">
+<a href="{{url_for('agente.listarAgente')}}" >
   <div class="urban-gov-menu-gov">
-    <i class="bi bi-car-front-fill"></i>
+    <i class="bi bi-person-fill"></i>
     <span class="titulo-menu-gov">Agentes</span>
   </div>
 </a>
-<a href="{{ url_for('maleta.listarDeteccao') }}" class="link-sidebar">
+<a href="{{ url_for('maleta.listarDeteccao') }}" >
   <div class="urban-gov-menu-gov">
-    <i class="bi bi-pin-map-fill"></i>
+    <i class="bi bi-globe-americas"></i>
     <span class="titulo-menu-gov">Detecções</span>
   </div>
 </a>
 {% endif %}
 
 {% if ('URBANCAD_AGENTE' in session["roles"]) %}
-<a href="{{ url_for('composicao.listarComposicao') }}" class="link-sidebar">
+<a href="{{ url_for('composicao.listarComposicao') }}" >
   <div class="urban-gov-menu-gov">
     <i class="bi bi-pin-map-fill"></i>
     <span class="titulo-menu-gov">Formar Composição</span>
@@ -90,6 +101,6 @@
 
 <div class="footer-sidebar mt-auto">
   <footer class="container-fluid text-center border-top ">
-    <p class="fw-semibold mt-1">&copy; 2023 Todos os direitos reservados.</p>
+    <p class="fw-semibold mt-1">Tiger &copy; 2024 - Todos os direitos reservados.</p>
   </footer>
 </div>
