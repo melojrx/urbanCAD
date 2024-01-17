@@ -1,4 +1,9 @@
+.mapa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #map { 
-    height: 300px !important;
-    width: 300px !important;
+    height: 40em;
+    width: 180em;
 }
