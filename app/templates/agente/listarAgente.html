@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
+<div class="container-fluid mt-2 rounded mb-2">
 
   <div class="container-fluid mt-2">
 
@@ -33,7 +33,7 @@
       <table class="table border table-striped table-hover table-borderless">
         {% if listAgente %}
           <thead>
-            <tr>
+            <tr class="text-center table-secondary">
               <th scope="col">Usuário</th>
               <th scope="col">Instituição</th>
               <th scope="col">Criação</th>
@@ -42,8 +42,8 @@
           </thead>
           <tbody>
             {% for row in listAgente.items %}
-              <tr>
-                <td>{{ row.usuario.name }}</td>
+              <tr class="text-center">
+                <td>{{ row.usuario.name.capitalize() }}</td>
                 <td>{{ row.instituicao.txtInstituicao }}</td>
                 <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
                 <td>{{ row.dataFim.strftime('%d/%m/%Y %H:%M') if row.dataFim else "" }}</td>
@@ -57,7 +57,7 @@
         {% endif %}
       </table>
     </div>
-      
+      {% if listAgente.total > 10 %}
       <!-- Pagination Links-->
       <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
         <a href="{{ url_for('agente.listarAgente', page=listAgente.prev_num) }}" class="btn btn-outline-primary 
@@ -84,11 +84,12 @@
             {% if listAgente.page == listAgente.pages %}disabled{% endif %}">
             &raquo;
         </a>
-    </div>
-    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-        Página {{ listAgente.page }} de {{ listAgente.pages }}
-    </p>
-  <!-- End Pagination Links-->
+      </div>
+      <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+          Página {{ listAgente.page }} de {{ listAgente.pages }}
+      </p>
+    {% endif %}
+    <!-- End Pagination Links-->
   </div>
 
 </div>

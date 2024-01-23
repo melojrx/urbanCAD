@@ -3,7 +3,7 @@
 <div class="container-fluid mt-2 rounded mb-2">
   <div class="container-fluid mt-3">
     <div class="card mb-2">
-      <div class="card-body">
+      <div class="card-header">
         <div class="row d-flex align-items-center">
           <div class="col-9">
             <h5 class="card-title">Gerenciamento de Ocorrências</h5>
@@ -19,31 +19,31 @@
         </div>
       </div>
     </div>
-    <div class="card mb-4">
+    <div class="card mb-2">
       <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
-        <div class="card-header mt-2">
-        <div class="card-title h6">
-          Consulta ocorrências
+        <div class="card-header">
+        <div class="card-title mt-2">
+          <h6>Consulta ocorrências</h6>
         </div>
         </div>
-        <div class="card-body" style="font-size: 0.8rem">
+        <div class="card-body" >
           <div class="row">
             <div class="col-3 m-1">
               {{form.numOcorrenciaSearch.label(class_="form-label m-1")}} {{
-              form.numOcorrenciaSearch(class="form-control form-control-sm m-1")
+              form.numOcorrenciaSearch(class="form-control form-control m-1")
               }}
             </div>
             <div class="col-3 m-1">
               {{form.dataInicioSearch.label(class_="form-label m-1")}} {{
-              form.dataInicioSearch(class="form-control form-control-sm m-1") }}
+              form.dataInicioSearch(class="form-control form-control m-1") }}
             </div>
             <div class="col-3 m-1">
               {{form.dataFimSearch.label(class_="form-label m-1")}} {{
-              form.dataFimSearch(class="form-control form-control-sm m-1") }}
+              form.dataFimSearch(class="form-control form-control m-1") }}
             </div>
             <div class="col-3 m-1">
-              {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
-              <button type="button" class="btn btn-outline-danger btn-sm m-1"
+              {{ form.submit(class_="btn btn-primary m-1") }}
+              <button type="button" class="btn btn-outline-danger m-1"
                 onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
                 Limpar
               </button>
@@ -54,10 +54,10 @@
     </div>
     <div class="mb-2">
       {% if listOcorrenciaHistorico.items %}
-      <div class="table-responsive" style="font-size: 0.9rem">
-        <table class="table border table-striped table-hover">
+      <div class="table-responsive" style="font-size: 0.9rem" >
+        <table class="table border table-striped table-hover table-borderless">
           <thead>
-            <tr class="text-center table-primary">
+            <tr class="text-center table-secondary">
               <th scope="col">Noticiante</th>
               <th scope="col">Tipo Ocorrência</th>
               <th scope="col">Subtipo Ocorrência</th>
@@ -79,7 +79,7 @@
               <td>{{ row.ocorrencia.numOcorrencia}}</td>
               <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
               <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-              <td>
+              <td class="text-start">
                 <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal"
                   data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
                   <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}" width="30%"></i>

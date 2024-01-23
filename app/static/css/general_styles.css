@@ -9,6 +9,14 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.body-login {
+    background-image: url('/static/img/body_login_cad1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    justify-content: center;
+    background-attachment: fixed;
+
+}
 .navbar {
     background: rgb(9, 9, 121);
     background: linear-gradient(90deg, rgba(9, 9, 121, 1) 0%, rgba(49, 5, 245, 1) 35%, rgba(0, 212, 255, 1) 100%);
@@ -110,7 +118,8 @@
 .bi-diagram-3-fill,
 .bi-person-lines-fill,
 .bi-person-fill,
-.bi-globe-americas {
+.bi-globe-americas,
+.bi-buildings-fill {
     font-size: 1.8em;
     padding-right: 8px;
 }

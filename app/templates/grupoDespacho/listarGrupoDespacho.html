@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
+<div class="container-fluid mt-2 rounded mb-2">
 
   <div class="container-fluid mt-2">
 
@@ -33,14 +33,14 @@
       <table class="table border table-striped table-hover table-borderless">
         {% if listGrupoDespacho != None %}
           <thead>
-            <tr>
+            <tr class="text-center table-secondary">
               <th scope="col">Grupo de Despacho</th>
               <th scope="col">Regional</th>
             </tr>
           </thead>
           <tbody>
             {% for row in listGrupoDespacho.items %}
-              <tr>
+              <tr class="text-center">
                 <td>{{ row.txtNome }}</td>
                 <td>{{ row.regional.txtRegiao }}</td>
               </tr>

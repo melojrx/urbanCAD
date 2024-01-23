@@ -17,8 +17,15 @@
 {% endif %}
 {% if ('URBANCAD_DESPACHO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
 
-      <a href="{{url_for('despacho.prepareSearchDespacho')}}"  class="accordion accordion-flush" id="accordionExample" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+      <a class="accordion accordion-flush" id="accordionExample" data-bs-toggle="collapse" data-bs-target="#collapseOne"
       aria-expanded="true" aria-controls="collapseOne">
+        <div class="urban-gov-menu-gov">
+          <i class="bi bi-newspaper"></i>
+          <span class="titulo-menu-gov">Gerenciar Despachos</span>
+        </div>
+      </a>
+
+      <a href="{{url_for('despacho.prepareSearchDespacho')}}" id="collapseOne"  data-bs-parent="#accordionExample" class="accordion-collapse collapse">
         <div class="urban-gov-menu-gov">
           <i class="bi bi-newspaper"></i>
           <span class="titulo-menu-gov">Despachos</span>
@@ -54,7 +61,7 @@
 </a>
 <a href="{{ url_for('instituicao.prepareSearchInstituicao') }}" >
   <div class="urban-gov-menu-gov">
-    <i class="bi bi-bank"></i>
+    <i class="bi bi-buildings-fill"></i>
     <span class="titulo-menu-gov">Instituições</span>
   </div>
 </a>

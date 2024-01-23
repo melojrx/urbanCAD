@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
+<div class="container-fluid mt-2 rounded mb-2">
 
     <div class="container-fluid mt-2">
         <form method="POST" enctype='multipart/form-data' action="{{ url_for('agente.cadastrarAgente') }}">
@@ -28,7 +28,7 @@
                 <div class="form-group mb-3 row justify-content-between">
                     <div class="col">
                         {{form.usuario.label(class_="form-label")}}
-                        {{form.usuario(class_="form-select")}}
+                        {{form.usuario(class_="form-control")}}
                         {% for error in form.usuario.errors %}
                         <div class="important">
                             {{error}}

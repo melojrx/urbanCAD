@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
+<div class="container-fluid mt-2 rounded mb-2">
 
     <div class="container-fluid mt-2">
         <div class="card mb-2">
@@ -9,6 +9,7 @@
                 <div class="row d-flex align-items-center">
                     <div class="col-9">
                         <h5 class="card-title">Gerenciamento de Composição</h5>
+                        <span class="card-text">Finalização de Composição</span>
                     </div>
                     <div class="col-3 d-flex justify-content-end">
                         <!-- Botão Voltar -->
@@ -18,25 +19,28 @@
                 </div>
             </div>
         </div>
-        DESEJA REALMENTE FINALIZAR A COMPOSIÇÃO?
+        
         <div class="card mb-2">
+            <div class="card-header">
+                <div class="card-title mt-1">
+                    <h6>Deseja realmente finalizar a composição?</h6>
+                </div>
+            </div>
             <div class="card-body">
-                <div class="form-group mb-3 row justify-content-between">
-                    <div class="col">
-                        Viatura: {{composicaoViatura.viatura}}
+                <div class="form-group row d-flex align-items-center">
+                    <div class="col-6">
+                        <span><strong>Viatura: </strong></span> {{composicaoViatura.viatura}}
                     </div>
-                    <div class="col">        
-                        Agente: {{composicaoViatura.agente.usuario.name}}
-                    </div>    
+                    <div class="col-3 ">        
+                        <span><strong>Agente: </strong></span>  {{composicaoViatura.agente.usuario.name.capitalize()}}
+                    </div>  
+                    <div class="col-3 d-flex justify-content-end">
+                        <button class="btn btn-danger" type="button"
+                            onclick="window.location.href='{{ url_for('composicao.finalizarComposicao', idComposicaoViatura=composicaoViatura.id) }}';">Finalizar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="col-3 d-flex justify-content-end">
-        <button class="btn btn-danger me-2" type="button"
-        onclick="window.location.href='{{ url_for('composicao.finalizarComposicao', idComposicaoViatura=composicaoViatura.id) }}';">Finalizar</button>
-    </div>
-
 </div>
 {% endblock conteudo %}
