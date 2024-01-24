@@ -5,94 +5,150 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
 
-<div class="border mt-2 rounded mb-2" id="form-cadastro-evento">
-
+<div class="container-fluid mt-2" id="form-cadastro-evento">
     <div class="container-fluid mt-2">
-        <div class="container-fluid">
-            <div class="card mb-2">
-                <div class="card-body">
-                    <h5 class="card-title">Gerenciamento de despachos</h5>
-                    <p class="card-text">Despacho de ocorrências</p>
-                    <div class="mb-3">
-                        Nº: {{ocorrencia.numOcorrencia}}
-                    </div>
-                    <div class="mb-3">
-                        Problema: {{ocorrencia.txtProblema}}
-                    </div>
-                    <div class="mb-3"> 
-                        Endereço: {{ocorrencia.txtEndereco}}
-                    </div>
-                    <div class="mb-3"> 
-                        Status: {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
-                    </div>
-                    <div class="mb-3"> 
-                        Tipo de Ocorrência: {{ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
-                    </div>
-                    <div class="mb-3"> 
-                        Subtipo de Ocorrência: {{ocorrencia.subcategoria.txtSubtipoOcorrencia}}
-                    </div>                                                
-                    <div class="mb-3">
-                        Início: {{ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M')}}
-                    </div>
+        
+        <div class="card mb-2">
+            <div class="card-header d-flex">
+                <h6 class="card-title mt-1">
+                    <i class="bi bi-newspaper"></i>
+                    <h5 class="pt-2">CENTRAL DE DESPACHOS</h5>
+                </h6>
+                <div class="ms-auto mt-2">
+                    <span>
+                        <i class="fa fa-user"></i>
+                        {{ current_user.name.capitalize() }}
+                    </span>
                 </div>
             </div>
         </div>
-        <div id="map"></div>
-        <div class="container-fluid"></div>
-            <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.despachar') }}">
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="d-none">
-                                    {{form.ocorrencia.label(class_="form-label")}}
-                                    {{form.ocorrencia(class_="form-control")}}
-                                    {% for error in form.ocorrencia.errors %}
-                                    <div class="important">
-                                        {{error}}
+
+        <div class="d-flex justify-content-center gap-2">
+            <div class="card col-3">
+                <div class="card-header text-center">
+                    <div class="card-title text-center"><strong>Ocorrência Atual</strong></div>
+                    {{ocorrencia.numOcorrencia}}
+                </div>
+                <div class="card-body" style="font-size: 0.9em;">
+                    <div class="mb-1">
+                        <strong>Descrição:</strong> {{ocorrencia.txtProblema}}
+                    </div>
+                    <div class="mb-1">
+                        <strong>Endereço:</strong> {{ocorrencia.txtEndereco}}
+                    </div>
+                    <div class="mb-1">
+                        <strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
+                    </div>
+                    <div class="mb-1">
+                        <strong>Tipo de Ocorrência:</strong> {{ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
+                    </div>
+                    <div class="mb-1">
+                        <strong>Subtipo de Ocorrência:</strong> {{ocorrencia.subcategoria.txtSubtipoOcorrencia}}
+                    </div>
+                    <div class="mb-1">
+                        <strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y'+' às '+ '%H:%M'+'h')}}
+                    </div>
+                    <div class="mb-1">
+                        <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.despachar') }}">
+                            <div class="mb-1">
+                                <div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="d-none">
+                                                {{form.ocorrencia.label(class_="form-label")}}
+                                                {{form.ocorrencia(class_="form-control")}}
+                                                {% for error in form.ocorrencia.errors %}
+                                                <div class="important">
+                                                    {{error}}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="d-none">
+                                                {{form.idRegiao.label(class_="form-label")}}
+                                                {{form.idRegiao(class_="form-control")}}
+                                                {% for error in form.idRegiao.errors %}
+                                                <div class="important">
+                                                    {{error}}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="mb-1" >
+                                                {{form.despacharPara.label(class_="form-label")}}
+                                                {{form.despacharPara(class_="form-control")}}
+                                                {% for error in form.despacharPara.errors %}
+                                                <div class="important">
+                                                    {{error}}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                     </div>
-                                    {% endfor %}
                                 </div>
-                                <div class="d-none">
-                                    {{form.idRegiao.label(class_="form-label")}}
-                                    {{form.idRegiao(class_="form-control")}}
-                                    {% for error in form.idRegiao.errors %}
-                                    <div class="important">
-                                        {{error}}
-                                    </div>
-                                    {% endfor %}
-                                </div>                                                              
-                                <div class="mb-3">
-                                    {{form.despacharPara.label(class_="form-label")}}
-                                    {{form.despacharPara(class_="form-control")}}
-                                    {% for error in form.despacharPara.errors %}
-                                    <div class="important">
-                                        {{error}}
-                                    </div>
-                                    {% endfor %}
-                                </div>                                
                             </div>
-                        </div>
+                            <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mt-2">
+                                {{ form.submit(class_="btn btn-primary btn-sm") }}
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="window.location.href='{{url_for('despacho.prepareSearchDespacho')}}';">Voltar
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
-                    {{ form.submit(class_="btn btn-primary") }}
-                    <button type="button" class="btn btn-danger"
-                        onclick="window.location.href='{{url_for('despacho.prepareSearchDespacho')}}';">Voltar
-                    </button>
-                </div>
-            </form>
+            </div>
+            <div class="mapa col-9">
+                <div id="map"></div>
+            </div>
         </div>
+        <div class="d-flex mt-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Finalizadas
+                </label>
+            </div>
+            <div class="form-check" style="margin-left: 2em ;">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Em atendimento
+                </label>
+            </div>
+        </div>
+        <div class="table-responsive mt-2" style="font-size: 0.9em;">
+            <table class="table table-striped-columns table-hover table-borderless">
+                <thead class="text-center">
+                    <tr class="table-secondary">
+                        <th scope="col">COD. OCORRÊNCIA</th>
+                        <th scope="col">SOLICITANTE</th>
+                        <th scope="col">EQUIPE</th>
+                        <th scope="col">ENDEREÇO</th>
+                        <th scope="col">TIPO DE OCORRÊNCIA</th>
+                        <th scope="col">SITUAÇÃO</th>
+                        <th class="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td> TESTE </td>
+                        <td>TESTE</td>
+                        <td>TESTE</td>
+                        <td>TESTE</td>
+                        <td>TESTE</td>
+                        <td>TESTE</td>
+                        <td>TESTE</td>
+                    </tr>
+                </tbody>
+        </table>
+          
+        </div>
+
     </div>
 </div>
-</div>
+
 
 {% block scripts %}
-
-
     <script>
 
-        var map = L.map('map').setView([-3.716638, -38.542298], 10)
+        var map = L.map('map').setView([-3.716638, -38.542298], 13)
         var idRegiao = document.getElementById("idRegiao").value 
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

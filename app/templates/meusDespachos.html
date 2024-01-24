@@ -1,15 +1,26 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid">
+<div class="container-fluid mt-2 rounded mb-2">
 
-    <div class="container-fluid border mt-1 rounded p-4 mb-2">
+    <div class="container-fluid mt-2">
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row d-flex align-items-center">
+                    <div class="col">
+                        <h5 class="card-title">Gerenciamento de Despachos</h5>
+                        <p class="card-text">Gerencie de Despachos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {% if listDespachoHistorico.items %}
-        <div class="table-responsive mt-2">
+        <div class="table-responsive mt-2" style="font-size: 0.9em;">
             <table class="table border table-striped table-hover table-borderless">
                 <thead>
-                    <tr>
+                    <tr class="text-center table-secondary">
                         <th scope="col">Tipo Ocorrência</th>
                         <th scope="col">Nº da Ocorrência</th>
                         <th scope="col">Status</th>
@@ -20,7 +31,7 @@
                 </thead>
                 <tbody>
                     {% for row in listDespachoHistorico.items %}
-                    <tr>
+                    <tr class="text-center">
                         <td>{{ row.despacho.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}</td>
                         <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
                         <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
@@ -52,6 +63,7 @@
             </table>
         </div>
         <!-- Pagination Links-->
+        {% if listDespachoHistorico.total > 10 %}
         <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
             <a href="{{ url_for('despacho.meusDespachos', page=listDespachoHistorico.prev_num) }}" class="btn btn-outline-primary 
             {% if listDespachoHistorico.page == 1 %}disabled{% endif %}">
@@ -82,12 +94,15 @@
         <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
             Página {{ listDespachoHistorico.page }} de {{ listDespachoHistorico.pages }}
         </p>
+        {% endif %}
         <!-- End Pagination Links-->
         {% else %}
         <p class="text-center">Nenhum registro encontrado.</p>
         {% endif %}
+       
 
     </div>
 
+</div>
 
-    {% endblock conteudo %}
+{% endblock conteudo %}

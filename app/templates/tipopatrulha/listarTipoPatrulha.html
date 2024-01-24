@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
+<div class="container-fluid mt-2 rounded mb-2">
 
   <div class="container-fluid mt-2">
 
     <div class="card mb-2">
-      <div class="card-body">
+      <div class="card-header">
           <div class="row d-flex align-items-center">
               <div class="col-9">
-                  <h5 class="card-title">Gerenciamento de Tipos de PAtrulha</h5>
-                  <p class="card-text">Gerencie aqui os Tipos de Patrulhas do sistema</p>
+                  <h5 class="card-title">Gerenciamento de tipos de patrulha</h5>
+                  <p class="card-text">Gerencie aqui os tipos de patrulhas do sistema</p>
               </div>
               <div class="col-3 d-flex justify-content-end">
-                   <!-- Botão Cadastrar VTR -->
                    <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('tipopatrulha.prepareCadastrarTipoPatrulha') }}';">Novo Tipo de Patrulha</button>
               </div>
           </div>
@@ -33,13 +32,13 @@
       <table class="table border table-striped table-hover table-borderless">
         {% if listTipoPatrulha != None %}
           <thead>
-            <tr>
+            <tr class="text-center table-secondary">
               <th scope="col">Descricao</th>
             </tr>
           </thead>
           <tbody>
             {% for row in listTipoPatrulha.items %}
-              <tr>
+              <tr class="text-center">
                 <td>{{ row.txtTipoPatrulha }}</td>
               </tr>
             {% endfor %}
@@ -51,7 +50,7 @@
         {% endif %}
       </table>
     </div>
-      
+      {% if listTipoPatrulha.total > 10 %}
       <!-- Pagination Links-->
       <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
         <a href="{{ url_for('tipopatrulha.listarTipoPatrulha', page=listTipoPatrulha.prev_num) }}" class="btn btn-outline-primary 
@@ -84,6 +83,7 @@
     </p>
   <!-- End Pagination Links-->
   </div>
+  {% endif %}
 
 </div>
 {% endblock %}

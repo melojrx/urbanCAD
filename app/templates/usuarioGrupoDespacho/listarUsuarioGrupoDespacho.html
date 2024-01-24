@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
+<div class="container-fluid mt-2 rounded mb-2">
 
   <div class="container-fluid mt-2">
 
     <div class="card mb-2">
-      <div class="card-body">
+      <div class="card-header">
           <div class="row d-flex align-items-center">
               <div class="col-9">
                   <h5 class="card-title">Gerenciamento de usuário dos Grupos de Despacho</h5>
@@ -33,15 +33,15 @@
       <table class="table border table-striped table-hover table-borderless">
         {% if listUsuarioGrupoDespacho != None %}
           <thead>
-            <tr>
+            <tr class="text-center table-secondary">
               <th scope="col">Usuario</th>
               <th scope="col">Grupo de Despacho</th>
             </tr>
           </thead>
           <tbody>
             {% for row in listUsuarioGrupoDespacho.items %}
-              <tr>
-                <td>{{ row.usuario.name }}</td>
+              <tr class="text-center">
+                <td>{{ row.usuario.name.capitalize() }}</td>
                 <td>{{ row.grupoDespacho.txtNome }}</td>
               </tr>
             {% endfor %}
@@ -53,7 +53,7 @@
         {% endif %}
       </table>
     </div>
-      
+      {% if listUsuarioGrupoDespacho.total > 10 %}
       <!-- Pagination Links-->
       <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
         <a href="{{ url_for('usuariogrupodespacho.listarUsuarioGrupoDespacho', page=listUsuarioGrupoDespacho.prev_num) }}" class="btn btn-outline-primary 
@@ -86,6 +86,7 @@
     </p>
   <!-- End Pagination Links-->
   </div>
+  {% endif %}
 
 </div>
 {% endblock %}

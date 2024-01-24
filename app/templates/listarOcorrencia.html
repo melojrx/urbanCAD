@@ -1,22 +1,19 @@
 {% extends 'base.html' %} {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
-  <div class="container-fluid mt-2">
+<div class="container-fluid mt-2 rounded mb-2">
+  <div class="container-fluid mt-3">
     <div class="card mb-2">
-      <div class="card-body">
+      <div class="card-header">
         <div class="row d-flex align-items-center">
           <div class="col-9">
             <h5 class="card-title">Gerenciamento de Ocorrências</h5>
-            <p class="card-text">Filtragem de ocorrências</p>
+            <p class="card-text">Tratamento de ocorrências</p>
           </div>
           <div class="col-3 d-flex justify-content-end">
             <!-- Botão Cadastrar Ocorrência -->
-            <button
-              type="button"
-              class="btn btn-primary bg-primary"
-              onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';"
-            >
-              Nova Ocorrência
+            <button type="button" class="btn btn-primary bg-primary"
+              onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">
+              <span style="font-size: 0.9em">Nova Ocorrência</span>
             </button>
           </div>
         </div>
@@ -25,56 +22,61 @@
     <div class="card mb-2">
       <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
         <div class="card-header">
-          <p class="card-text" style="font-weight: 600">Consulta ocorrências</p>
+        <div class="card-title mt-2">
+          <h6>Consulta ocorrências</h6>
         </div>
-        <div class="card-body" style="font-size: 0.8rem">
+        </div>
+        <div class="card-body" >
           <div class="row">
-            <div class="col-3 m-1">
-              {{form.numOcorrenciaSearch.label(class_="form-label m-1")}} {{
-              form.numOcorrenciaSearch(class="form-control form-control-sm m-1")
+            <div class="col-3">
+              {{form.numOcorrenciaSearch.label(class_="form-label")}} {{
+              form.numOcorrenciaSearch(class="form-control form-control")
               }}
             </div>
-            <div class="col-3 m-1">
-              {{form.dataInicioSearch.label(class_="form-label m-1")}} {{
-              form.dataInicioSearch(class="form-control form-control-sm m-1") }}
+            <div class="col-3">
+              {{form.dataInicioSearch.label(class_="form-label")}} {{
+              form.dataInicioSearch(class="form-control form-control") }}
             </div>
-            <div class="col-3 m-1">
-              {{form.dataFimSearch.label(class_="form-label m-1")}} {{
-              form.dataFimSearch(class="form-control form-control-sm m-1") }}
+            <div class="col-3">
+              {{form.dataFimSearch.label(class_="form-label")}} {{
+              form.dataFimSearch(class="form-control form-control") }}
             </div>
-            <div class="col-3 m-1">
-              {{ form.submit(class_="btn btn-primary btn-sm m-1") }}
-              <button
-                type="button"
-                class="btn btn-outline-danger btn-sm m-1"
-                onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';"
-              >
-                Limpar
-              </button>
+            <div class="col-3">
+              {{form.statusSearch.label(class_="form-label")}} {{
+              form.statusSearch(class="form-select") }}
             </div>
+          </div>
+        </div>
+        <div class="card-footer text-start">
+          <div class="d-grid gap-3 d-md-block" >
+            {{ form.submit(class_="btn btn-primary") }}
+            <button type="button" class="btn btn-outline-danger"
+              onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
+              Limpar
+            </button>
           </div>
         </div>
       </form>
     </div>
-    <div class="card mb-2">
+    <div class="mb-2">
       {% if listOcorrenciaHistorico.items %}
-      <div class="table-responsive" style="font-size: 0.9rem">
-        <table class="table border table-striped table-hover table-bordered">
+      <div class="table-responsive" style="font-size: 0.9rem" >
+        <table class="table border table-striped table-hover table-borderless">
           <thead>
-            <tr class="text-center">
-              <th scope="col">Interessado</th>
+            <tr class="text-center table-secondary">
+              <th scope="col">Noticiante</th>
               <th scope="col">Tipo Ocorrência</th>
               <th scope="col">Subtipo Ocorrência</th>
               <th scope="col">Nº da Ocorrência</th>
               <th scope="col">Status</th>
               <th scope="col">Data</th>
-              <th class="text-left">Ações</th>
+              <th class="col">Ações</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-center">
             {% for row in listOcorrenciaHistorico.items %}
             <tr>
-              <td>{{ row.ocorrencia.interessado.txtInteressado}}</td>
+              <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
               <td>
                 {{
                 row.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
@@ -83,29 +85,14 @@
               <td>{{ row.ocorrencia.numOcorrencia}}</td>
               <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
               <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-              <td>
-                <a
-                  href="#"
-                  class="btn btn-primary btn-sm"
-                  data-toggle="modal"
-                  data-target="#txtProblemaModal"
-                  data-imgsrc="{{row.ocorrencia.txtProblema}}"
-                  role="button"
-                  title="Detalhar Ocorrência"
-                >
-                  <i
-                    class="bi bi-card-text"
-                    src="{{row.ocorrencia.txtProblema}}"
-                    width="30%"
-                  ></i>
+              <td class="text-start">
+                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal"
+                  data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
+                  <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}" width="30%"></i>
                 </a>
                 {% if row.statusOCorrencia.id == 1 %}
-                <a
-                  href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
-                  class="btn btn-danger btn-sm"
-                  role="button"
-                  title="Enviar para Grupo de Despacho"
-                >
+                <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
+                  class="btn btn-danger btn-sm" role="button" title="Enviar para Grupo de Despacho">
                   <i class="bi bi-box-arrow-up-right"></i>
                 </a>
                 {% endif %}
@@ -116,14 +103,8 @@
         </table>
       </div>
       <!-- Modal -->
-      <div
-        class="modal fade"
-        id="txtProblemaModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="enlargedImageModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="txtProblemaModal" tabindex="-1" role="dialog"
+        aria-labelledby="enlargedImageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xb">
           <div class="modal-content">
             <div class="modal-header">
@@ -139,50 +120,39 @@
       </div>
     </div>
     <!-- Pagination Links-->
-    <div
-      class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center"
-    >
-      <a
-        href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}"
-        class="btn btn-outline-primary {% if listOcorrenciaHistorico.page == 1 %}disabled{% endif %}"
-      >
-        &laquo; </a
-      ><!-- Loop through the number of pages to display a link for each-->
+    {% if listOcorrenciaHistorico.total > 10 %}
+    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}"
+        class="btn btn-outline-primary {% if listOcorrenciaHistorico.page == 1 %}disabled{% endif %}">
+        &laquo; </a><!-- Loop through the number of pages to display a link for each-->
       {% for page_num in listOcorrenciaHistorico.iter_pages(left_edge=1,
       right_edge=1, left_current=1, right_current=2) %} {% if page_num %}
       <!-- Check for the active page and set the link to "Active"-->
       {% if listOcorrenciaHistorico.page == page_num %}
-      <a
-        href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}"
-        class="btn btn-primary"
-      >
+      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="btn btn-primary">
         {{ page_num }}
       </a>
       {% else %}
-      <a
-        href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}"
-        class="btn btn-outline-primary"
-      >
+      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="btn btn-outline-primary">
         {{ page_num }}
       </a>
       {% endif %} {% else %} ... {% endif %} {% endfor %}
-      <a
-        href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.next_num) }}"
-        class="btn btn-outline-primary {% if listOcorrenciaHistorico.page == listOcorrenciaHistorico.pages %}disabled{% endif %}"
-      >
+      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.next_num) }}"
+        class="btn btn-outline-primary {% if listOcorrenciaHistorico.page == listOcorrenciaHistorico.pages %}disabled{% endif %}">
         &raquo;
       </a>
     </div>
-    <p
-      class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary"
-    >
+    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary">
       Página {{ listOcorrenciaHistorico.page }} de {{
       listOcorrenciaHistorico.pages }}
     </p>
+    {% endif %}
     <!-- End Pagination Links-->
     {% else %}
     <p class="text-center">Nenhum registro encontrado.</p>
     {% endif %}
+
+
   </div>
 </div>
 <script>

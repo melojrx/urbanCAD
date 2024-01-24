@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, InputRequired, Length
 class OcorrenciaForm(Form):
 
     problema = StringField(
-        'Qual o problema?',
+        'Descreva a ocorrência:',
         widget=TextArea(),
         render_kw={"placeholder": "Faça uma breve descrição do seu problema"},
         validators = [
@@ -15,7 +15,7 @@ class OcorrenciaForm(Form):
         ])
 
     endereco = StringField(
-        'Qual o endereço da ocorrência:',
+        'Endereço da ocorrência:',
         render_kw={"placeholder": "Endereço da ocorrência"},
         validators = [
             InputRequired(message=('*Campo Requerido')),
@@ -31,7 +31,7 @@ class OcorrenciaForm(Form):
         render_kw={'readonly': True})     
 
     tipoOcorrencia = SelectField(
-        'Tipo de Ocorrência',
+        'Tipo de Ocorrência:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
@@ -39,7 +39,7 @@ class OcorrenciaForm(Form):
     ])
 
     subtipoOcorrencia = SelectField(
-        'Subtipo de Ocorrência',
+        'Subtipo de Ocorrência:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
@@ -49,8 +49,8 @@ class OcorrenciaForm(Form):
     # Dados do interessdo
 
     txtInteressado = StringField(
-        'Interessado',
-        render_kw={"placeholder": "Nome do Interessado"},
+        'Noticiante:',
+        render_kw={"placeholder": "Nome do Noticiante"},
         validators = [
             InputRequired(message=('*Campo Requerido')),
             Length(max=1000, message='A senha deve ter no mínimo %(max)d caracteres')
@@ -58,7 +58,7 @@ class OcorrenciaForm(Form):
     
    
     txtCpf = StringField(
-        'CPF do Interessado',
+        'CPF do Noticiante:',
         render_kw={'placeholder': 'CPF', 'class': 'form-control'}, 
         validators = [
             Length(max=11, min=11, message='O CPF deve ter conter exatamente 11 caracteres'),
@@ -66,17 +66,17 @@ class OcorrenciaForm(Form):
     ])
 
     txtRg = StringField(
-        'RG do Interessado',
+        'RG do Noticiante:',
         render_kw={'placeholder': 'RG', 'class': 'form-control'}, 
     )
 
     txtPassaporte = StringField(
-        'Passaporte do Interessado',
+        'Passaporte do Noticiante:',
         render_kw={'placeholder': 'Passaporte', 'class': 'form-control'}, 
     )
 
     txtTelefone = StringField(
-        'Telefone do Interessado',
+        'Telefone do Noticiante:',
         render_kw={'placeholder': 'DDD + Telefone. Digite apenas números', 'class': 'form-control'}, 
         validators = [
             DataRequired(message='*Campo Requerido'),

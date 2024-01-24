@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block conteudo %}
 
-<div class="container-fluid border mt-2 rounded mb-2">
+<div class="container-fluid mt-2 rounded mb-2">
 
   <div class="container-fluid mt-2">
 
@@ -29,11 +29,11 @@
           </div>    
     </div>
     <!-- Lista Viaturas -->
-    <div class="table-resposive">
+    <div class="table-resposive text-center">
       <table class="table border table-striped table-hover table-borderless">
         {% if listViatura != None %}
           <thead>
-            <tr>
+            <tr class="text-center table-secondary">
               <th scope="col">Código</th>
               <th scope="col">Placa</th>
               <th scope="col">Descrição</th>
@@ -45,8 +45,8 @@
             {% for viatura in listViatura.items %}
               <tr>
                 <td>{{ viatura.txtCodigo }}</td>
-                <td>{{ viatura.txtplaca }}</td>
-                <td>{{ viatura.txtDescricao }}</td>
+                <td>{{ viatura.txtPlaca }}</td>
+                <td>{{ viatura.txtDescricao.capitalize() }}</td>
                 <td>{{ viatura.instituicao.txtInstituicao }}</td>
                 <td>{{ viatura.tipoPatrulha.txtTipoPatrulha }}</td>
               </tr>
@@ -60,38 +60,40 @@
       </table>
     </div>
       
-      <!-- Pagination Links-->
-      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-        <a href="{{ url_for('viatura.listarViaturas', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
-            {% if listViatura.page == 1 %}disabled{% endif %}">
-            &laquo;
-        </a><!-- Loop through the number of pages to display a link for each-->
-        {% for page_num in listViatura.iter_pages(left_edge=1, right_edge=1, left_current=1,
-        right_current=2)
-        %}{% if page_num %}
-        <!-- Check for the active page and set the link to "Active"-->
-        {% if listViatura.page == page_num %}
-        <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-primary">
-            {{ page_num }}
-        </a>
-        {% else %}
-        <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-outline-primary">
-            {{ page_num }}
-        </a>
-        {% endif %}
-        {% else %}
-        ...
-        {% endif %}
-        {% endfor %} <a href="{{ url_for('viatura.listarViaturas', page=listViatura.next_num) }}" class="btn btn-outline-primary 
-            {% if listViatura.page == listViatura.pages %}disabled{% endif %}">
-            &raquo;
-        </a>
+    {% if listViatura.total > 5 %}
+    <!-- Pagination Links-->
+    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+      <a href="{{ url_for('viatura.listarViaturas', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
+                {% if listViatura.page == 1 %}disabled{% endif %}">
+        &laquo;
+      </a><!-- Loop through the number of pages to display a link for each-->
+      {% for page_num in listViatura.iter_pages(left_edge=1, right_edge=1, left_current=1,
+      right_current=2)
+      %}{% if page_num %}
+      <!-- Check for the active page and set the link to "Active"-->
+      {% if listViatura.page == page_num %}
+      <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-primary">
+        {{ page_num }}
+      </a>
+      {% else %}
+      <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-outline-primary">
+        {{ page_num }}
+      </a>
+      {% endif %}
+      {% else %}
+      ...
+      {% endif %}
+      {% endfor %} <a href="{{ url_for('viatura.listarViaturas', page=listViatura.next_num) }}" class="btn btn-outline-primary 
+                {% if listViatura.page == listViatura.pages %}disabled{% endif %}">
+        &raquo;
+      </a>
     </div>
     <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-        Página {{ listViatura.page }} de {{ listViatura.pages }}
+      Página {{ listViatura.page }} de {{ listViatura.pages }}
     </p>
-  <!-- End Pagination Links-->
-  </div>
-
+    <!-- End Pagination Links-->
+    {% endif %}
+    </div>
+    
 </div>
 {% endblock %}

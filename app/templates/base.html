@@ -6,33 +6,16 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid container_nav">
-        <a class="navbar-brand" href="{{ url_for('login.site') }}"><h3 class="urban_logo">URBAN CAD</h3></a>
+        <a class="navbar-brand" href="{{ url_for('ocorrencia.iniciar') }}"><h3 class="urban_logo">URBAN CAD</h3></a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-         <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login.site') }}">Início</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('viatura.listarViaturas') }}">Viaturas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('maleta.listarDeteccao') }}">Detecções</a>
-            </li> -->
-          <!--  <li class="nav-item" id="novaocorrenciaadmmenu">
-              <a class="nav-link" href="#">Cadastrar Ocorrência</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login.logout') }}">Sair</a>
-            </li>
-          </ul> -->
           {% if current_user.is_authenticated %}
           <div class="btn-group ms-auto">
             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <span class="log_user">
                 <i class="fa fa-user"></i>
-                {{ current_user.name }}
+                {{ current_user.name.capitalize() }}
               </span>
             </button>
             <ul class="dropdown-menu">

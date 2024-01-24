@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, Leng
 class RegisterForm(Form):
 
     name = StringField(
-    'Informe seu Nome',
+    'Digite seu Nome',
     [
         InputRequired(message=('Por favor, informe seu Nome.'))
     ])
@@ -25,14 +25,14 @@ class RegisterForm(Form):
         ValidaCpf()
     ])
 
-    password = PasswordField('Password', 
+    password = PasswordField('Digite sua Senha', 
     validators = [
         DataRequired(),
         EqualTo('confirm_password', message='As senhas não são iguais'),
         Length(min=8, message='A senha deve ter no mínimo %(min)d caracteres')
     ])
 
-    confirm_password = PasswordField('Confirm Password',
+    confirm_password = PasswordField('Confirme sua senha',
     validators = [
         DataRequired(message='*Campo Requerido'),
         EqualTo('password', message='As senhas devem ser iguais')

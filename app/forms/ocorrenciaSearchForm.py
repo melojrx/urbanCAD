@@ -1,9 +1,9 @@
-from wtforms import Form, StringField, SubmitField, DateField
+from wtforms import Form, StringField, SubmitField, DateField, SelectField
  
 class OcorrenciaSearchForm(Form):
 
     numOcorrenciaSearch = StringField(
-        'Número da Ocorrência:', 
+        'Número da Ocorrência', 
         render_kw={"placeholder": "Número da Ocorrência"}
     )
     
@@ -18,6 +18,11 @@ class OcorrenciaSearchForm(Form):
         format='%d/%m/%Y',
         render_kw={"placeholder": "dd/mm/aa"}
     )
+
+    statusSearch = SelectField(
+        'Status',
+        coerce=int,
+        )
     
     submit = SubmitField(
         'Filtrar'
