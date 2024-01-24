@@ -15,25 +15,25 @@
             </div>
             <div class="card-body">
                 <div class="mb-2">
-                    Nº: {{ocorrencia.numOcorrencia}}
+                    <strong>Ocorrência Nº:</strong> {{ocorrencia.numOcorrencia}}
                 </div>
                 <div class="mb-2">
-                    Problema: {{ocorrencia.txtProblema}}
+                    <strong>Descrição:</strong> {{ocorrencia.txtProblema}}
                 </div>
                 <div class="mb-2">
-                    Endereço: {{ocorrencia.txtEndereco}}
+                    <strong>Endereço:</strong> {{ocorrencia.txtEndereco}}
                 </div>
                 <div class="mb-2">
-                    Status: {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
+                    <strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
                 </div>
                 <div class="mb-2">
-                    Tipo de Ocorrência: {{ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
+                    <strong>Tipo de Ocorrência:</strong> {{ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
                 </div>
                 <div class="mb-2">
-                    Subtipo de Ocorrência: {{ocorrencia.subcategoria.txtSubtipoOcorrencia}}
+                    <strong>Subtipo de Ocorrência:</strong>  {{ocorrencia.subcategoria.txtSubtipoOcorrencia}}
                 </div>
                 <div class="mb-2">
-                    Início: {{ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M')}}
+                    <strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y'+' às '+ '%H:%M'+'h')}}
                 </div>
                 <div class="mapa col-12 mb-3">
                     <div id="map"></div>

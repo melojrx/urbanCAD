@@ -30,6 +30,7 @@
 }
 
 .sidebar {
+    font-size: 0.9em;
     display: flex;
     flex-direction: column;
     background-image: url('../img/barra_lateral.png');

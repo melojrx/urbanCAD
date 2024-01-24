@@ -13,7 +13,7 @@
             <!-- Botão Cadastrar Ocorrência -->
             <button type="button" class="btn btn-primary bg-primary"
               onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">
-              Nova Ocorrência
+              <span style="font-size: 0.9em">Nova Ocorrência</span>
             </button>
           </div>
         </div>
@@ -28,26 +28,32 @@
         </div>
         <div class="card-body" >
           <div class="row">
-            <div class="col-3 m-1">
-              {{form.numOcorrenciaSearch.label(class_="form-label m-1")}} {{
-              form.numOcorrenciaSearch(class="form-control form-control m-1")
+            <div class="col-3">
+              {{form.numOcorrenciaSearch.label(class_="form-label")}} {{
+              form.numOcorrenciaSearch(class="form-control form-control")
               }}
             </div>
-            <div class="col-3 m-1">
-              {{form.dataInicioSearch.label(class_="form-label m-1")}} {{
-              form.dataInicioSearch(class="form-control form-control m-1") }}
+            <div class="col-3">
+              {{form.dataInicioSearch.label(class_="form-label")}} {{
+              form.dataInicioSearch(class="form-control form-control") }}
             </div>
-            <div class="col-3 m-1">
-              {{form.dataFimSearch.label(class_="form-label m-1")}} {{
-              form.dataFimSearch(class="form-control form-control m-1") }}
+            <div class="col-3">
+              {{form.dataFimSearch.label(class_="form-label")}} {{
+              form.dataFimSearch(class="form-control form-control") }}
             </div>
-            <div class="col-3 m-1">
-              {{ form.submit(class_="btn btn-primary m-1") }}
-              <button type="button" class="btn btn-outline-danger m-1"
-                onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
-                Limpar
-              </button>
+            <div class="col-3">
+              {{form.statusSearch.label(class_="form-label")}} {{
+              form.statusSearch(class="form-select") }}
             </div>
+          </div>
+        </div>
+        <div class="card-footer text-start">
+          <div class="d-grid gap-3 d-md-block" >
+            {{ form.submit(class_="btn btn-primary") }}
+            <button type="button" class="btn btn-outline-danger"
+              onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
+              Limpar
+            </button>
           </div>
         </div>
       </form>
@@ -70,7 +76,7 @@
           <tbody class="text-center">
             {% for row in listOcorrenciaHistorico.items %}
             <tr>
-              <td>{{ row.ocorrencia.interessado.txtInteressado}}</td>
+              <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
               <td>
                 {{
                 row.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
