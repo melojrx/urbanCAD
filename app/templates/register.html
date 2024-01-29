@@ -1,123 +1,162 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-{% include 'include.html' %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>URBAN CAD</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <!-- CSS do Projeto -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/styles_login_register.css')}}">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/815b3dd720.js" crossorigin="anonymous"></script>
+</head>
 
-<body class="body-login"  >   
+<body class="body-login d-flex align-items-center">   
        
-    <div class="container col-12 col-md-6 py-3" id="form-container" >
-            <div class="row_form justify-content-center">
-                <div class="col">
-                        <h3 class="text-center mb-3">Realize o seu cadastro</h3>
-                    {% with messages = get_flashed_messages(category_filter=["exist"]) %}
-                    {% if messages %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ messages[0] }}. Ir para <a href="{{ url_for('login.login') }}">página de login</a>.
-                    </div>
-                    {% endif %}
-                    {% endwith %}
-
-                    {% with messages = get_flashed_messages(category_filter=["error"]) %}
-                    {% if messages %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ messages[0] }}.
-                    </div>
-                    {% endif %}
-                    {% endwith %}
-
-                    <form action="" method="post">
-                        <div class="form-signin mb-3">
-                            {{form.name.label(class_="form-label")}}
-                            {{form.name(class_="form-control")}}
-                            {% for error in form.name.errors %}
-                            <div class="important">
-                                {{error}}
+    <div class="container py-5 h-100" style="opacity: 0.9;">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+    
+                        <div class="mb-md-3 mt-md-3 pb-3">
+                            {% with messages = get_flashed_messages(category_filter=["exist"]) %}
+                            {% if messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ messages[0] }}. Ir para <a href="{{ url_for('login.login') }}">página de login</a>.
                             </div>
-                            {% endfor %}
-                        </div>
-                        <div class="form-signin mb-3">
-                            {{form.email.label(class_="form-label")}}
-                            {{form.email(class_="form-control")}}
-                            {% for error in form.email.errors %}
-                            <div class="important">
-                                {{error}}
+                            {% endif %}
+                            {% endwith %}
+                            
+                            {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                            {% if messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ messages[0] }}.
                             </div>
-                            {% endfor %}
-                        </div>
-                        <div class="form-signin mb-3">
-                            {{form.cpf.label(class_="form-label")}}
-                            {{form.cpf(class_="form-control")}}
-                            {% for error in form.cpf.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="form-signin mb-3">
-                            {{form.password.label(class_="form-label")}}
-                            {{form.password(class_="form-control")}}
-                            {% for error in form.password.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="form-signin mb-3">
-                            {{form.confirm_password.label(class_="form-label")}}
-                            {{form.confirm_password(class_="form-control")}}
-                            {% for error in form.confirm_password.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check mb-2">
-                                {{form.accept_tos.label(class_="form-label")}}
-                                {{form.accept_tos(class_="form-check-input")}}
-                                {% for error in form.accept_tos.errors %}
-                                <div class="important">
-                                    {{error}}
+                            {% endif %}
+                            {% endwith %}
+                            <h2 class="fw-bold mb-2 text-uppercase">URBANCAD</h2>
+                            <p class="text-white-50 mb-5">Realize seu cadastro!</p>
+                            <form action="" method="POST">
+                                <div class="form-outline form-white mb-4 text-start">
+                                    {{form.name.label(class_="form-label")}}
+                                    {{form.name(class_="form-control")}}
+                                    {% for error in form.name.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-                            </div>
-                            <div class="form-check mb-2">
-                                {{form.newsletters.label(class_="form-label")}}
-                                {{form.newsletters(class_="form-check-input")}}
-                                {% for error in form.newsletters.errors %}
-                                <div class="important">
-                                    {{error}}
+                                <div class="form-outline form-white mb-4 text-start">
+                                    {{form.email.label(class_="form-label")}}
+                                    {{form.email(class_="form-control")}}
+                                    {% for error in form.email.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-                            </div> 
+                                <div class="form-outline form-white mb-4 text-start">
+                                    {{form.cpf.label(class_="form-label")}}
+                                    {{form.cpf(class_="form-control cpf")}}
+                                    {% for error in form.cpf.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-outline form-white mb-4 text-start">
+                                    {{form.password.label(class_="form-label")}}
+                                    {{form.password(class_="form-control")}}
+                                    {% for error in form.password.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-outline form-white mb-4 text-start">
+                                    {{form.confirm_password.label(class_="form-label")}}
+                                    {{form.confirm_password(class_="form-control")}}
+                                    {% for error in form.confirm_password.errors %}
+                                    <div class="important">
+                                        {{error}}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="mb-4">
+                                    <div class="form-check mb-2 text-start">
+                                        {{form.accept_tos.label(class_="form-label")}}
+                                        {{form.accept_tos(class_="form-check-input")}}
+                                        {% for error in form.accept_tos.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-check mb-2 text-start">
+                                        {{form.newsletters.label(class_="form-label")}}
+                                        {{form.newsletters(class_="form-check-input")}}
+                                        {% for error in form.newsletters.errors %}
+                                        <div class="important">
+                                            {{error}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="d-grid mb-3">
+                                    {{ form.submit(class_="btn btn-primary") }}
+                                </div>
+                            </form>
+    
+                            <div class="d-flex justify-content-center text-center mt-4 pt-1">
+                                <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                                <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                                <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
+                            </div>
+
+                            <div class="mt-4 pt-1">
+                                <p class="mb-0">Já tem uma conta? <a href="{{url_for('login.login')}}" class="text-white-50 fw-bold">Entre</a></p>
+                            </div>
+    
                         </div>
-                       
-                            <div class="d-grid mb-3">
-                                {{ form.submit(class_="btn btn-primary") }}
-                            </div>
-                            <div class="checkbox text-center mb-3" id="link-container">
-                                <a href="{{url_for('login.login')}}">Eu já tenho uma conta</a>
-                            </div>
-                        
-                    </form>
+
+                    </div>
                 </div>
             </div>
-        </div>  
-        
-        <!-- Máscara de CPF -->
-        <script>
-            $(document).ready(function () {
+        </div>
+    </div>
+   
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous">
+    </script>
+
+    <!-- Máscara de CPF -->
+    <script>
+        $(document).ready(function () {
             // Aplicar a máscara de CPF
             $(".cpf").mask("000.000.000-00", { reverse: true });
-        
+
             // Remover pontos e traço antes de enviar o formulário
             $("form").submit(function (event) {
                 var cpfField = $(".cpf");
                 var cpfValue = cpfField.val().replace(/[^\d]/g, ""); // Deixa apenas os dígitos
                 cpfField.val(cpfValue);
             });
-            });
-        </script>
-
+        });
+    </script>
 </body>
-</html>
+        
+
+
+

@@ -41,12 +41,14 @@
  
 
 {% endif %}
-<!-- <a href="{{url_for('despacho.meusDespachos')}}" >
+{% if ('URBANCAD_AGENTE' in session["roles"]) %}
+<a href="{{url_for('despacho.meusDespachos')}}" >
   <div class="urban-gov-menu-gov">
     <i class="bi bi-pencil-square"></i>
     <span class="titulo-menu-gov">Meus Despachos</span>
   </div>
-</a> -->
+</a> 
+{% endif %}
 
 
 {% if ('URBANCAD_ADMIN' in session["roles"]) %}
@@ -123,7 +125,7 @@
 </a>
 {% endif %}
 
-<div class="footer-sidebar mt-auto">
+<div class="footer-sidebar mt-auto mb-2">
   <footer class="container-fluid text-left">
     <span class="footer-titulo"> Workspace Urban (URBANCAD) </span><br>
     <span class="footer-info"> Versão 1.0.1 </span> <br>

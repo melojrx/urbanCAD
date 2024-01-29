@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
 
 <div class="container-fluid rounded mb-2" id="form-cadastro-evento">
 
@@ -89,7 +92,7 @@
                                     </div>
                                     <div id="cpf" class="mb-3">
                                         {{form.txtCpf.label(class_="form-label")}}
-                                        {{form.txtCpf(class_="form-control")}}
+                                        {{form.txtCpf(class_="form-control cpf")}}
                                         {% for error in form.txtCpf.errors %}
                                         <div class="important">
                                             {{error}}
@@ -119,7 +122,7 @@
                                     <div class="mb-3" id="showSubtipoOcorrencia"></div>
                                     <div class="mb-2">
                                         {{form.txtTelefone.label(class_="form-label")}}
-                                        {{form.txtTelefone(class_="form-control")}}
+                                        {{form.txtTelefone(class_="form-control", id="phone" )}}
                                         {% for error in form.txtTelefone.errors %}
                                         <div class="important">
                                             {{error}}
@@ -145,6 +148,13 @@
 {% block scripts %}
 <script src="{{url_for('static', filename='js/map.js')}}"></script>
 {% endblock %}
+
+<!-- Máscaras -->
+<script>
+    $('#phone').mask('(00) 0000-0000');
+    $('.cpf').mask('000.000.000-00', { reverse: true });
+
+</script>
 
 <script type="text/javascript">
 

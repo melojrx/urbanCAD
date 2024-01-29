@@ -120,39 +120,43 @@
       </div>
     </div>
     <!-- Pagination Links-->
-    {% if listOcorrenciaHistorico.total > 10 %}
-    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}"
-        class="btn btn-outline-primary {% if listOcorrenciaHistorico.page == 1 %}disabled{% endif %}">
-        &laquo; </a><!-- Loop through the number of pages to display a link for each-->
-      {% for page_num in listOcorrenciaHistorico.iter_pages(left_edge=1,
-      right_edge=1, left_current=1, right_current=2) %} {% if page_num %}
-      <!-- Check for the active page and set the link to "Active"-->
-      {% if listOcorrenciaHistorico.page == page_num %}
-      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="btn btn-primary">
-        {{ page_num }}
-      </a>
-      {% else %}
-      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="btn btn-outline-primary">
-        {{ page_num }}
-      </a>
-      {% endif %} {% else %} ... {% endif %} {% endfor %}
-      <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.next_num) }}"
-        class="btn btn-outline-primary {% if listOcorrenciaHistorico.page == listOcorrenciaHistorico.pages %}disabled{% endif %}">
-        &raquo;
-      </a>
-    </div>
-    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary">
-      Página {{ listOcorrenciaHistorico.page }} de {{
-      listOcorrenciaHistorico.pages }}
-    </p>
-    {% endif %}
+    <nav aria-label="Page navigation">
+    {% if listOcorrenciaHistorico.total >=10 %}
+    <ul class="pagination">
+      <ul class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+        <li class="page-item">
+          <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}"
+          class="page-link {% if listOcorrenciaHistorico.page == 1 %}disabled{% endif %}">
+          Anterior </a>
+        <!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in listOcorrenciaHistorico.iter_pages(left_edge=1,
+        right_edge=1, left_current=1, right_current=2) %} {% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if listOcorrenciaHistorico.page == page_num %}</li>
+        <li class="page-item">
+          <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="page-link">
+          {{ page_num }}</a>
+        </li>
+        {% else %}
+        <li class="page-item"><a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="page-link">
+          {{ page_num }}
+        </a></li>
+        {% endif %} {% else %} ... {% endif %} {% endfor %}
+        <li class="page-item"><a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.next_num) }}"
+          class="page-link {% if listOcorrenciaHistorico.page == listOcorrenciaHistorico.pages %}disabled{% endif %}">
+         Próximo
+        </a></li>
+        <!-- <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary">
+          Página {{ listOcorrenciaHistorico.page }} de {{
+          listOcorrenciaHistorico.pages }}
+        </p> -->
+        {% endif %}
+      </ul>
+    </nav>
     <!-- End Pagination Links-->
     {% else %}
     <p class="text-center">Nenhum registro encontrado.</p>
     {% endif %}
-
-
   </div>
 </div>
 <script>
