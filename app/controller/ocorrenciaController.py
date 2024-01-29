@@ -3,6 +3,7 @@ import geocoder
 from sqlalchemy import text
 from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
 from app.forms.ocorrenciaGrupoDespachoForm import OcorrenciaGrupoDespachoForm
+from app.models.statusOcorrenciaModel import StatusOcorrencia
 from ..database import db
 from app.models.ocorrenciaModel import Ocorrencia
 from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
@@ -45,7 +46,12 @@ class ocorrenciaController():
         page = request.args.get('page', 1, type=int)
         form = OcorrenciaSearchForm(request.form)
         listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
-        return render_template('listarOcorrencia.html', listOcorrenciaHistorico=listOcorrenciaHistorico, form=form)
+
+        listStatusOcorrencia = StatusOcorrencia.query.filter(StatusOcorrencia.dataFim.is_(None)).all()
+        form.statusSearch.choices = [(0, "Selecione...")]+[(row.id, row.txtStatusOcorrencia) for row in listStatusOcorrencia]
+        session['statusChoices'] = form.statusSearch.choices
+
+        return render_template('listarOcorrencia.html', listOcorrenciaHistorico=listOcorrenciaHistorico,  form=form)
 
 
     @ocorrencia_bp.route('/searchOcorrencia', methods=['GET'])
@@ -54,11 +60,12 @@ class ocorrenciaController():
     def searchOcorrencia():
 
         form = OcorrenciaSearchForm(request.form)
+        form.statusSearch.choices = session.get('statusChoices', None)
         numOcorrenciaSearch = request.args.get('numOcorrenciaSearch')
-        form.numOcorrenciaSearch.data = numOcorrenciaSearch
         dataInicioSearch = request.args.get('dataInicioSearch')
         dataFimSearch = request.args.get('dataFimSearch')
-
+        statusSearch = request.args.get('statusSearch')
+        
         page = request.args.get('page', 1, type=int)
 
         if dataInicioSearch:
@@ -71,12 +78,17 @@ class ocorrenciaController():
 
         try: 
 
-            if numOcorrenciaSearch or dataInicioSearch or dataFimSearch:          
+            if numOcorrenciaSearch or dataInicioSearch or dataFimSearch or statusSearch:          
 
                 querySearch = OcorrenciaHistorico.query.filter(OcorrenciaHistorico.dataFim.is_(None))
 
                 if numOcorrenciaSearch != "" and numOcorrenciaSearch != None:
                     querySearch= querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.numOcorrencia == numOcorrenciaSearch)
+                    form.numOcorrenciaSearch.data = numOcorrenciaSearch
+
+                if statusSearch:
+                    querySearch= querySearch.filter(OcorrenciaHistorico.idStatusOcorrencia == statusSearch)
+                    form.statusSearch.data = int(statusSearch) if statusSearch else None
 
                 if dataInicioSearch and dataFimSearch:
                     querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio >= dataInicioSearch).filter(Ocorrencia.dataInicio <= dataFimSearch)

@@ -32,7 +32,7 @@
                 <tbody>
                     {% for row in listDespachoHistorico.items %}
                     <tr class="text-center">
-                        <td>{{ row.despacho.ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}</td>
+                        <td>{{ row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
                         <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
                         <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
                         <td>{{ row.despacho.composicaoViatura.viatura }}</td>

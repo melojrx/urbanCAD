@@ -1,9 +1,11 @@
 import datetime
 from app.forms.despachoObservacaoForm import DespachoObservacaoForm
+from app.models.tipoOcorrenciaModel import TipoOcorrencia
 from app.models.agenteModel import Agente
 
 from app.models.composicaoViaturaModel import ComposicaoViatura
 from app.models.despachoObservacaoModel import DespachoObservacao
+from app.models.interessadoModel import Interessado
 from ..database import db
 from sqlalchemy import and_, text, JSON
 from flask import flash, redirect, render_template, request, session, url_for
@@ -17,16 +19,18 @@ from app.models.userModel import User
 from app.models.usuarioGrupoDespachoModel import UsuarioGrupoDespacho
 from app.models.ocorrenciaHistoricoModel import OcorrenciaHistorico
 from app.models.ocorrenciaGrupoDespachoModel import OcorrenciaGrupoDespacho
+from app.models.subtipoOcorrenciaModel import SubtipoOcorrencia
 from app.models.ocorrenciaModel import Ocorrencia
 from app.models.despachoHistoricoModel import DespachoHistorico
 from .roleRequired import roles_required
 from ..rotas.despachoRout import despacho_bp
+from sqlalchemy.orm import joinedload
 
 class DespachoController():
 
     global ROWS_PER_PAGE 
     ROWS_PER_PAGE = 10
-
+    
     @despacho_bp.route('/prepareSearchDespacho', methods=['GET'])
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')
@@ -36,14 +40,24 @@ class DespachoController():
         
         querySearchDespacho = None
         querySearchADespachar = None
+        global listOcorrenciaDespachada
 
         if not 'URBANCAD_ADMIN' in session["roles"]:    
-            querySearchDespacho = (Ocorrencia.query.join(Despacho)
+            querySearchDespacho = (Ocorrencia.query
+                        .join(Interessado)
+                        .join(Despacho)
+                        .join(SubtipoOcorrencia, 'subtipoOcorrencia')
+                        .join(ComposicaoViatura)
                         .join(OcorrenciaHistorico)
                         .join(OcorrenciaGrupoDespacho)
                         .join(GrupoDespacho)
                         .join(UsuarioGrupoDespacho)
                         .join(User)
+                        .options(
+                            joinedload('interessado')
+                            ,joinedload('listDespacho')
+                            ,joinedload('subtipoOcorrencia').joinedload('tipoOcorrencia')
+                        )
                         .filter(
                             OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
                             User.id == current_user.id,
@@ -63,8 +77,12 @@ class DespachoController():
                 )
             )
         else:
-            querySearchDespacho = (Ocorrencia.query.join(Despacho)
+            querySearchDespacho = (Ocorrencia.query
+                        .join(Interessado, Ocorrencia.interessado)
+                        .join(Despacho)
                         .join(OcorrenciaHistorico)
+                        .options(
+                            joinedload('ocorrencia.interessado'))
                         .filter(
                             OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
                             OcorrenciaHistorico.dataFim.is_(None))
@@ -141,7 +159,7 @@ class DespachoController():
         if row:
             form.idRegiao.data = row["id"]
             
-        return render_template('despacho.html', form=form, ocorrencia=ocorrencia)
+        return render_template('despacho.html', form=form, ocorrencia=ocorrencia, listOcorrenciaDespachada=listOcorrenciaDespachada)
 
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required

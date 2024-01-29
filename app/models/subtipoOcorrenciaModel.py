@@ -11,4 +11,4 @@ class SubtipoOcorrencia(db.Model):
     dataInicio = db.Column('dat_inicio_soc', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_soc', db.DateTime, nullable=True)
 
-    tipoCororrencia = db.relationship(TipoOcorrencia)
+    tipoOcorrencia = db.relationship(TipoOcorrencia)

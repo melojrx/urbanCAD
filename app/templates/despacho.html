@@ -40,10 +40,10 @@
                         <strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
                     </div>
                     <div class="mb-1">
-                        <strong>Tipo de Ocorrência:</strong> {{ocorrencia.subcategoria.tipoCororrencia.txtTipoOcorrencia}}
+                        <strong>Tipo de Ocorrência:</strong> {{ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
                     </div>
                     <div class="mb-1">
-                        <strong>Subtipo de Ocorrência:</strong> {{ocorrencia.subcategoria.txtSubtipoOcorrencia}}
+                        <strong>Subtipo de Ocorrência:</strong> {{ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}
                     </div>
                     <div class="mb-1">
                         <strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y'+' às '+ '%H:%M'+'h')}}
@@ -123,19 +123,23 @@
                         <th scope="col">ENDEREÇO</th>
                         <th scope="col">TIPO DE OCORRÊNCIA</th>
                         <th scope="col">SITUAÇÃO</th>
-                        <th class="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
-                    <tr>
-                        <td> TESTE </td>
-                        <td>TESTE</td>
-                        <td>TESTE</td>
-                        <td>TESTE</td>
-                        <td>TESTE</td>
-                        <td>TESTE</td>
-                        <td>TESTE</td>
-                    </tr>
+                    {% for row in listOcorrenciaDespachada %}
+                        <tr>
+                            <td> {{ row.numOcorrencia}} </td>
+                            <td> {{ row.interessado.txtInteressado}} </td>
+                            <td> 
+                                {% for despacho in row.listDespacho %}
+                                    {{ despacho.composicaoViatura.viatura}}<br>
+                                {% endfor %}
+                            </td>
+                            <td> {{ row.txtEndereco}} </td>
+                            <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                            <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
         </table>
           
