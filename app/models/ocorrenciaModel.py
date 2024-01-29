@@ -21,7 +21,7 @@ class Ocorrencia(db.Model):
     exibeFinalizarOcorrencia = False
     
     usuario = db.relationship(User)
-    subcategoria = db.relationship(SubtipoOcorrencia)
+    subtipoOcorrencia = db.relationship(SubtipoOcorrencia)
     interessado = db.relationship(Interessado, back_populates="ocorrencia", uselist=False)
     ocorrenciaHistorico = db.relationship('OcorrenciaHistorico', primaryjoin="(Ocorrencia.id == OcorrenciaHistorico.idOcorrencia) & (OcorrenciaHistorico.dataFim == None)", back_populates='ocorrencia', uselist=False)
     listDespacho = db.relationship("Despacho", back_populates='ocorrencia')

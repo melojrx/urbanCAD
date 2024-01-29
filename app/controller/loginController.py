@@ -104,7 +104,9 @@ class loginController:
  
                     session["roles"] = data['roles']
                     login_user(user)
-                    return redirect(url_for('viatura.listarViaturas'))  
+                    return redirect(url_for('viatura.listarViaturas'))
+                elif(response.status_code == 500):
+                    flash('Erro: {}. {}'.format(response.status_code, data['Login indisponível']), 'error')                  
                 else:
                     flash('Erro: {}. {}'.format(response.status_code, data['message']), 'error') 
                     return render_template('login.html', form=form)
