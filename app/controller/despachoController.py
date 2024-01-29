@@ -78,11 +78,16 @@ class DespachoController():
             )
         else:
             querySearchDespacho = (Ocorrencia.query
-                        .join(Interessado, Ocorrencia.interessado)
+                        .join(Interessado)
                         .join(Despacho)
+                        .join(SubtipoOcorrencia, 'subtipoOcorrencia')
+                        .join(ComposicaoViatura)
                         .join(OcorrenciaHistorico)
                         .options(
-                            joinedload('ocorrencia.interessado'))
+                            joinedload('interessado')
+                            ,joinedload('listDespacho')
+                            ,joinedload('subtipoOcorrencia').joinedload('tipoOcorrencia')
+                        )
                         .filter(
                             OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
                             OcorrenciaHistorico.dataFim.is_(None))
