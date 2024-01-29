@@ -27,9 +27,9 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                        <div class="card-body p-5 text-center">
+                        <div class="card-body p-5 text-center pb-1">
     
-                            <div class="mb-md-5 mt-md-4 pb-5">
+                            <div class="mb-md-5 mt-md-4 pb-2">
                                 {% with messages = get_flashed_messages(category_filter = ['sucess']) %}
                                 {% if messages %}
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -88,6 +88,14 @@
                             <div>
                                 <p class="mb-0">Ainda não tem acesso? <a href="{{url_for('login.register')}}" class="text-white-50 fw-bold">clique aqui</a>
                                 </p>
+                            </div>
+
+                            <div class="card-footer mt-4" style="border-top-color: gray;">
+                                <footer class="container-fluid text-start py-1">
+                                    <span class="footer-titulo"> Workspace Urban (URBANCAD) </span><br>
+                                    <span class="footer-info"> Versão 1.0.1 </span> <br>
+                                    <span class="footer-info"> Tiger Soluções 2024 <i class="bi bi-c-circle"></i> </span>
+                                </footer>
                             </div>
     
                         </div>
