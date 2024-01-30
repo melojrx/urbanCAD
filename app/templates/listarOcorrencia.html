@@ -122,8 +122,7 @@
     <!-- Pagination Links-->
     <nav aria-label="Page navigation">
     {% if listOcorrenciaHistorico.total >=10 %}
-    <ul class="pagination">
-      <ul class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+      <ul class="pagination col m-0 d-grid d-md-flex mx-auto justify-content-md-center">
         <li class="page-item">
           <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}"
           class="page-link {% if listOcorrenciaHistorico.page == 1 %}disabled{% endif %}">

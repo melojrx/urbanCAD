@@ -27,23 +27,25 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                        <div class="card-body p-5 text-center">
-    
-                            <div class="mb-md-5 mt-md-4 pb-5">
+                        <div class="card-body p-5 text-center pb-1">
+
+                            <div class="mb-md-5 mt-md-4 pb-2">
                                 {% with messages = get_flashed_messages(category_filter = ['sucess']) %}
                                 {% if messages %}
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     {{ messages[0] }}.
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                                 {% endif %}
                                 {% endwith %}
-                                
+
                                 {% with messages = get_flashed_messages(category_filter = ['error']) %}
                                 {% if messages %}
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                     {{ messages[0] }}.
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                                 {% endif %}
                                 {% endwith %}
@@ -59,7 +61,7 @@
                                         </div>
                                         {% endfor %}
                                     </div>
-        
+
                                     <div class="form-outline form-white mb-4 text-start">
                                         {{form.password.label(class_="form-label")}}
                                         {{form.password(class_="form-control")}}
@@ -69,27 +71,37 @@
                                         </div>
                                         {% endfor %}
                                     </div>
-        
+
                                     <p class="mb-5 pb-lg-2"><a class="text-white-50" href="#!">Esqueceu a senha?</a></p>
-                                
+
                                     <div class="d-grid mb-3 mt-5">
                                         {{ form.submit(class="btn btn-primary") }}
                                     </div>
                                 </form>
-    
+
                                 <div class="d-flex justify-content-center text-center mt-4 pt-1">
                                     <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
                                     <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
                                     <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
                                 </div>
-    
+
                             </div>
-    
+
                             <div>
-                                <p class="mb-0">Ainda não tem acesso? <a href="{{url_for('login.register')}}" class="text-white-50 fw-bold">clique aqui</a>
+                                <p class="mb-0">Ainda não tem acesso? <a href="{{url_for('login.register')}}"
+                                        class="text-white-50 fw-bold">clique aqui</a>
                                 </p>
                             </div>
-    
+
+                            <div class="card-footer mt-4" style="border-top-color: gray;">
+                                <footer class="container-fluid text-start py-1">
+                                    <span class="footer-titulo"> Workspace Urban (URBANCAD) </span><br>
+                                    <span class="footer-info"> Versão 1.0.1 </span> <br>
+                                    <span class="footer-info"> Tiger Soluções 2024 <i class="bi bi-c-circle"></i>
+                                    </span>
+                                </footer>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -99,7 +111,7 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous">
-    </script>
+        </script>
 </body>
-   
+
 </html>

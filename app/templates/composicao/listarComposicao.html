@@ -6,7 +6,7 @@
   <div class="container-fluid mt-2">
 
     <div class="card mb-2">
-      <div class="card-body">
+      <div class="card-header">
           <div class="row d-flex align-items-center">
               <div class="col-9">
                   <h5 class="card-title">Gerenciamento de Composição</h5>
@@ -69,7 +69,7 @@
         {% endif %}
       </table>
     </div>
-  {% if listComposicao.total > 10 %}
+  {% if listComposicao.total >= 10 %}
   <!-- Pagination Links-->
   <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
       <a href="{{ url_for('composicao.listarComposicao', page=listComposicao.prev_num) }}" class="btn btn-outline-primary 

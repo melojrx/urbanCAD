@@ -27,7 +27,7 @@
             <!-- Parametros para consulta -->
           </div>    
     </div>
-    <!-- Lista Viaturas -->
+    <!-- Lista Regiões -->
     <div class="table-resposive">
       <table class="table border table-striped table-hover table-borderless">
         {% if listGrupoDespacho != None %}
@@ -54,36 +54,40 @@
     </div>
       
       <!-- Pagination Links-->
-      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-        <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=listGrupoDespacho.prev_num) }}" class="btn btn-outline-primary 
+    <nav aria-label="Page navigation">
+      <ul class="pagination col m-0 d-grid d-md-flex mx-auto justify-content-md-center">
+        <li class="page-item" ><a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=listGrupoDespacho.prev_num) }}" class="page-link" 
             {% if listGrupoDespacho.page == 1 %}disabled{% endif %}">
-            &laquo;
-        </a><!-- Loop through the number of pages to display a link for each-->
+            Anterior
+        </a></li><!-- Loop through the number of pages to display a link for each-->
         {% for page_num in listGrupoDespacho.iter_pages(left_edge=1, right_edge=1, left_current=1,
         right_current=2)
         %}{% if page_num %}
         <!-- Check for the active page and set the link to "Active"-->
         {% if listGrupoDespacho.page == page_num %}
-        <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=page_num) }}" class="btn btn-primary">
+        <li class="page-item"><a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=page_num) }}" class="page-link">
             {{ page_num }}
-        </a>
+        </a></li>
         {% else %}
-        <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=page_num) }}" class="btn btn-outline-primary">
+        <li class="page-item"><a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=page_num) }}" class="page-link">
             {{ page_num }}
-        </a>
+        </a></li>
         {% endif %}
         {% else %}
         ...
         {% endif %}
-        {% endfor %} <a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=listGrupoDespacho.next_num) }}" class="btn btn-outline-primary 
+        {% endfor %} 
+        <li class="page-item"><a href="{{ url_for('grupodespacho.listarGrupoDespacho', page=listGrupoDespacho.next_num) }}" class="page-link 
             {% if listGrupoDespacho.page == listGrupoDespacho.pages %}disabled{% endif %}">
-            &raquo;
-        </a>
-    </div>
-    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-        Página {{ listGrupoDespacho.page }} de {{ listGrupoDespacho.pages }}
-    </p>
-  <!-- End Pagination Links-->
+            Próximo
+        </a></li>
+      </ul>
+      <!-- <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+          Página {{ listGrupoDespacho.page }} de {{ listGrupoDespacho.pages }}
+      </p> -->
+      <!-- End Pagination Links-->
+    </nav>
+
   </div>
 
 </div>
