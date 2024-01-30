@@ -15,10 +15,10 @@
                 </div>
             </div>
         </div>
-   
+
         <!-- LISTAGEM DE DESPACHOS REALIZADOS -->
         {% if listOcorrenciaDespachada %}
-                {% for row in listOcorrenciaDespachada %}
+        {% for row in listOcorrenciaDespachada %}
         <div class="card mb-2">
             <div class="card-header">
                 <div class="card-title">
@@ -27,46 +27,47 @@
             </div>
             <div class="card-body">
                 <h6 class="card-title">Ocorrência Nº: {{ row.numOcorrencia}}</h6>
-                    <div class="table-responsive mt-2">
-                        <table class="table border table-striped table-hover table-borderless">
-                            <tr class="text-center">
-                                <th scope="col">Ocorrência</th>
-                                <th scope="col">Status da Ocorrência</th>
-                                <th scope="col">Data</th>
-                                <th scope="col">Finalizar</th>
-                            </tr>
-                            <tr class="text-center">
-                                <td>{{ row.txtProblema}}</td>
-                                <td>{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</td>
-                                <td>{{ row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                                <td>
-                                    <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia %}disabled{% endif %}
-                                    type="button" onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <table class="table border table-striped table-hover table-borderless">
-                                        {% for row in row.listDespacho %}
-                                            <tr class="text-center">
-                                                <th scope="col">Status do Despacho</th>
-                                                <th scope="col">Responsável</th>
-                                                <th scope="col">Viatura</th>
-                                                <th scope="col">Data</th>
-                                            </tr>
-                                            <tr class="text-center">
-                                                <td>{{ row.despachoHistorico.statusDespacho.txtStatusDespacho}}</td>
-                                                <td>{{ row.composicaoViatura.agente.usuario.name.capitalize()}}</td>
-                                                <td>{{ row.composicaoViatura.viatura}}</td>
-                                                <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                                            </tr>
-                                        {%endfor%}
-                                    </table>
+                <div class="table-responsive mt-2">
+                    <table class="table border table-striped table-hover table-borderless">
+                        <tr class="text-center">
+                            <th scope="col">Ocorrência</th>
+                            <th scope="col">Status da Ocorrência</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Finalizar</th>
+                        </tr>
+                        <tr class="text-center">
+                            <td>{{ row.txtProblema}}</td>
+                            <td>{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</td>
+                            <td>{{ row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                            <td>
+                                <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia %}disabled{%
+                                    endif %} type="button"
+                                    onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <table class="table border table-striped table-hover table-borderless">
+                                {% for row in row.listDespacho %}
+                                <tr class="text-center">
+                                    <th scope="col">Status do Despacho</th>
+                                    <th scope="col">Responsável</th>
+                                    <th scope="col">Viatura</th>
+                                    <th scope="col">Data</th>
                                 </tr>
-                        </table>
-                    </div>
+                                <tr class="text-center">
+                                    <td>{{ row.despachoHistorico.statusDespacho.txtStatusDespacho}}</td>
+                                    <td>{{ row.composicaoViatura.agente.usuario.name.capitalize()}}</td>
+                                    <td>{{ row.composicaoViatura.viatura}}</td>
+                                    <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                                </tr>
+                                {%endfor%}
+                            </table>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>                    
-                {%endfor%}
+        </div>
+        {%endfor%}
         {% endif %}
 
 
@@ -109,7 +110,7 @@
                 </div>
             </div>
         </div>
-            
+
         {% if listDespachar.total > 5 %}
         <!-- Pagination Links-->
         <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
@@ -117,7 +118,7 @@
             {% if listDespachar.page == 1 %}disabled{% endif %}">
                 &laquo;
             </a><!-- Loop through the number of pages to display a link for each-->
-            {% for page_num in listDespachar.iter_pages(left_edge=1, right_edge=1, left_current=1,  right_current=2) %}
+            {% for page_num in listDespachar.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
             {% if page_num %}
             <!-- Check for the active page and set the link to "Active"-->
             {% if listDespachar.page == page_num %}
@@ -132,8 +133,7 @@
             {% else %}
             ...
             {% endif %}
-            {% endfor %} <a href="{{ url_for('despacho.prepareSearchDespacho', page=listDespachar.next_num) }}"
-                class="btn btn-outline-primary 
+            {% endfor %} <a href="{{ url_for('despacho.prepareSearchDespacho', page=listDespachar.next_num) }}" class="btn btn-outline-primary 
             {% if listDespachar.page == listDespachar.pages %}disabled{% endif %}">
                 &raquo;
             </a>
@@ -146,9 +146,8 @@
         {% else %}
         <p class="text-center">Nenhum registro de Ocorrência para Despachar encontrado.</p>
         {% endif %}
-       
-    </div>
 
+    </div>
 
 </div>
 {% endblock conteudo %}
