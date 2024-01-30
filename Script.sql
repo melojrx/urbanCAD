@@ -471,3 +471,16 @@ ALTER TABLE cad.tb_interessado_int ADD txt_rg_int varchar(15) null;
 ALTER TABLE cad.tb_interessado_int ADD txt_passaporte_int varchar(15)  null;
 ALTER TABLE cad.tb_interessado_int ADD bol_vitima_int boolean null DEFAULT false;
 ALTER TABLE cad.tb_interessado_int ADD bol_estrangeiro_int boolean null DEFAULT false;
+ALTER TABLE cad.tb_tipo_ocorrencia_toc ADD txt_icon_toc varchar(10) NULL;
+
+
+-- ####################################
+-- #   UPDATES PÓS ALTER TABLES       #
+-- ####################################
+
+UPDATE cad.tb_tipo_ocorrencia_toc SET  txt_icon_toc='crach' WHERE txt_tipo_ocorrencia_toc='Acidente';
+UPDATE cad.tb_tipo_ocorrencia_toc SET  txt_icon_toc='thief' WHERE txt_tipo_ocorrencia_toc='Assalto';
+ALTER TABLE cad.tb_tipo_ocorrencia_toc ALTER COLUMN txt_icon_toc SET NOT NULL;
+
+
+

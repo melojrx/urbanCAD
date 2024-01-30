@@ -123,6 +123,7 @@
                         <th scope="col">ENDEREÇO</th>
                         <th scope="col">TIPO DE OCORRÊNCIA</th>
                         <th scope="col">SITUAÇÃO</th>
+                        <th scope="col">ICONE</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
@@ -138,6 +139,7 @@
                             <td> {{ row.txtEndereco}} </td>
                             <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
                             <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
+                            <td>{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -184,6 +186,65 @@
                         }
                     }
                 }).addTo(map);
+
+                // OCORRÊNCIAS EM ATENDIMENTO
+                var ocorrenciasEmAtendimento = [
+                    {% for row in listOcorrenciaDespachada %}
+                        {
+                            txtLat: '{{ row.txtLat }}',
+                            txtLong: '{{ row.txtLong }}',
+                            txtProblema: '{{ row.txtProblema }}',
+                            icon: '{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}'
+                        },
+                        {% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ];
+                // var ocorrenciasJSON = JSON.stringify(ocorrenciasEmAtendimento);
+
+                ocorrenciasEmAtendimento.forEach(function (ocorrenciaAtendida) {
+
+                    var iconAtendidaUrl = '../static/img/icons/'+ ocorrenciaAtendida.icon +'Green.png';
+
+                    var iconAtendido = L.icon({
+                            iconUrl: iconAtendidaUrl,
+                            iconSize: [32, 32],
+                            iconAnchor: [16, 32], 
+                            popupAnchor: [0, -32]
+                    });
+
+                      var marker = L.marker([ocorrenciaAtendida.txtLat, ocorrenciaAtendida.txtLong], { icon: iconAtendido }).addTo(map);
+                    marker.bindPopup(ocorrenciaAtendida.txtProblema);
+                });
+
+                // OCORRÊNCIAS PARA ATENDER
+                 var ocorrenciasParaAtender = [
+                     {% for row in listDespachar.items %}
+                         {
+                             txtLat: '{{ row.ocorrencia.txtLat }}',
+                             txtLong: '{{ row.ocorrencia.txtLong }}',
+                             txtProblema: '{{ row.ocorrencia.txtProblema }}',
+                             icon: '{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}'
+                         },
+                         {% if not loop.last %},{% endif %}
+                     {% endfor %}
+                 ];
+
+                 ocorrenciasParaAtender.forEach(function (ocorrenciaAtender) {
+
+                     var iconAtenderUrl = '../static/img/icons/'+ ocorrenciaAtender.icon +'Red.png';
+
+                     var iconAtendido = L.icon({
+                             iconUrl: iconAtenderUrl,
+                             iconSize: [32, 32],
+                             iconAnchor: [16, 32], 
+                             popupAnchor: [0, -32]
+                     });
+
+                       var marker = L.marker([ocorrenciaAtender.txtLat, ocorrenciaAtender.txtLong], { icon: iconAtendido }).addTo(map);
+                     marker.bindPopup(ocorrenciaAtender.txtProblema);
+                 });
+
+
             })
             .catch(function (error) {
                 console.error('Erro ao buscar dados:', error);

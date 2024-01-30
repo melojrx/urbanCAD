@@ -41,8 +41,10 @@ class DespachoController():
         querySearchDespacho = None
         querySearchADespachar = None
         global listOcorrenciaDespachada
+        global listDespachar
 
-        if not 'URBANCAD_ADMIN' in session["roles"]:    
+        if not 'URBANCAD_ADMIN' in session["roles"]:  
+              
             querySearchDespacho = (Ocorrencia.query
                         .join(Interessado)
                         .join(Despacho)
@@ -66,10 +68,15 @@ class DespachoController():
 
             querySearchADespachar = (OcorrenciaHistorico.query
                 .join(Ocorrencia)
+                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
                 .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
                 .join(OcorrenciaGrupoDespacho)
                 .join(GrupoDespacho)
                 .join(UsuarioGrupoDespacho)
+                .options(
+                            joinedload('ocorrencia')
+                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
+                        )
                 .filter(
                     OcorrenciaHistorico.dataFim.is_(None),
                     Despacho.id.is_(None),
@@ -95,7 +102,12 @@ class DespachoController():
 
             querySearchADespachar = (OcorrenciaHistorico.query
                 .join(Ocorrencia)
+                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
                 .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+                .options(
+                            joinedload('ocorrencia')
+                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
+                        )
                 .filter(
                     OcorrenciaHistorico.dataFim.is_(None),
                     Despacho.id.is_(None)
@@ -164,7 +176,7 @@ class DespachoController():
         if row:
             form.idRegiao.data = row["id"]
             
-        return render_template('despacho.html', form=form, ocorrencia=ocorrencia, listOcorrenciaDespachada=listOcorrenciaDespachada)
+        return render_template('despacho.html', form=form, ocorrencia=ocorrencia, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
 
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required

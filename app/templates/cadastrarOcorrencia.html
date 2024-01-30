@@ -8,7 +8,7 @@
 <div class="container-fluid rounded mb-2" id="form-cadastro-evento">
 
 <div class="container-fluid mt-3">
-    <form method="POST" enctype='multipart/form-data' action="{{ url_for('ocorrencia.cadastrarOcorrencia') }}">
+    <form id="cadastrarOcorrenciaForm" method="POST" enctype='multipart/form-data' action="{{ url_for('ocorrencia.cadastrarOcorrencia') }}">
         <div class="container-fluid " id="form_cad_evento">
             <div class="card mb-2">
                 <div class="card-header">
@@ -151,10 +151,24 @@
 
 <!-- Máscaras -->
 <script>
-    $('#phone').mask('(00) 0000-0000');
-    $('.cpf').mask('000.000.000-00', { reverse: true });
+        $(document).ready(function () {
+            // Aplicar a máscara de CPF
+            $(".cpf").mask("000.000.000-00", { reverse: true });
+            $('#phone').mask('(00) 0000-0000');
 
+            // Remover pontos e traço antes de enviar o formulário
+            $("form").submit(function (event) {
+                var cpfField = $(".cpf");
+                var cpfValue = cpfField.val().replace(/[^\d]/g, ""); // Deixa apenas os dígitos
+                cpfField.val(cpfValue);
+
+                var phoneField = $("#phone");
+                var phoneValue = phoneField.val().replace(/[^\d]/g, ""); // Deixa apenas os dígitos
+                phoneField.val(phoneValue);
+            });
+        });
 </script>
+ 
 
 <script type="text/javascript">
 
