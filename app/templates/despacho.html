@@ -9,25 +9,18 @@
     <div class="container-fluid mt-2">
         
         <div class="card mb-2">
-            <div class="card-header d-flex">
-                <h6 class="card-title mt-1">
-                    <i class="bi bi-newspaper"></i>
-                    <h5 class="pt-2">CENTRAL DE DESPACHOS</h5>
-                </h6>
-                <div class="ms-auto mt-2">
-                    <span>
-                        <i class="fa fa-user"></i>
-                        {{ current_user.name.capitalize() }}
-                    </span>
+            <div class="card-header" style="background-color: #525B62;">
+                <div class="card-title d-flex justify-content-center mt-1" style="color: antiquewhite;">
+                    <span style="font-size: 1.5em;">Central de Despachos</span>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex justify-content-center gap-2">
+        <div class="d-flex justify-content-center gap-1 mb-2">
             <div class="card col-3">
-                <div class="card-header text-center">
-                    <div class="card-title text-center"><strong>Ocorrência Atual</strong></div>
-                    {{ocorrencia.numOcorrencia}}
+                <div class="card-header text-center" style="background-color: #525B62;">
+                    <div class="card-title text-center" style="color: antiquewhite;"><strong>Ocorrência Atual</strong></div>
+                    <span style="color: antiquewhite;">{{ocorrencia.numOcorrencia}}</span>
                 </div>
                 <div class="card-body" style="font-size: 0.9em;">
                     <div class="mb-1">
@@ -99,54 +92,59 @@
                 <div id="map"></div>
             </div>
         </div>
-        <div class="d-flex mt-2">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Finalizadas
-                </label>
+        <div class="card mb-2">
+            <div class="card-header d-flex" style="background-color: #525B62;">
+                <div class="form-check" style="color: antiquewhite;">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        <span>Finalizadas</span>
+                    </label>
+                </div>
+                <div class="form-check" style="margin-left: 2em; color: antiquewhite;">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        <span>Em atendimento</span>
+                    </label>
+                </div>
             </div>
-            <div class="form-check" style="margin-left: 2em ;">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Em atendimento
-                </label>
+            <div class="card-body p-0">
+                <div class="table-responsive" style="font-size: 0.9em;">
+                    <table class="table table-striped-columns table-hover table-borderless">
+                        <thead class="text-center">
+                            <tr class="table-secondary">
+                                <th scope="col">COD. OCORRÊNCIA</th>
+                                <th scope="col">SOLICITANTE</th>
+                                <th scope="col">EQUIPE</th>
+                                <th scope="col">ENDEREÇO</th>
+                                <th scope="col">TIPO DE OCORRÊNCIA</th>
+                                <th scope="col">SITUAÇÃO</th>
+                                <th scope="col">ICONE</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            {% for row in listOcorrenciaDespachada %}
+                                <tr>
+                                    <td> {{ row.numOcorrencia}} </td>
+                                    <td> {{ row.interessado.txtInteressado}} </td>
+                                    <td> 
+                                        {% for despacho in row.listDespacho %}
+                                            {{ despacho.composicaoViatura.viatura}}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td> {{ row.txtEndereco}} </td>
+                                    <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                    <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                    <td>{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer" style="background-color: #525B62;">
+                <span style="color: antiquewhite;">UrbanCAD - Sistema de Gestão de Atendimento e Despacho</span>
             </div>
         </div>
-        <div class="table-responsive mt-2" style="font-size: 0.9em;">
-            <table class="table table-striped-columns table-hover table-borderless">
-                <thead class="text-center">
-                    <tr class="table-secondary">
-                        <th scope="col">COD. OCORRÊNCIA</th>
-                        <th scope="col">SOLICITANTE</th>
-                        <th scope="col">EQUIPE</th>
-                        <th scope="col">ENDEREÇO</th>
-                        <th scope="col">TIPO DE OCORRÊNCIA</th>
-                        <th scope="col">SITUAÇÃO</th>
-                        <th scope="col">ICONE</th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    {% for row in listOcorrenciaDespachada %}
-                        <tr>
-                            <td> {{ row.numOcorrencia}} </td>
-                            <td> {{ row.interessado.txtInteressado}} </td>
-                            <td> 
-                                {% for despacho in row.listDespacho %}
-                                    {{ despacho.composicaoViatura.viatura}}<br>
-                                {% endfor %}
-                            </td>
-                            <td> {{ row.txtEndereco}} </td>
-                            <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                            <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
-                            <td>{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-        </table>
-          
-        </div>
-
     </div>
 </div>
 
@@ -154,7 +152,7 @@
 {% block scripts %}
     <script>
 
-        var map = L.map('map').setView([-3.716638, -38.542298], 13)
+        var map = L.map('map').setView([-3.716638, -38.542298], 14)
         var idRegiao = document.getElementById("idRegiao").value 
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
