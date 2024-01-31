@@ -283,8 +283,8 @@ class ocorrenciaController():
             db.session.commit()
 
             flash('Ocorrência finalizada com sucesso', 'sucess')
-            return redirect(url_for('despacho.prepareSearchDespacho'))
+            # return redirect(url_for('despacho.prepareSearchDespacho'))
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error') 
-            return redirect(url_for('despacho.prepareSearchDespacho'))
+            # return redirect(url_for('despacho.prepareSearchDespacho'))

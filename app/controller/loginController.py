@@ -73,7 +73,7 @@ class loginController:
                 return redirect(url_for('ocorrencia.iniciar')) 
             if "gd" in user.email:
                 session["roles"] = 'URBANCAD_DESPACHO'
-                return redirect(url_for('despacho.prepareSearchDespacho')) 
+                return redirect(url_for('despacho.telaDespacho')) 
             if "agente" in user.email:
                 session["roles"] = 'URBANCAD_AGENTE'
                 return redirect(url_for('despacho.meusDespachos'))             
