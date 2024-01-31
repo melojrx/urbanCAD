@@ -4,6 +4,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+<!-- Websocket -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 
 <div class="container-fluid mt-2" id="form-cadastro-evento">
     <div class="container-fluid mt-2">
@@ -94,7 +96,7 @@
             </div>
         </div>
         <div class="card mb-2">
-            <div class="card-header d-flex" style="background-color: #525B62;">
+            <!-- <div class="card-header d-flex" style="background-color: #525B62;">
                 <div class="form-check" style="color: antiquewhite;">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
                     <label class="form-check-label" for="flexCheckDefault">
@@ -107,41 +109,80 @@
                         <span>Em atendimento</span>
                     </label>
                 </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive" style="font-size: 0.9em;">
-                    <table class="table table-striped-columns table-hover table-borderless">
-                        <thead class="text-center">
-                            <tr class="table-secondary">
-                                <th scope="col">COD. OCORRÊNCIA</th>
-                                <th scope="col">SOLICITANTE</th>
-                                <th scope="col">EQUIPE</th>
-                                <th scope="col">ENDEREÇO</th>
-                                <th scope="col">TIPO DE OCORRÊNCIA</th>
-                                <th scope="col">SITUAÇÃO</th>
-                                <th scope="col">ICONE</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center">
-                            {% for row in listOcorrenciaDespachada %}
-                                <tr>
-                                    <td> {{ row.numOcorrencia}} </td>
-                                    <td> {{ row.interessado.txtInteressado}} </td>
-                                    <td> 
-                                        {% for despacho in row.listDespacho %}
-                                            {{ despacho.composicaoViatura.viatura}}<br>
-                                        {% endfor %}
-                                    </td>
-                                    <td> {{ row.txtEndereco}} </td>
-                                    <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                    <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                    <td>{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
+            </div> -->
+            <!--A DEPACHAR-->
+            <fieldset>
+                <legend>Ocorrências a Despachar</legend>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="font-size: 0.9em;">
+                        <table class="table table-striped-columns table-hover table-borderless">
+                            <thead class="text-center">
+                                <tr class="table-secondary">
+                                    <th scope="col">COD. OCORRÊNCIA</th>
+                                    <th scope="col">SOLICITANTE</th>
+                                    <th scope="col">ENDEREÇO</th>
+                                    <th scope="col">TIPO DE OCORRÊNCIA</th>
+                                    <th scope="col">SITUAÇÃO</th>
+                                    <th scope="col">ICONE</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>        
+                            </thead>
+                            <tbody class="text-center" id="listADespachar">
+                                {% for row in listDespachar.items %}
+                                    <tr>
+                                        <td> {{ row.ocorrencia.numOcorrencia}} </td>
+                                        <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
+                                        <td> {{ row.ocorrencia.txtEndereco}} </td>
+                                        <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                        <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                        <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>        
+                    </div>
                 </div>
-            </div>
+            </fieldset>
+
+            </br>
+
+            <!--A DESPACHADO-->
+            <fieldset>
+                <legend>Ocorrências Despachadas</legend>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="font-size: 0.9em;">
+                        <table class="table table-striped-columns table-hover table-borderless">
+                            <thead class="text-center">
+                                <tr class="table-secondary">
+                                    <th scope="col">COD. OCORRÊNCIA</th>
+                                    <th scope="col">SOLICITANTE</th>
+                                    <th scope="col">EQUIPE</th>
+                                    <th scope="col">ENDEREÇO</th>
+                                    <th scope="col">TIPO DE OCORRÊNCIA</th>
+                                    <th scope="col">SITUAÇÃO</th>
+                                    <th scope="col">ICONE</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                {% for row in listOcorrenciaDespachada %}
+                                    <tr>
+                                        <td> {{ row.numOcorrencia}} </td>
+                                        <td> {{ row.interessado.txtInteressado}} </td>
+                                        <td> 
+                                            {% for despacho in row.listDespacho %}
+                                                {{ despacho.composicaoViatura.viatura}}<br>
+                                            {% endfor %}
+                                        </td>
+                                        <td> {{ row.txtEndereco}} </td>
+                                        <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                        <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                        <td>{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>        
+                    </div>
+                </div>
+            </fieldset>
             <div class="card-footer" style="background-color: #525B62;">
                 <span style="color: antiquewhite;">UrbanCAD - Sistema de Gestão de Atendimento e Despacho</span>
             </div>
@@ -151,143 +192,175 @@
 
 
 {% block scripts %}
-    <script>
+<script>
 
-        var map = L.map('map').setView([-3.716638, -38.542298], 14)
-        var idRegiao = document.getElementById("idRegiao").value 
+    var map = L.map('map').setView([-3.716638, -38.542298], 14)
+    var idRegiao = document.getElementById("idRegiao").value 
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-        axios.get('/regionaisjson')
-            .then(function (response) {
-                var regions_data = response.data;
+    axios.get('/regionaisjson')
+        .then(function (response) {
+            var regions_data = response.data;
 
-                var blueLayer = L.geoJson(regions_data, {
-                    onEachFeature: function (feature, layer) {
-                        layer.bindPopup(feature.properties.regiao);
-                    },
-                    style: function (feature) {
-                        return { color: "#0000ff" };
+            var blueLayer = L.geoJson(regions_data, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(feature.properties.regiao);
+                },
+                style: function (feature) {
+                    return { color: "#0000ff" };
+                }
+            }).addTo(map);
+
+            var redLayer = L.geoJson(regions_data, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(feature.properties.regiao);
+                },
+                style: function (feature) {
+                    if (idRegiao && feature.properties.idRegiao == idRegiao) {
+                        return { color: "#ff0000" };
+                    } else {
+                        return { color: "transparent" };
                     }
-                }).addTo(map);
+                }
+            }).addTo(map);
 
-                var redLayer = L.geoJson(regions_data, {
-                    onEachFeature: function (feature, layer) {
-                        layer.bindPopup(feature.properties.regiao);
+            // OCORRÊNCIAS EM ATENDIMENTO
+            var ocorrenciasEmAtendimento = [
+                {% for row in listOcorrenciaDespachada %}
+                    {
+                        txtLat: '{{ row.txtLat }}',
+                        txtLong: '{{ row.txtLong }}',
+                        txtProblema: '{{ row.txtProblema }}',
+                        icon: '{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}'
                     },
-                    style: function (feature) {
-                        if (idRegiao && feature.properties.idRegiao == idRegiao) {
-                            return { color: "#ff0000" };
-                        } else {
-                            return { color: "transparent" };
-                        }
-                    }
-                }).addTo(map);
+                    {% if not loop.last %},{% endif %}
+                {% endfor %}
+            ];
+            // var ocorrenciasJSON = JSON.stringify(ocorrenciasEmAtendimento);
 
-                // OCORRÊNCIAS EM ATENDIMENTO
-                var ocorrenciasEmAtendimento = [
-                    {% for row in listOcorrenciaDespachada %}
+            ocorrenciasEmAtendimento.forEach(function (ocorrenciaAtendida) {
+
+                var iconAtendidaUrl = '../static/img/icons/'+ ocorrenciaAtendida.icon +'Green.png';
+
+                var iconAtendido = L.icon({
+                        iconUrl: iconAtendidaUrl,
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32], 
+                        popupAnchor: [0, -32]
+                });
+
+                    var marker = L.marker([ocorrenciaAtendida.txtLat, ocorrenciaAtendida.txtLong], { icon: iconAtendido }).addTo(map);
+                marker.bindPopup(ocorrenciaAtendida.txtProblema);
+            });
+
+            // OCORRÊNCIAS PARA ATENDER
+                var ocorrenciasParaAtender = [
+                    {% for row in listDespachar.items %}
                         {
-                            txtLat: '{{ row.txtLat }}',
-                            txtLong: '{{ row.txtLong }}',
-                            txtProblema: '{{ row.txtProblema }}',
-                            icon: '{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}'
+                            txtLat: '{{ row.ocorrencia.txtLat }}',
+                            txtLong: '{{ row.ocorrencia.txtLong }}',
+                            txtProblema: '{{ row.ocorrencia.txtProblema }}',
+                            icon: '{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}'
                         },
                         {% if not loop.last %},{% endif %}
                     {% endfor %}
                 ];
-                // var ocorrenciasJSON = JSON.stringify(ocorrenciasEmAtendimento);
 
-                ocorrenciasEmAtendimento.forEach(function (ocorrenciaAtendida) {
+                ocorrenciasParaAtender.forEach(function (ocorrenciaAtender) {
 
-                    var iconAtendidaUrl = '../static/img/icons/'+ ocorrenciaAtendida.icon +'Green.png';
+                    var iconAtenderUrl = '../static/img/icons/'+ ocorrenciaAtender.icon +'Red.png';
 
                     var iconAtendido = L.icon({
-                            iconUrl: iconAtendidaUrl,
+                            iconUrl: iconAtenderUrl,
                             iconSize: [32, 32],
                             iconAnchor: [16, 32], 
                             popupAnchor: [0, -32]
                     });
 
-                      var marker = L.marker([ocorrenciaAtendida.txtLat, ocorrenciaAtendida.txtLong], { icon: iconAtendido }).addTo(map);
-                    marker.bindPopup(ocorrenciaAtendida.txtProblema);
+                    var marker = L.marker([ocorrenciaAtender.txtLat, ocorrenciaAtender.txtLong], { icon: iconAtendido }).addTo(map);
+                    marker.bindPopup(ocorrenciaAtender.txtProblema);
                 });
 
-                // OCORRÊNCIAS PARA ATENDER
-                 var ocorrenciasParaAtender = [
-                     {% for row in listDespachar.items %}
-                         {
-                             txtLat: '{{ row.ocorrencia.txtLat }}',
-                             txtLong: '{{ row.ocorrencia.txtLong }}',
-                             txtProblema: '{{ row.ocorrencia.txtProblema }}',
-                             icon: '{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}'
-                         },
-                         {% if not loop.last %},{% endif %}
-                     {% endfor %}
-                 ];
 
-                 ocorrenciasParaAtender.forEach(function (ocorrenciaAtender) {
+        })
+        .catch(function (error) {
+            console.error('Erro ao buscar dados:', error);
+        });
+</script>
+<script>
+    // Função para obter a data e hora atuais
+    function obterDataHora() {
+        var dataHoraAtual = new Date();
 
-                     var iconAtenderUrl = '../static/img/icons/'+ ocorrenciaAtender.icon +'Red.png';
+        // Obter partes da data
+        var diaSemana = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dataHoraAtual);
 
-                     var iconAtendido = L.icon({
-                             iconUrl: iconAtenderUrl,
-                             iconSize: [32, 32],
-                             iconAnchor: [16, 32], 
-                             popupAnchor: [0, -32]
-                     });
+        // Capitalizar a primeira letra do dia da semana
+        diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
 
-                       var marker = L.marker([ocorrenciaAtender.txtLat, ocorrenciaAtender.txtLong], { icon: iconAtendido }).addTo(map);
-                     marker.bindPopup(ocorrenciaAtender.txtProblema);
-                 });
+        var dia = dataHoraAtual.getDate();
+        var mes = new Intl.DateTimeFormat('pt-BR', { month: 'long' }).format(dataHoraAtual);
+        var ano = dataHoraAtual.getFullYear();
 
+        // Formatar partes da data
+        var dataFormatada = diaSemana + ', ' + dia + ' de ' + mes + ' de ' + ano;
 
-            })
-            .catch(function (error) {
-                console.error('Erro ao buscar dados:', error);
-            });
-    </script>
-    <script>
-        // Função para obter a data e hora atuais
-        function obterDataHora() {
-            var dataHoraAtual = new Date();
+        // Obter partes da hora
+        var hora = dataHoraAtual.getHours();
+        var minutos = dataHoraAtual.getMinutes();
+        var segundos = dataHoraAtual.getSeconds();
 
-            // Obter partes da data
-            var diaSemana = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dataHoraAtual);
+        // Adicionar zeros à esquerda se necessário
+        minutos = minutos < 10 ? '0' + minutos : minutos;
+        segundos = segundos < 10 ? '0' + segundos : segundos;
 
-            // Capitalizar a primeira letra do dia da semana
-            diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+        // Formatar partes da hora
+        var horaFormatada = hora + ':' + minutos + ':' + segundos;
 
-            var dia = dataHoraAtual.getDate();
-            var mes = new Intl.DateTimeFormat('pt-BR', { month: 'long' }).format(dataHoraAtual);
-            var ano = dataHoraAtual.getFullYear();
+        // Inserir na div com o id "dataHoraDiv"
+        document.getElementById('dataHoraDiv').innerHTML = dataFormatada + '<br>' + horaFormatada;
+    }
 
-            // Formatar partes da data
-            var dataFormatada = diaSemana + ', ' + dia + ' de ' + mes + ' de ' + ano;
+    // Chamar a função ao carregar a página
+    window.onload = function () {
+        obterDataHora();
+    };
+</script>
 
-            // Obter partes da hora
-            var hora = dataHoraAtual.getHours();
-            var minutos = dataHoraAtual.getMinutes();
-            var segundos = dataHoraAtual.getSeconds();
+<script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-            // Adicionar zeros à esquerda se necessário
-            minutos = minutos < 10 ? '0' + minutos : minutos;
-            segundos = segundos < 10 ? '0' + segundos : segundos;
+    socket.on('connect', function() {
+      console.log('Conectado ao servidor');
+    });
 
-            // Formatar partes da hora
-            var horaFormatada = hora + ':' + minutos + ':' + segundos;
+    socket.on('disconnect', function() {
+      console.log('Desconectado do servidor');
+    });
 
-            // Inserir na div com o id "dataHoraDiv"
-            document.getElementById('dataHoraDiv').innerHTML = dataFormatada + '<br>' + horaFormatada;
-        }
+    socket.on('atualizar_lista_despachar', function() {
+        atualizarListaDespachar();
+    });
 
-        // Chamar a função ao carregar a página
-        window.onload = function () {
-            obterDataHora();
+    function atualizarListaDespachar() {
+        // Use AJAX para buscar a lista atualizada do servidor
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Atualize a lista com os dados recebidos do servidor
+                var listaItens = document.getElementById('listADespachar');
+                listaItens.innerHTML = xhr.responseText;
+            }
         };
-    </script>
+
+        xhr.open('GET', '/loadListADespachar', true);
+        xhr.send();
+    }
+
+  </script>
 
 
 {% endblock %}

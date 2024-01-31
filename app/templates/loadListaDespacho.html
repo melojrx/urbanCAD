@@ -1,0 +1,12 @@
+<div>
+    {% for row in listDespachar.items %}
+        <tr>
+            <td> {{ row.ocorrencia.numOcorrencia}} </td>
+            <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
+            <td> {{ row.ocorrencia.txtEndereco}} </td>
+            <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+            <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
+            <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
+        </tr>
+    {% endfor %}
+</div>
