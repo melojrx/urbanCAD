@@ -122,12 +122,8 @@ class DespachoController():
 
         return  listOcorrenciaDespachada, listDespachar
 
-    @despacho_bp.route('/telaDespacho', methods=['GET'])
-    @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')    
-    def telaDespacho():
-        form = DespachoForm(request.form)
-
+    @classmethod
+    def getIdRegiaoByUser(cls):
         sqlRegional = text("SELECT id"  
                     " FROM cad.tb_regionais_reg reg"
                     " JOIN cad.tb_grupo_despacho_gde gde ON reg.id = gde.id_regional_gde"
@@ -135,8 +131,16 @@ class DespachoController():
                     " WHERE ugd.id_usuario_ugd = :param;")
         resultRegional = db.engine.execute(sqlRegional, param=current_user.id)
         row = resultRegional.fetchone()
-        if row:
-            form.idRegiao.data = row["id"]
+
+        return row["id"]
+
+    @despacho_bp.route('/telaDespacho', methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')    
+    def telaDespacho():
+        form = DespachoForm(request.form)
+
+        form.idRegiao.data = DespachoController.getIdRegiaoByUser();
 
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
         return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
@@ -306,5 +310,7 @@ class DespachoController():
     @despacho_bp.route("/loadListADespachar",methods=["POST","GET"])
     @login_required
     def loadListADespachar():
+        form = DespachoForm(request.form)
+        form.idRegiao.data = DespachoController.getIdRegiaoByUser();
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
-        return render_template('loadListaDespacho.html', listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
+        return render_template('loadListaDespacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
