@@ -1,4 +1,7 @@
+import dataclasses
 import datetime
+import json
+import subprocess
 import geocoder
 from sqlalchemy import text
 from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
@@ -19,6 +22,8 @@ from ..forms.ocorrenciaForm import OcorrenciaForm
 from flask_login import login_required, current_user
 from sqlalchemy import and_
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from flask_socketio import emit
+from app import socketio
 
 class ocorrenciaController():
         
@@ -230,6 +235,7 @@ class ocorrenciaController():
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
 
+    @socketio.on("atribuir_ocorrencia")
     @ocorrencia_bp.route('/atribuirGrupoDespacho', methods=['POST'])
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
@@ -252,6 +258,7 @@ class ocorrenciaController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
+            socketio.emit('atualizar_lista_despachar')
             flash('Ocorrencia enviada para Grupo de Despacho com sucesso', 'sucess')
             return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
         except Exception as e:
@@ -280,4 +287,4 @@ class ocorrenciaController():
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error') 
-            return redirect(url_for('despacho.prepareSearchDespacho'))         
+            return redirect(url_for('despacho.prepareSearchDespacho'))

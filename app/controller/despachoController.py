@@ -1,13 +1,12 @@
 import datetime
 from app.forms.despachoObservacaoForm import DespachoObservacaoForm
-from app.models.tipoOcorrenciaModel import TipoOcorrencia
 from app.models.agenteModel import Agente
 
 from app.models.composicaoViaturaModel import ComposicaoViatura
 from app.models.despachoObservacaoModel import DespachoObservacao
 from app.models.interessadoModel import Interessado
 from ..database import db
-from sqlalchemy import and_, text, JSON
+from sqlalchemy import and_, text
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import login_required, current_user
 from ..enum import statusOcorrenciaEnum
@@ -68,13 +67,14 @@ class DespachoController():
 
             querySearchADespachar = (OcorrenciaHistorico.query
                 .join(Ocorrencia)
+                .join(Interessado)
                 .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
                 .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
                 .join(OcorrenciaGrupoDespacho)
                 .join(GrupoDespacho)
                 .join(UsuarioGrupoDespacho)
                 .options(
-                            joinedload('ocorrencia')
+                            joinedload('ocorrencia').joinedload('interessado')
                             ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
                         )
                 .filter(
@@ -102,10 +102,11 @@ class DespachoController():
 
             querySearchADespachar = (OcorrenciaHistorico.query
                 .join(Ocorrencia)
+                .join(Interessado)
                 .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
                 .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
                 .options(
-                            joinedload('ocorrencia')
+                            joinedload('ocorrencia').joinedload('interessado')
                             ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
                         )
                 .filter(
@@ -298,3 +299,52 @@ class DespachoController():
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error') 
             return redirect(url_for('despacho.meusDespachos'))
+        
+    @despacho_bp.route("/loadListADespachar",methods=["POST","GET"])
+    @login_required
+    def loadListADespachar():
+
+        page = request.args.get('page', 1, type=int)
+        
+        querySearchADespachar = None
+        global listDespachar
+
+        if not 'URBANCAD_ADMIN' in session["roles"]:  
+              
+            querySearchADespachar = (OcorrenciaHistorico.query
+                .join(Ocorrencia)
+                .join(Interessado)
+                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
+                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+                .join(OcorrenciaGrupoDespacho)
+                .join(GrupoDespacho)
+                .join(UsuarioGrupoDespacho)
+                .options(
+                            joinedload('ocorrencia').joinedload('interessado')
+                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
+                        )
+                .filter(
+                    OcorrenciaHistorico.dataFim.is_(None),
+                    Despacho.id.is_(None),
+                    UsuarioGrupoDespacho.idUsuario == current_user.id
+                )
+            )
+        else:
+            querySearchADespachar = (OcorrenciaHistorico.query
+                .join(Ocorrencia)
+                .join(Interessado)
+                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
+                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
+                .options(
+                            joinedload('ocorrencia').joinedload('interessado')
+                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
+                        )
+                .filter(
+                    OcorrenciaHistorico.dataFim.is_(None),
+                    Despacho.id.is_(None)
+                    )
+            )
+
+        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+
+        return render_template('loadListaDespacho.html', listDespachar=listDespachar)
