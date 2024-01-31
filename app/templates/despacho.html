@@ -19,29 +19,29 @@
         </div>
 
         <div class="d-flex justify-content-center gap-1 mb-2">
-            <div class="card col-3">
+            <div class="card col-3"  id="formDespacho">
                 <div class="card-header text-center" style="background-color: #525B62;">
                     <div class="card-title text-center" style="color: antiquewhite;"><strong>Ocorrência Atual</strong></div>
-                    <span style="color: antiquewhite;">{{ocorrencia.numOcorrencia}}</span>
+                    <span style="color: antiquewhite;"></span>
                 </div>
                 <div class="card-body" style="font-size: 0.9em; background-color: gray;  color: white;">
                     <div class="mb-1">
-                        <strong>Descrição:</strong> {{ocorrencia.txtProblema}}
+                        <strong>Descrição:</strong>
                     </div>
                     <div class="mb-1">
-                        <strong>Endereço:</strong> {{ocorrencia.txtEndereco}}
+                        <strong>Endereço:</strong> 
                     </div>
                     <div class="mb-1">
-                        <strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
+                        <strong>Status:</strong>
                     </div>
                     <div class="mb-1">
-                        <strong>Tipo de Ocorrência:</strong> {{ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                        <strong>Tipo de Ocorrência:</strong> 
                     </div>
                     <div class="mb-1">
-                        <strong>Subtipo de Ocorrência:</strong> {{ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}
+                        <strong>Subtipo de Ocorrência:</strong> 
                     </div>
                     <div class="mb-1">
-                        <strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y'+' às '+ '%H:%M'+'h')}}
+                        <strong>Início:</strong>
                     </div>
                     <div class="mb-1">
                         <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.despachar') }}">
@@ -80,12 +80,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mt-2">
-                                {{ form.submit(class_="btn btn-primary btn-sm") }}
-                                <button type="button" class="btn btn-danger btn-sm"
-                                    onclick="window.location.href='{{url_for('despacho.prepareSearchDespacho')}}';">Voltar
-                                </button>
-                            </div>
                         </form>
                     </div>
                     <div id="dataHoraDiv" class="text-center pt-1 pb-0" style="font-weight: bold; color: yellow;"></div>
@@ -95,7 +89,8 @@
                 <div id="map"></div>
             </div>
         </div>
-        <div class="card mb-2">
+        
+        <div class="card mb-2" id="listDespachos">
             <!-- <div class="card-header d-flex" style="background-color: #525B62;">
                 <div class="form-check" style="color: antiquewhite;">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
@@ -123,18 +118,23 @@
                                     <th scope="col">ENDEREÇO</th>
                                     <th scope="col">TIPO DE OCORRÊNCIA</th>
                                     <th scope="col">SITUAÇÃO</th>
-                                    <th scope="col">ICONE</th>
+                                    <th scope="col">Ações</th>
                                 </tr>
                             </thead>
                             <tbody class="text-center" id="listADespachar">
-                                {% for row in listDespachar.items %}
+                                {% for row in listDespachar %}
                                     <tr>
                                         <td> {{ row.ocorrencia.numOcorrencia}} </td>
                                         <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
                                         <td> {{ row.ocorrencia.txtEndereco}} </td>
                                         <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
                                         <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                        <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
+                                        <td class="text-start">
+                                            <a onclick="prepareDespachar('{{ row.ocorrencia.id }}')"
+                                                class="btn btn-danger btn-sm" role="button" title="Despachar">
+                                                <i class="bi bi-box-arrow-up-right"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -159,10 +159,10 @@
                                     <th scope="col">ENDEREÇO</th>
                                     <th scope="col">TIPO DE OCORRÊNCIA</th>
                                     <th scope="col">SITUAÇÃO</th>
-                                    <th scope="col">ICONE</th>
+                                    <th scope="col">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center">
+                            <tbody class="text-center" id="listDespachada">
                                 {% for row in listOcorrenciaDespachada %}
                                     <tr>
                                         <td> {{ row.numOcorrencia}} </td>
@@ -175,7 +175,11 @@
                                         <td> {{ row.txtEndereco}} </td>
                                         <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
                                         <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                        <td>{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}</td>
+                                        <td>
+                                            <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia %}disabled{%
+                                                endif %} type="button"
+                                                onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -258,7 +262,7 @@
 
             // OCORRÊNCIAS PARA ATENDER
                 var ocorrenciasParaAtender = [
-                    {% for row in listDespachar.items %}
+                    {% for row in listDespachar %}
                         {
                             txtLat: '{{ row.ocorrencia.txtLat }}',
                             txtLong: '{{ row.ocorrencia.txtLong }}',
@@ -346,11 +350,9 @@
     });
 
     function atualizarListaDespachar() {
-        // Use AJAX para buscar a lista atualizada do servidor
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                // Atualize a lista com os dados recebidos do servidor
                 var listaItens = document.getElementById('listADespachar');
                 listaItens.innerHTML = xhr.responseText;
             }
@@ -362,6 +364,21 @@
 
   </script>
 
+<script>
+
+    function prepareDespachar(idOcorrencia) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var listaItens = document.getElementById('formDespacho');
+                listaItens.innerHTML = xhr.responseText;
+            }
+        };
+        xhr.open('GET', '/prepareDespachar/' + idOcorrencia, true);
+        xhr.send();
+    }
+
+</script>
 
 {% endblock %}
 

@@ -26,21 +26,15 @@ from ..rotas.despachoRout import despacho_bp
 from sqlalchemy.orm import joinedload
 
 class DespachoController():
-
+      
     global ROWS_PER_PAGE 
     ROWS_PER_PAGE = 10
     
-    @despacho_bp.route('/prepareSearchDespacho', methods=['GET'])
-    @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')
-    def prepareSearchDespacho():
+    @classmethod
+    def getListDespacho(cls):
 
-        page = request.args.get('page', 1, type=int)
-        
         querySearchDespacho = None
         querySearchADespachar = None
-        global listOcorrenciaDespachada
-        global listDespachar
 
         if not 'URBANCAD_ADMIN' in session["roles"]:  
               
@@ -113,9 +107,7 @@ class DespachoController():
                     OcorrenciaHistorico.dataFim.is_(None),
                     Despacho.id.is_(None)
                     )
-            )
-
-            
+            )          
 
         listOcorrenciaDespachada = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
 
@@ -124,17 +116,36 @@ class DespachoController():
                 if all(row.despachoHistorico.idStatusDespacho == statusDespachoEnum.StatusDespachoEnum.CONCLUIDO.value for row in ocorrencia.listDespacho):
                     ocorrencia.exibeFinalizarOcorrencia = True
 
-        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
 
 
 
-        return render_template('listarDespacho.html', listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
+        return  listOcorrenciaDespachada, listDespachar
+
+    @despacho_bp.route('/telaDespacho', methods=['GET'])
+    @login_required
+    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')    
+    def telaDespacho():
+        form = DespachoForm(request.form)
+
+        sqlRegional = text("SELECT id"  
+                    " FROM cad.tb_regionais_reg reg"
+                    " JOIN cad.tb_grupo_despacho_gde gde ON reg.id = gde.id_regional_gde"
+                    " JOIN cad.tb_usuario_grupo_despacho_ugd ugd ON gde.id_grupo_despacho_gde = ugd.id_grupo_despacho_ugd "
+                    " WHERE ugd.id_usuario_ugd = :param;")
+        resultRegional = db.engine.execute(sqlRegional, param=current_user.id)
+        row = resultRegional.fetchone()
+        if row:
+            form.idRegiao.data = row["id"]
+
+        listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
+        return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
 
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
     def prepareDespachar(idOcorrencia):
-
+        print(idOcorrencia)
         form = DespachoForm(request.form)
         form.ocorrencia.data = idOcorrencia
 
@@ -161,23 +172,15 @@ class DespachoController():
 
         if(not result.rowcount):
             flash('Nenhuma viatura disponível para a região', 'error')
-            return redirect(url_for('despacho.prepareSearchDespacho'))
+            return
 
         form.despacharPara.choices = [(row["id_composicao_viatura_cvi"], 
                                        str(row["txt_tipo_patrulha_tpa"]) + " " + 
                                        str(row["txt_instituicao_ins"]) + " " + 
                                        str(row["txt_codigo_via"]) + " " + 
                                        str(row["txt_placa_via"])) for row in result]
-        
-        sqlRegional = text("SELECT id"  
-                    " FROM cad.tb_regionais_reg reg"
-                    " WHERE ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
-        resultRegional = db.engine.execute(sqlRegional, param1=ocorrencia.txtLong, param2=ocorrencia.txtLat)
-        row = resultRegional.fetchone()
-        if row:
-            form.idRegiao.data = row["id"]
-            
-        return render_template('despacho.html', form=form, ocorrencia=ocorrencia, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
+                   
+        return render_template('formDespacho.html', form=form, ocorrencia=ocorrencia)
 
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required
@@ -204,7 +207,7 @@ class DespachoController():
             db.session.commit()
 
             flash('Despacho Realizado com sucesso', 'sucess')
-            return redirect(url_for('despacho.prepareSearchDespacho'))
+            return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:
             db.session.rollback();
             flash('Erro: {}'.format(e), 'error') 
@@ -303,48 +306,5 @@ class DespachoController():
     @despacho_bp.route("/loadListADespachar",methods=["POST","GET"])
     @login_required
     def loadListADespachar():
-
-        page = request.args.get('page', 1, type=int)
-        
-        querySearchADespachar = None
-        global listDespachar
-
-        if not 'URBANCAD_ADMIN' in session["roles"]:  
-              
-            querySearchADespachar = (OcorrenciaHistorico.query
-                .join(Ocorrencia)
-                .join(Interessado)
-                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
-                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-                .join(OcorrenciaGrupoDespacho)
-                .join(GrupoDespacho)
-                .join(UsuarioGrupoDespacho)
-                .options(
-                            joinedload('ocorrencia').joinedload('interessado')
-                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
-                        )
-                .filter(
-                    OcorrenciaHistorico.dataFim.is_(None),
-                    Despacho.id.is_(None),
-                    UsuarioGrupoDespacho.idUsuario == current_user.id
-                )
-            )
-        else:
-            querySearchADespachar = (OcorrenciaHistorico.query
-                .join(Ocorrencia)
-                .join(Interessado)
-                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
-                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-                .options(
-                            joinedload('ocorrencia').joinedload('interessado')
-                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
-                        )
-                .filter(
-                    OcorrenciaHistorico.dataFim.is_(None),
-                    Despacho.id.is_(None)
-                    )
-            )
-
-        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
-
-        return render_template('loadListaDespacho.html', listDespachar=listDespachar)
+        listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
+        return render_template('loadListaDespacho.html', listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
