@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% include 'include.html' %}
 {% block conteudo %}
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -22,7 +22,7 @@
                     <div class="card-title text-center" style="color: antiquewhite;"><strong>Ocorrência Atual</strong></div>
                     <span style="color: antiquewhite;">{{ocorrencia.numOcorrencia}}</span>
                 </div>
-                <div class="card-body" style="font-size: 0.9em;">
+                <div class="card-body" style="font-size: 0.9em; background-color: gray;  color: white;">
                     <div class="mb-1">
                         <strong>Descrição:</strong> {{ocorrencia.txtProblema}}
                     </div>
@@ -86,6 +86,7 @@
                             </div>
                         </form>
                     </div>
+                    <div id="dataHoraDiv" class="text-center pt-1 pb-0" style="font-weight: bold; color: yellow;"></div>
                 </div>
             </div>
             <div class="mapa col-9">
@@ -248,6 +249,46 @@
                 console.error('Erro ao buscar dados:', error);
             });
     </script>
+    <script>
+        // Função para obter a data e hora atuais
+        function obterDataHora() {
+            var dataHoraAtual = new Date();
+
+            // Obter partes da data
+            var diaSemana = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dataHoraAtual);
+
+            // Capitalizar a primeira letra do dia da semana
+            diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+
+            var dia = dataHoraAtual.getDate();
+            var mes = new Intl.DateTimeFormat('pt-BR', { month: 'long' }).format(dataHoraAtual);
+            var ano = dataHoraAtual.getFullYear();
+
+            // Formatar partes da data
+            var dataFormatada = diaSemana + ', ' + dia + ' de ' + mes + ' de ' + ano;
+
+            // Obter partes da hora
+            var hora = dataHoraAtual.getHours();
+            var minutos = dataHoraAtual.getMinutes();
+            var segundos = dataHoraAtual.getSeconds();
+
+            // Adicionar zeros à esquerda se necessário
+            minutos = minutos < 10 ? '0' + minutos : minutos;
+            segundos = segundos < 10 ? '0' + segundos : segundos;
+
+            // Formatar partes da hora
+            var horaFormatada = hora + ':' + minutos + ':' + segundos;
+
+            // Inserir na div com o id "dataHoraDiv"
+            document.getElementById('dataHoraDiv').innerHTML = dataFormatada + '<br>' + horaFormatada;
+        }
+
+        // Chamar a função ao carregar a página
+        window.onload = function () {
+            obterDataHora();
+        };
+    </script>
+
 
 {% endblock %}
 
