@@ -482,5 +482,15 @@ UPDATE cad.tb_tipo_ocorrencia_toc SET  txt_icon_toc='crach' WHERE txt_tipo_ocorr
 UPDATE cad.tb_tipo_ocorrencia_toc SET  txt_icon_toc='thief' WHERE txt_tipo_ocorrencia_toc='Assalto';
 ALTER TABLE cad.tb_tipo_ocorrencia_toc ALTER COLUMN txt_icon_toc SET NOT NULL;
 
+-- ####################################
+-- #        INSERTS PARA TESTES       #
+-- ####################################
+
+INSERT INTO cad.tb_tipo_ocorrencia_toc
+(id_tipo_ocorrencia_toc, txt_tipo_ocorrencia_toc, txt_icon_toc)
+VALUES(3, 'Incêndio', 'fire');
+INSERT INTO cad.tb_tipo_ocorrencia_toc
+(id_tipo_ocorrencia_toc, txt_tipo_ocorrencia_toc, txt_icon_toc)
+VALUES(4, 'Desmoronamento', 'Collapse');
 
 
