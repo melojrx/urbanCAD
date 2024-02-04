@@ -1,0 +1,25 @@
+{% for row in listOcorrenciaHistorico %}
+<tr>
+  <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
+  <td>
+    {{
+    row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+  </td>
+  <td>{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</td>
+  <td>{{ row.ocorrencia.numOcorrencia}}</td>
+  <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+  <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
+  <td class="text-start">
+    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal"
+      data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
+      <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}" width="30%"></i>
+    </a>
+    {% if row.statusOCorrencia.id == 1 %}
+    <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
+      class="btn btn-danger btn-sm" role="button" title="Enviar para Grupo de Despacho">
+      <i class="bi bi-box-arrow-up-right"></i>
+    </a>
+    {% endif %}
+  </td>
+</tr>
+{% endfor %}

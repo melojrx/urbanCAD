@@ -4,12 +4,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
-<!-- Websocket -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 
 <div class="container-fluid mt-2" id="form-cadastro-evento">
     <div class="container-fluid mt-2">
-        
+
         <div class="card mb-2">
             <div class="card-header" style="background-color: #525B62;">
                 <div class="card-title d-flex justify-content-center mt-1" style="color: antiquewhite;">
@@ -19,9 +17,10 @@
         </div>
 
         <div class="d-flex justify-content-center gap-1 mb-2">
-            <div class="card col-3"  id="formDespacho">
+            <div class="card col-3" id="formDespacho">
                 <div class="card-header text-center" style="background-color: #525B62;">
-                    <div class="card-title text-center" style="color: antiquewhite;"><strong>Ocorrência Atual</strong></div>
+                    <div class="card-title text-center" style="color: antiquewhite;"><strong>Ocorrência Atual</strong>
+                    </div>
                     <span style="color: antiquewhite;"></span>
                 </div>
                 <div class="card-body" style="font-size: 0.9em; background-color: gray;  color: white;">
@@ -29,22 +28,22 @@
                         <strong>Descrição:</strong>
                     </div>
                     <div class="mb-1">
-                        <strong>Endereço:</strong> 
+                        <strong>Endereço:</strong>
                     </div>
                     <div class="mb-1">
                         <strong>Status:</strong>
                     </div>
                     <div class="mb-1">
-                        <strong>Tipo de Ocorrência:</strong> 
+                        <strong>Tipo de Ocorrência:</strong>
                     </div>
                     <div class="mb-1">
-                        <strong>Subtipo de Ocorrência:</strong> 
+                        <strong>Subtipo de Ocorrência:</strong>
                     </div>
                     <div class="mb-1">
                         <strong>Início:</strong>
                     </div>
                     <div class="mb-1">
-                        <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.despachar') }}">
+                        <form method="POST" id="despacharForm" action="{{ url_for('despacho.despachar') }}">
                             <div class="mb-1">
                                 <div>
                                     <div class="row">
@@ -67,7 +66,7 @@
                                                 </div>
                                                 {% endfor %}
                                             </div>
-                                            <div class="mb-1" >
+                                            <div class="mb-1">
                                                 {{form.despacharPara.label(class_="form-label")}}
                                                 {{form.despacharPara(class_="form-control")}}
                                                 {% for error in form.despacharPara.errors %}
@@ -89,7 +88,7 @@
                 <div id="map"></div>
             </div>
         </div>
-        
+
         <div class="card mb-2" id="listDespachos">
             <!-- <div class="card-header d-flex" style="background-color: #525B62;">
                 <div class="form-check" style="color: antiquewhite;">
@@ -123,22 +122,22 @@
                             </thead>
                             <tbody class="text-center" id="listADespachar">
                                 {% for row in listDespachar %}
-                                    <tr>
-                                        <td> {{ row.ocorrencia.numOcorrencia}} </td>
-                                        <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
-                                        <td> {{ row.ocorrencia.txtEndereco}} </td>
-                                        <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                        <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                        <td class="text-start">
-                                            <a onclick="prepareDespachar('{{ row.ocorrencia.id }}')"
-                                                class="btn btn-danger btn-sm" role="button" title="Despachar">
-                                                <i class="bi bi-box-arrow-up-right"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td> {{ row.ocorrencia.numOcorrencia}} </td>
+                                    <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
+                                    <td> {{ row.ocorrencia.txtEndereco}} </td>
+                                    <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                    <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                    <td class="text-start">
+                                        <a onclick="prepareDespachar('{{ row.ocorrencia.id }}')"
+                                            class="btn btn-danger btn-sm" role="button" title="Despachar">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
             </fieldset>
@@ -164,26 +163,26 @@
                             </thead>
                             <tbody class="text-center" id="listDespachada">
                                 {% for row in listOcorrenciaDespachada %}
-                                    <tr>
-                                        <td> {{ row.numOcorrencia}} </td>
-                                        <td> {{ row.interessado.txtInteressado}} </td>
-                                        <td> 
-                                            {% for despacho in row.listDespacho %}
-                                                {{ despacho.composicaoViatura.viatura}}<br>
-                                            {% endfor %}
-                                        </td>
-                                        <td> {{ row.txtEndereco}} </td>
-                                        <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                        <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                        <td>
-                                            <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia %}disabled{%
-                                                endif %} type="button"
-                                                onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td> {{ row.numOcorrencia}} </td>
+                                    <td> {{ row.interessado.txtInteressado}} </td>
+                                    <td>
+                                        {% for despacho in row.listDespacho %}
+                                        {{ despacho.composicaoViatura.viatura}}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td> {{ row.txtEndereco}} </td>
+                                    <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                    <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                    <td>
+                                        <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia
+                                            %}disabled{% endif %} type="button"
+                                            onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
+                                    </td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
             </fieldset>
@@ -194,12 +193,10 @@
     </div>
 </div>
 
-
-{% block scripts %}
 <script>
 
     var map = L.map('map').setView([-3.716638, -38.542298], 14)
-    var idRegiao = document.getElementById("idRegiao").value 
+    var idRegiao = document.getElementById("idRegiao").value
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
@@ -235,64 +232,64 @@
             var ocorrenciasEmAtendimento = [
                 {% for row in listOcorrenciaDespachada %}
                     {
-                        txtLat: '{{ row.txtLat }}',
-                        txtLong: '{{ row.txtLong }}',
-                        txtProblema: '{{ row.txtProblema }}',
-                        icon: '{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}'
-                    },
-                    {% if not loop.last %},{% endif %}
-                {% endfor %}
+                txtLat: '{{ row.txtLat }}',
+                txtLong: '{{ row.txtLong }}',
+                txtProblema: '{{ row.txtProblema }}',
+                icon: '{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}'
+            },
+            {% if not loop.last %}, {% endif %}
+    {% endfor %}
             ];
-            // var ocorrenciasJSON = JSON.stringify(ocorrenciasEmAtendimento);
+    // var ocorrenciasJSON = JSON.stringify(ocorrenciasEmAtendimento);
 
-            ocorrenciasEmAtendimento.forEach(function (ocorrenciaAtendida) {
+    ocorrenciasEmAtendimento.forEach(function (ocorrenciaAtendida) {
 
-                var iconAtendidaUrl = '../static/img/icons/'+ ocorrenciaAtendida.icon +'Green.png';
+        var iconAtendidaUrl = '../static/img/icons/' + ocorrenciaAtendida.icon + 'Green.png';
 
-                var iconAtendido = L.icon({
-                        iconUrl: iconAtendidaUrl,
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 32], 
-                        popupAnchor: [0, -32]
-                });
+        var iconAtendido = L.icon({
+            iconUrl: iconAtendidaUrl,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
 
-                    var marker = L.marker([ocorrenciaAtendida.txtLat, ocorrenciaAtendida.txtLong], { icon: iconAtendido }).addTo(map);
-                marker.bindPopup(ocorrenciaAtendida.txtProblema);
-            });
+        var marker = L.marker([ocorrenciaAtendida.txtLat, ocorrenciaAtendida.txtLong], { icon: iconAtendido }).addTo(map);
+        marker.bindPopup(ocorrenciaAtendida.txtProblema);
+    });
 
-            // OCORRÊNCIAS PARA ATENDER
-                var ocorrenciasParaAtender = [
-                    {% for row in listDespachar %}
-                        {
-                            txtLat: '{{ row.ocorrencia.txtLat }}',
-                            txtLong: '{{ row.ocorrencia.txtLong }}',
-                            txtProblema: '{{ row.ocorrencia.txtProblema }}',
-                            icon: '{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}'
-                        },
-                        {% if not loop.last %},{% endif %}
-                    {% endfor %}
+    // OCORRÊNCIAS PARA ATENDER
+    var ocorrenciasParaAtender = [
+        {% for row in listDespachar %}
+    {
+        txtLat: '{{ row.ocorrencia.txtLat }}',
+            txtLong: '{{ row.ocorrencia.txtLong }}',
+                txtProblema: '{{ row.ocorrencia.txtProblema }}',
+                    icon: '{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}'
+    },
+    {% if not loop.last %}, {% endif %}
+    {% endfor %}
                 ];
 
-                ocorrenciasParaAtender.forEach(function (ocorrenciaAtender) {
+    ocorrenciasParaAtender.forEach(function (ocorrenciaAtender) {
 
-                    var iconAtenderUrl = '../static/img/icons/'+ ocorrenciaAtender.icon +'Red.png';
+        var iconAtenderUrl = '../static/img/icons/' + ocorrenciaAtender.icon + 'Red.png';
 
-                    var iconAtendido = L.icon({
-                            iconUrl: iconAtenderUrl,
-                            iconSize: [32, 32],
-                            iconAnchor: [16, 32], 
-                            popupAnchor: [0, -32]
-                    });
+        var iconAtendido = L.icon({
+            iconUrl: iconAtenderUrl,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
 
-                    var marker = L.marker([ocorrenciaAtender.txtLat, ocorrenciaAtender.txtLong], { icon: iconAtendido }).addTo(map);
-                    marker.bindPopup(ocorrenciaAtender.txtProblema);
-                });
+        var marker = L.marker([ocorrenciaAtender.txtLat, ocorrenciaAtender.txtLong], { icon: iconAtendido }).addTo(map);
+        marker.bindPopup(ocorrenciaAtender.txtProblema);
+    });
 
 
         })
-        .catch(function (error) {
-            console.error('Erro ao buscar dados:', error);
-        });
+        .catch (function (error) {
+        console.error('Erro ao buscar dados:', error);
+    });
 </script>
 <script>
     // Função para obter a data e hora atuais
@@ -337,38 +334,35 @@
 <script>
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-    socket.on('connect', function() {
-      console.log('Conectado ao servidor');
+    socket.on('connect', function () {
+        console.log('Conectado ao servidor');
     });
 
-    socket.on('disconnect', function() {
-      console.log('Desconectado do servidor');
+    socket.on('disconnect', function () {
+        console.log('Desconectado do servidor');
     });
 
-    socket.on('atualizar_lista_despachar', function() {
+    socket.on('atualizar_lista_despachar', function () {
         atualizarListaDespachar();
     });
 
     function atualizarListaDespachar() {
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var listaItens = document.getElementById('listADespachar');
                 listaItens.innerHTML = xhr.responseText;
             }
         };
-
         xhr.open('GET', '/loadListADespachar', true);
         xhr.send();
     }
-
-  </script>
+</script>
 
 <script>
-
     function prepareDespachar(idOcorrencia) {
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var listaItens = document.getElementById('formDespacho');
                 listaItens.innerHTML = xhr.responseText;
@@ -377,9 +371,6 @@
         xhr.open('GET', '/prepareDespachar/' + idOcorrencia, true);
         xhr.send();
     }
-
 </script>
-
-{% endblock %}
 
 {% endblock conteudo %}

@@ -24,6 +24,7 @@ from app.models.despachoHistoricoModel import DespachoHistorico
 from .roleRequired import roles_required
 from ..rotas.despachoRout import despacho_bp
 from sqlalchemy.orm import joinedload
+from app import socketio
 
 class DespachoController():
       
@@ -149,7 +150,7 @@ class DespachoController():
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
     def prepareDespachar(idOcorrencia):
-        print(idOcorrencia)
+
         form = DespachoForm(request.form)
         form.ocorrencia.data = idOcorrencia
 
@@ -210,6 +211,7 @@ class DespachoController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
+            socketio.emit('atualizar_lista_ocorrencia')
             flash('Despacho Realizado com sucesso', 'sucess')
             return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:

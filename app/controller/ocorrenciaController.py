@@ -1,7 +1,4 @@
-import dataclasses
 import datetime
-import json
-import subprocess
 import geocoder
 from sqlalchemy import text
 from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
@@ -22,13 +19,17 @@ from ..forms.ocorrenciaForm import OcorrenciaForm
 from flask_login import login_required, current_user
 from sqlalchemy import and_
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
-from flask_socketio import emit
 from app import socketio
 
 class ocorrenciaController():
         
     global ROWS_PER_PAGE 
     ROWS_PER_PAGE = 10
+
+    @classmethod
+    def getListOcorrencia(cls):
+        listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc())
+        return listOcorrenciaHistorico
 
     @ocorrencia_bp.route('/iniciar', methods=['GET'])
     @login_required
@@ -48,10 +49,10 @@ class ocorrenciaController():
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
     def prepareSearchOcorrencia():
-        page = request.args.get('page', 1, type=int)
-        form = OcorrenciaSearchForm(request.form)
-        listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
 
+        form = OcorrenciaSearchForm(request.form)
+        listOcorrenciaHistorico = ocorrenciaController.getListOcorrencia()
+        
         listStatusOcorrencia = StatusOcorrencia.query.filter(StatusOcorrencia.dataFim.is_(None)).all()
         form.statusSearch.choices = [(0, "Selecione...")]+[(row.id, row.txtStatusOcorrencia) for row in listStatusOcorrencia]
         session['statusChoices'] = form.statusSearch.choices
@@ -235,7 +236,6 @@ class ocorrenciaController():
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
 
-    @socketio.on("atribuir_ocorrencia")
     @ocorrencia_bp.route('/atribuirGrupoDespacho', methods=['POST'])
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
@@ -288,3 +288,11 @@ class ocorrenciaController():
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error') 
             # return redirect(url_for('despacho.prepareSearchDespacho'))
+
+    @ocorrencia_bp.route("/loadListOcorrencia",methods=["POST","GET"])
+    @login_required
+    def loadListOcorrencia():
+        print('ENTROU')
+        form = OcorrenciaForm(request.form)
+        listOcorrenciaHistorico = ocorrenciaController.getListOcorrencia()
+        return render_template('loadListaOcorrencia.html', form=form, listOcorrenciaHistorico=listOcorrenciaHistorico)            

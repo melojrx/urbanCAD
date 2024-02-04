@@ -23,11 +23,11 @@
     <div class="card mb-2">
       <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
         <div class="card-header">
-        <div class="card-title mt-2">
-          <h6>Consulta ocorrências</h6>
+          <div class="card-title mt-2">
+            <h6>Consulta ocorrências</h6>
+          </div>
         </div>
-        </div>
-        <div class="card-body" >
+        <div class="card-body">
           <div class="row">
             <div class="col-3">
               {{form.numOcorrenciaSearch.label(class_="form-label")}} {{
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="card-footer text-start">
-          <div class="d-grid gap-3 d-md-block" >
+          <div class="d-grid gap-3 d-md-block">
             {{ form.submit(class_="btn btn-primary") }}
             <button type="button" class="btn btn-outline-danger"
               onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
@@ -61,8 +61,8 @@
     </div>
     <div class="card">
       <div class="card-body p-0">
-        {% if listOcorrenciaHistorico.items %}
-        <div class="table-responsive p-0" style="font-size: 0.9rem" >
+        {% if listOcorrenciaHistorico %}
+        <div class="table-responsive p-0" style="font-size: 0.9rem">
           <table class="table table-striped-columns table-hover table-borderless">
             <thead>
               <tr class="text-center table-secondary">
@@ -75,8 +75,8 @@
                 <th class="col">Ações</th>
               </tr>
             </thead>
-            <tbody class="text-center">
-              {% for row in listOcorrenciaHistorico.items %}
+            <tbody class="text-center" id="listOcorrencia">
+              {% for row in listOcorrenciaHistorico %}
               <tr>
                 <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
                 <td>
@@ -125,40 +125,6 @@
         </div>
       </div>
     </div>
-    <!-- Pagination Links-->
-    <nav aria-label="Page navigation">
-    {% if listOcorrenciaHistorico.total >=10 %}
-      <ul class="pagination col m-0 d-grid d-md-flex mx-auto justify-content-md-center">
-        <li class="page-item">
-          <a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.prev_num) }}"
-          class="page-link {% if listOcorrenciaHistorico.page == 1 %}disabled{% endif %}">
-          Anterior </a>
-        <!-- Loop through the number of pages to display a link for each-->
-        {% for page_num in listOcorrenciaHistorico.iter_pages(left_edge=1,
-        right_edge=1, left_current=1, right_current=2) %} {% if page_num %}
-        <!-- Check for the active page and set the link to "Active"-->
-        {% if listOcorrenciaHistorico.page == page_num %}</li>
-        <li class="page-item">
-          <a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="page-link">
-          {{ page_num }}</a>
-        </li>
-        {% else %}
-        <li class="page-item"><a href="{{ url_for('ocorrencia.searchOcorrencia', page=page_num) }}" class="page-link">
-          {{ page_num }}
-        </a></li>
-        {% endif %} {% else %} ... {% endif %} {% endfor %}
-        <li class="page-item"><a href="{{ url_for('ocorrencia.searchOcorrencia', page=listOcorrenciaHistorico.next_num) }}"
-          class="page-link {% if listOcorrenciaHistorico.page == listOcorrenciaHistorico.pages %}disabled{% endif %}">
-         Próximo
-        </a></li>
-        <!-- <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary">
-          Página {{ listOcorrenciaHistorico.page }} de {{
-          listOcorrenciaHistorico.pages }}
-        </p> -->
-        {% endif %}
-      </ul>
-    </nav>
-    <!-- End Pagination Links-->
     {% else %}
     <p class="text-center">Nenhum registro encontrado.</p>
     {% endif %}
@@ -177,6 +143,35 @@
     var modal = $(this);
     modal.find("#modalText").text(""); // Limpa a imagem quando o modal for fechado
   });
+</script>
+
+<script>
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+  socket.on('connect', function () {
+      console.log('Conectado ao servidor');
+  });
+
+  socket.on('disconnect', function () {
+      console.log('Desconectado do servidor');
+  });
+
+  socket.on('atualizar_lista_ocorrencia', function () {
+      atualizarListaDespachar();
+  });
+
+  function atualizarListaDespachar() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+              var listaItens = document.getElementById('listOcorrencia');
+              listaItens.innerHTML = xhr.responseText;
+          }
+      };
+      xhr.open('GET', '/loadListOcorrencia', true);
+      xhr.send();
+  }
+
 </script>
 
 {% endblock conteudo %}
