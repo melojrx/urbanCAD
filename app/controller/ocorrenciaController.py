@@ -103,7 +103,7 @@ class ocorrenciaController():
                 elif not dataInicioSearch and dataFimSearch:
                     querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio <= dataFimSearch)
 
-                listOcorrenciaHistorico = querySearch.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+                listOcorrenciaHistorico = querySearch.order_by(OcorrenciaHistorico.dataInicio.desc())
             else:
                 return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
    
@@ -282,12 +282,13 @@ class ocorrenciaController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
+            socketio.emit('atualizar_lista_ocorrencia')
             flash('Ocorrência finalizada com sucesso', 'sucess')
-            # return redirect(url_for('despacho.prepareSearchDespacho'))
+            return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error') 
-            # return redirect(url_for('despacho.prepareSearchDespacho'))
+            return redirect(url_for('despacho.telaDespacho'))
 
     @ocorrencia_bp.route("/loadListOcorrencia",methods=["POST","GET"])
     @login_required
