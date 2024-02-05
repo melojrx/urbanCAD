@@ -15,7 +15,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/listarTipoPatrulha', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def listarTipoPatrulha():
         try:
             page = request.args.get('page', 1, type=int)
@@ -29,7 +29,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/prepareCadastrarTipoPatrulha', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def prepareCadastrarTipoPatrulha():
 
         form = TipoPatrulhaForm(request.form)
@@ -39,7 +39,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/cadastrarTipoPatrulha' , methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def cadastrarTipoPatrulha():
 
         form = TipoPatrulhaForm(request.form)

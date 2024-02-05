@@ -17,7 +17,7 @@ class viaturaController:
 
     @viatura_bp.route('/listarViaturas', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def listarViaturas():
         try:
             page = request.args.get('page', 1, type=int)
@@ -31,7 +31,7 @@ class viaturaController:
 
     @viatura_bp.route('/prepareCadastrar', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def prepareCadastrar():
         form = ViaturaForm(request.form)
 
@@ -46,7 +46,7 @@ class viaturaController:
 
     @viatura_bp.route('/cadastrar' , methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def cadastrar():
 
         form = ViaturaForm(request.form)

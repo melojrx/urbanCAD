@@ -16,7 +16,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/listarUsuarioGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def listarUsuarioGrupoDespacho():
         try:
             page = request.args.get('page', 1, type=int)
@@ -30,7 +30,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/prepareCadastrarUsuarioGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def prepareCadastrarUsuarioGrupoDespacho():
 
         try:
@@ -50,7 +50,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/cadastrarUsuarioGrupoDespacho' , methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def cadastrarUsuarioGrupoDespacho():
 
         form = UsuarioGrupoDespachoForm(request.form)

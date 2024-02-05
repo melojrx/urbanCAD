@@ -65,7 +65,7 @@
         Tabela de Ocorrências 
       </div>
       <div class="card-body" >
-        {% if listOcorrenciaHistorico.items %}
+        {% if listOcorrenciaHistorico %}
           <table class="table table-bordered" style="font-size: 14px;">
             <thead>
               <tr>
@@ -78,8 +78,8 @@
                 <th >Ações</th>
               </tr>
             </thead>
-            <tbody>
-              {% for row in listOcorrenciaHistorico.items %}
+            <tbody class="text-center" id="listOcorrencia">
+              {% for row in listOcorrenciaHistorico %}
               <tr>
                 <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
                 <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
@@ -122,7 +122,6 @@
         </div>
       </div>
     </div>
-    
 </div>
 
 <script>
@@ -138,6 +137,35 @@
     var modal = $(this);
     modal.find("#modalText").text(""); // Limpa a imagem quando o modal for fechado
   });
+</script>
+
+<script>
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+  socket.on('connect', function () {
+      console.log('Conectado ao servidor');
+  });
+
+  socket.on('disconnect', function () {
+      console.log('Desconectado do servidor');
+  });
+
+  socket.on('atualizar_lista_ocorrencia', function () {
+      atualizarListaDespachar();
+  });
+
+  function atualizarListaDespachar() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+              var listaItens = document.getElementById('listOcorrencia');
+              listaItens.innerHTML = xhr.responseText;
+          }
+      };
+      xhr.open('GET', '/loadListOcorrencia', true);
+      xhr.send();
+  }
+
 </script>
 
 {% endblock conteudo %}

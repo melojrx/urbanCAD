@@ -11,7 +11,7 @@ import requests
 class loginController:
 
     global app_key 
-    app_key = '52f3e7a57351afc533bc384ca914a2c8b56a818b0d81d2b38b7934b6'
+    app_key = '930b745492848e4dbfbb9c5320ff78ad26b2693a61fefec01ef087e0'
     global institution_external_id
     institution_external_id = 'cff955b7939ec690e6b63d82ffca69de1a45184b292e9792d8aa709f'
 
@@ -41,7 +41,7 @@ class loginController:
                 db.session.add(user)
                 
                 url = 'http://10.82.85.8:8080/api/b2in/user/role'
-                data = {'institution_external_id': institution_external_id, 'email': email, 'password': pwd, "application_external_id": app_key, "role_name": "URBANCAD_USER", 'type': 'USER'}
+                data = {'institution_external_id': institution_external_id, 'email': email, 'password': pwd, "application_external_id": app_key, "role_name": "MACEIO_USER", 'type': 'USER'}
                 headers = {'Content-Type': 'application/json'}
                 response = requests.post(url, json=data, headers=headers)
                 data = response.json() 
@@ -69,13 +69,13 @@ class loginController:
             user = User.query.filter_by(email=form.email.data).first()
             login_user(user)
             if "admin" in user.email:
-                session["roles"] = 'URBANCAD_ADMIN'
+                session["roles"] = 'MACEIO_ADMIN'
                 return redirect(url_for('ocorrencia.iniciar')) 
             if "gd" in user.email:
-                session["roles"] = 'URBANCAD_DESPACHO'
+                session["roles"] = 'CAD_DESPACHO'
                 return redirect(url_for('despacho.telaDespacho')) 
             if "agente" in user.email:
-                session["roles"] = 'URBANCAD_AGENTE'
+                session["roles"] = 'CAD_AGENTE'
                 return redirect(url_for('despacho.meusDespachos'))             
         else:
              return render_template('login.html', form=form)
@@ -103,8 +103,11 @@ class loginController:
                     #print(data['roles'])
  
                     session["roles"] = data['roles']
+                    if ('MACEIO_ADMIN' not in session["roles"] and 'CAD_DESPACHO' not in session["roles"] and 'CAD_AGENTE' not in session["roles"]):
+                        flash('Usuário sem papel definido. Entre em contato com o Administrador do sistema.', 'error')
+                        return render_template('login.html', form=form)
                     login_user(user)
-                    return redirect(url_for('viatura.listarViaturas'))
+                    return redirect(url_for('ocorrencia.iniciar'))
                 elif(response.status_code == 500):
                     flash('Erro: {}. {}'.format(response.status_code, data['Login indisponível']), 'error')                  
                 else:

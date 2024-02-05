@@ -1,3 +1,4 @@
+{% include 'include.html' %}
 {% extends 'base.html' %}
 {% include 'include.html' %}
 {% block conteudo %}
@@ -16,91 +17,90 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="card" id="listMeusDespachos">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Tabela de Despachos
             </div>
-            {% if listDespachoHistorico.items %}
-            <div class="card-body">
-                <table class="table table-responsive table-bordered" style="font-size: 14px;">
-                    <thead>
-                        <tr class="text-center ">
-                            <th scope="col">Tipo Ocorrência</th>
-                            <th scope="col">Nº da Ocorrência</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Despachado para</th>
-                            <th scope="col">Data</th>
-                            <th scope="col">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in listDespachoHistorico.items %}
-                        <tr class="text-center">
-                            <td>{{ row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
-                            <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
-                            <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
-                            <td>{{ row.despacho.composicaoViatura.viatura }}</td>
-                            <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                            <td>
-                                {% if row.statusDespacho.id == 1 %}
-                                <a href="{{ url_for('despacho.atenderDespacho', idDespachoHistorico=row.id) }}"
-                                    class="btn btn-danger btn-sm" role="button" title="Atender">
-                                    <i class="bi bi-box-arrow-up-right"></i>
-                                </a>
-                                {% endif %}
-                                {% if row.statusDespacho.id == 2 %}
-                                <a href="{{ url_for('despacho.gerenciarDespacho', idDespachoHistorico=row.id) }}"
-                                    class="btn btn-primary btn-sm" role="button" title="Gerenciar">
-                                    <i class="bi bi-box-arrow-up-right"></i>
-                                </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <!-- Pagination Links-->
-                {% if listDespachoHistorico.total > 10 %}
-                <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-                    <a href="{{ url_for('despacho.meusDespachos', page=listDespachoHistorico.prev_num) }}" class="btn btn-outline-primary 
-                            {% if listDespachoHistorico.page == 1 %}disabled{% endif %}">
-                        &laquo;
-                    </a><!-- Loop through the number of pages to display a link for each-->
-                    {% for page_num in listDespachoHistorico.iter_pages(left_edge=1, right_edge=1, left_current=1,
-                    right_current=2) %}
-                    {% if page_num %}
-                    <!-- Check for the active page and set the link to "Active"-->
-                    {% if listDespachoHistorico.page == page_num %}
-                    <a href="{{ url_for('despacho.meusDespachos', page=page_num) }}" class="btn btn-primary">
-                        {{ page_num }}
-                    </a>
-                    {% else %}
-                    <a href="{{ url_for('despacho.meusDespachos', page=page_num) }}" class="btn btn-outline-primary">
-                        {{ page_num }}
-                    </a>
-                    {% endif %}
-                    {% else %}
-                    ...
-                    {% endif %}
-                    {% endfor %} <a href="{{ url_for('despacho.meusDespachos', page=listDespachoHistorico.next_num) }}" class="btn btn-outline-primary 
-                            {% if listDespachoHistorico.page == listDespachoHistorico.pages %}disabled{% endif %}">
-                        &raquo;
-                    </a>
-                </div>
-                <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-                    Página {{ listDespachoHistorico.page }} de {{ listDespachoHistorico.pages }}
-                </p>
-                {% endif %}
-                <!-- End Pagination Links-->
-                {% else %}
-                <p class="text-center">Nenhum registro encontrado.</p>
-                {% endif %}
-            </div>
-        </div>
-        
+            {% if listDespachoHistorico %}
+                <div class="table-responsive mt-2" style="font-size: 0.9em;">
+                    <table class="table border table-striped table-hover table-borderless">
+                        <thead>
+                            <tr class="text-center table-secondary">
+                                <th scope="col">Tipo Ocorrência</th>
+                                <th scope="col">Nº da Ocorrência</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Despachado para</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in listDespachoHistorico %}
+                            <tr class="text-center">
+                                <td>{{ row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
+                                <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
+                                <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
+                                <td>{{ row.despacho.composicaoViatura.viatura }}</td>
+                                <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                                <td>
+                                    {% if row.statusDespacho.id == 1 %}
+                                        <a
+                                        href="{{ url_for('despacho.atenderDespacho', idDespachoHistorico=row.id) }}"
+                                        class="btn btn-danger btn-sm"
+                                        role="button"
+                                        title="Atender">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if row.statusDespacho.id == 2 %}
+                                        <a
+                                        href="{{ url_for('despacho.gerenciarDespacho', idDespachoHistorico=row.id) }}"
+                                        class="btn btn-primary btn-sm"
+                                        role="button"
+                                        title="Gerenciar">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    {% endif %}                            
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> 
+            {% endif %}
+        </div> 
     </div>
 
 </div>
+
+<script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+  
+    socket.on('connect', function () {
+        console.log('Conectado ao servidor');
+    });
+  
+    socket.on('disconnect', function () {
+        console.log('Desconectado do servidor');
+    });
+  
+    socket.on('atualizar_lista_meus_despachos_agente', function () {
+        atualizarListaMeusDespachos();
+    });
+  
+    function atualizarListaMeusDespachos() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var listaItens = document.getElementById('listMeusDespachos');
+                listaItens.innerHTML = xhr.responseText;
+            }
+        };
+        xhr.open('GET', '/loadListMeusDespachos', true);
+        xhr.send();
+    }
+  
+  </script>
 
 {% endblock conteudo %}
