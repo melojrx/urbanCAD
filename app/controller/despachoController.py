@@ -24,7 +24,7 @@ from app.models.despachoHistoricoModel import DespachoHistorico
 from .roleRequired import roles_required
 from ..rotas.despachoRout import despacho_bp
 from sqlalchemy.orm import joinedload
-from app import socketio
+# from app import socketio
 
 class DespachoController():
       
@@ -211,8 +211,8 @@ class DespachoController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
-            socketio.emit('atualizar_lista_ocorrencia')
-            socketio.emit('atualizar_lista_meus_despachos_agente')
+            # socketio.emit('atualizar_lista_ocorrencia')
+            # socketio.emit('atualizar_lista_meus_despachos_agente')
             flash('Despacho Realizado com sucesso', 'sucess')
             return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:
