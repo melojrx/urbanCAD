@@ -12,7 +12,7 @@
             <p class="card-text">Tratamento de ocorrências</p>
           </div>
           <div class="col-3 d-flex justify-content-end">
-            <!-- Botão Cadastrar Ocorrência -->
+
             <button type="button" class="btn btn-primary bg-primary"
               onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">
               <span style="font-size: 0.9em">Nova Ocorrência</span>
@@ -24,11 +24,10 @@
     <div class="card mb-2">
       <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
         <div class="card-header">
-          <div class="card-title mt-2">
-            <h6>Consulta ocorrências</h6>
-          </div>
+          <i class="fas fa-table me-1"></i>
+          Consulta Ocorrências
         </div>
-        <div class="card-body">
+        <div class="card-body pb-0">
           <div class="row">
             <div class="col-3">
               {{form.numOcorrenciaSearch.label(class_="form-label")}} {{
@@ -48,68 +47,65 @@
               form.statusSearch(class="form-select") }}
             </div>
           </div>
-        </div>
-        <div class="card-footer text-start">
-          <div class="d-grid gap-3 d-md-block">
-            {{ form.submit(class_="btn btn-primary") }}
-            <button type="button" class="btn btn-outline-danger"
-              onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
-              Limpar
-            </button>
+          <div class="row mt-3 mb-0">
+            <div class="col-12 gap-2 d-flex justify-content-end">
+              {{ form.submit(class_="btn btn-primary") }}
+              <button type="button" class="btn btn-outline-danger"
+                onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
+                Limpar
+              </button>
+            </div>
           </div>
         </div>
       </form>
     </div>
     <div class="card">
-      <div class="card-body p-0">
+      <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Tabela de Ocorrências 
+      </div>
+      <div class="card-body" >
         {% if listOcorrenciaHistorico %}
-        <div class="table-responsive p-0" style="font-size: 0.9rem">
-          <table class="table table-striped-columns table-hover table-borderless">
+          <table class="table table-bordered" style="font-size: 14px;">
             <thead>
-              <tr class="text-center table-secondary">
-                <th scope="col">Noticiante</th>
-                <th scope="col">Tipo Ocorrência</th>
-                <th scope="col">Subtipo Ocorrência</th>
-                <th scope="col">Nº da Ocorrência</th>
-                <th scope="col">Status</th>
-                <th scope="col">Data</th>
-                <th class="col">Ações</th>
+              <tr>
+                <th >Noticiante</th>
+                <th >Tipo Ocorrência</th>
+                <th >Subtipo Ocorrência</th>
+                <th >Nº da Ocorrência</th>
+                <th >Status</th>
+                <th >Data</th>
+                <th >Ações</th>
               </tr>
             </thead>
             <tbody class="text-center" id="listOcorrencia">
               {% for row in listOcorrenciaHistorico %}
               <tr>
                 <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
-                <td>
-                  {{
-                  row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
-                </td>
+                <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
                 <td>{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</td>
                 <td>{{ row.ocorrencia.numOcorrencia}}</td>
                 <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
                 <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
-                <td class="text-start">
+                <td class="d-flex gap-2 align-items-center justify-content-start">
                   <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal"
                     data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
-                    <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}" width="30%"></i>
+                    <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}"></i>
                   </a>
                   {% if row.statusOCorrencia.id == 1 %}
                   <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
                     class="btn btn-danger btn-sm" role="button" title="Enviar para Grupo de Despacho">
-                    <i class="bi bi-box-arrow-up-right"></i>
-                  </a>
+                    <i class="bi bi-box-arrow-up-right"></i></a>
                   {% endif %}
                 </td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span>UrbanCAD - Sistema de Gestão de Atendimento e Despacho</span>
+        {% endif %}
       </div>
     </div>
+  </div>
     <!-- Modal -->
     <div class="modal fade" id="txtProblemaModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel"
       aria-hidden="true">
@@ -126,11 +122,8 @@
         </div>
       </div>
     </div>
-    {% else %}
-    <p class="text-center">Nenhum registro encontrado.</p>
-    {% endif %}
-  </div>
 </div>
+
 <script>
   $("#txtProblemaModal").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget); // Botão que acionou o modal

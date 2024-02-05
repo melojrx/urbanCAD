@@ -1,5 +1,6 @@
 {% include 'include.html' %}
 {% extends 'base.html' %}
+{% include 'include.html' %}
 {% block conteudo %}
 
 <div class="container-fluid mt-2 rounded mb-2">
@@ -16,8 +17,11 @@
                 </div>
             </div>
         </div>
-
-        <div id="listMeusDespachos">
+        <div class="card" id="listMeusDespachos">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Tabela de Despachos
+            </div>
             {% if listDespachoHistorico %}
                 <div class="table-responsive mt-2" style="font-size: 0.9em;">
                     <table class="table border table-striped table-hover table-borderless">

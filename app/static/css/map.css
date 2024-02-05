@@ -7,3 +7,8 @@
     height: 45em;
     width: 180em;
 }
+.map_dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
