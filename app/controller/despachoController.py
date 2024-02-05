@@ -212,6 +212,7 @@ class DespachoController():
             db.session.commit()
 
             socketio.emit('atualizar_lista_ocorrencia')
+            socketio.emit('atualizar_lista_meus_despachos_agente')
             flash('Despacho Realizado com sucesso', 'sucess')
             return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:
@@ -282,8 +283,7 @@ class DespachoController():
     @login_required
     @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')
     def meusDespachos():
-        page = request.args.get('page', 1, type=int)
-        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).all()
         return render_template('meusDespachos.html', listDespachoHistorico=listDespachoHistorico)
     
     @despacho_bp.route('/finalizarDespacho/<idDespachoHistorico>', methods=['GET'])
@@ -316,3 +316,9 @@ class DespachoController():
         form.idRegiao.data = DespachoController.getIdRegiaoByUser();
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
         return render_template('loadListaDespacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
+    
+    @despacho_bp.route('/loadListMeusDespachos', methods=['GET'])
+    @login_required
+    def loadListMeusDespachos():
+        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).all()
+        return render_template('loadListaMeusDespachos.html', listDespachoHistorico=listDespachoHistorico)
