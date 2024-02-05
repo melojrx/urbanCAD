@@ -24,6 +24,7 @@ from app.models.despachoHistoricoModel import DespachoHistorico
 from .roleRequired import roles_required
 from ..rotas.despachoRout import despacho_bp
 from sqlalchemy.orm import joinedload
+from app import socketio
 
 class DespachoController():
       
@@ -36,7 +37,7 @@ class DespachoController():
         querySearchDespacho = None
         querySearchADespachar = None
 
-        if not 'URBANCAD_ADMIN' in session["roles"]:  
+        if not 'MACEIO_ADMIN' in session["roles"]:  
               
             querySearchDespacho = (Ocorrencia.query
                         .join(Interessado)
@@ -136,7 +137,7 @@ class DespachoController():
 
     @despacho_bp.route('/telaDespacho', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')    
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')    
     def telaDespacho():
         form = DespachoForm(request.form)
 
@@ -147,9 +148,9 @@ class DespachoController():
 
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')    
     def prepareDespachar(idOcorrencia):
-        print(idOcorrencia)
+
         form = DespachoForm(request.form)
         form.ocorrencia.data = idOcorrencia
 
@@ -188,7 +189,7 @@ class DespachoController():
 
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO', 'URBANCAD_DESPACHO')    
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')    
     def despachar():
 
         try:
@@ -210,6 +211,8 @@ class DespachoController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
+            socketio.emit('atualizar_lista_ocorrencia')
+            socketio.emit('atualizar_lista_meus_despachos_agente')
             flash('Despacho Realizado com sucesso', 'sucess')
             return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:
@@ -219,7 +222,7 @@ class DespachoController():
    
     @despacho_bp.route('/atenderDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')    
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')     
     def atenderDespacho(idDespachoHistorico):
 
         try:
@@ -242,7 +245,7 @@ class DespachoController():
         
     @despacho_bp.route('/gerenciarDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')    
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')     
     def gerenciarDespacho(idDespachoHistorico):
 
         try:
@@ -258,7 +261,7 @@ class DespachoController():
 
     @despacho_bp.route('/cadastrarObservacao', methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')    
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')     
     def cadastrarObservacao():
 
         try:
@@ -278,15 +281,14 @@ class DespachoController():
 
     @despacho_bp.route('/meusDespachos', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE', 'URBANCAD_DESPACHO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')
     def meusDespachos():
-        page = request.args.get('page', 1, type=int)
-        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).all()
         return render_template('meusDespachos.html', listDespachoHistorico=listDespachoHistorico)
     
     @despacho_bp.route('/finalizarDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_AGENTE')    
+    @roles_required('MACEIO_ADMIN', 'CAD_AGENTE')    
     def finalizarDespacho(idDespachoHistorico):
         try:
 
@@ -314,3 +316,9 @@ class DespachoController():
         form.idRegiao.data = DespachoController.getIdRegiaoByUser();
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
         return render_template('loadListaDespacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
+    
+    @despacho_bp.route('/loadListMeusDespachos', methods=['GET'])
+    @login_required
+    def loadListMeusDespachos():
+        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).all()
+        return render_template('loadListaMeusDespachos.html', listDespachoHistorico=listDespachoHistorico)

@@ -17,7 +17,7 @@ class agenteController:
 
     @agente_bp.route('/listarAgente', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def listarAgente():
         try:
             page = request.args.get('page', 1, type=int)
@@ -31,7 +31,7 @@ class agenteController:
 
     @agente_bp.route('/prepareCadastrarAgente', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def prepareCadastrarAgente():
 
         form = AgenteForm(request.form)
@@ -47,7 +47,7 @@ class agenteController:
 
     @agente_bp.route('/cadastrarAgente' , methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def cadastrarAgente():
 
         form = AgenteForm(request.form)

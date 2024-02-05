@@ -1,7 +1,4 @@
-import dataclasses
 import datetime
-import json
-import subprocess
 import geocoder
 from sqlalchemy import text
 from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
@@ -22,7 +19,6 @@ from ..forms.ocorrenciaForm import OcorrenciaForm
 from flask_login import login_required, current_user
 from sqlalchemy import and_
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
-from flask_socketio import emit
 from app import socketio
 
 class ocorrenciaController():
@@ -30,28 +26,34 @@ class ocorrenciaController():
     global ROWS_PER_PAGE 
     ROWS_PER_PAGE = 10
 
+    @classmethod
+    def getListOcorrencia(cls):
+        listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc())
+        return listOcorrenciaHistorico
+
     @ocorrencia_bp.route('/iniciar', methods=['GET'])
     @login_required
     def iniciar():
         try:
             # Se o usário tem permissão de governo
-            if 'URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]: 
-                # Lista todos os eventos cadastrados
+            if 'MACEIO_ADMIN' in session["roles"]: 
                 return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
-            else :
-                return redirect(url_for('ocorrencia.prepareCadastrarOcorrencia'))
-
+            elif 'CAD_DESPACHO' in session["roles"]:
+                return redirect(url_for('despacho.telaDespacho'))
+            elif 'CAD_AGENTE' in session["roles"]:
+                return redirect(url_for('despacho.meusDespachos'))
+            
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
 
     @ocorrencia_bp.route('/prepareSearchOcorrencia', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def prepareSearchOcorrencia():
-        page = request.args.get('page', 1, type=int)
-        form = OcorrenciaSearchForm(request.form)
-        listOcorrenciaHistorico = OcorrenciaHistorico.query.filter(and_(OcorrenciaHistorico.idStatusOcorrencia != statusOcorrenciaEnum.StatusOcorrenciaEnum.FINALIZADO.value, OcorrenciaHistorico.dataFim.is_(None))).order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
 
+        form = OcorrenciaSearchForm(request.form)
+        listOcorrenciaHistorico = ocorrenciaController.getListOcorrencia()
+        
         listStatusOcorrencia = StatusOcorrencia.query.filter(StatusOcorrencia.dataFim.is_(None)).all()
         form.statusSearch.choices = [(0, "Selecione...")]+[(row.id, row.txtStatusOcorrencia) for row in listStatusOcorrencia]
         session['statusChoices'] = form.statusSearch.choices
@@ -61,7 +63,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/searchOcorrencia', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def searchOcorrencia():
 
         form = OcorrenciaSearchForm(request.form)
@@ -71,8 +73,6 @@ class ocorrenciaController():
         dataFimSearch = request.args.get('dataFimSearch')
         statusSearch = request.args.get('statusSearch')
         
-        page = request.args.get('page', 1, type=int)
-
         if dataInicioSearch:
             dataInicioSearch = datetime.datetime.strptime(dataInicioSearch, '%Y-%m-%d')
             form.dataInicioSearch.data = dataInicioSearch
@@ -102,7 +102,7 @@ class ocorrenciaController():
                 elif not dataInicioSearch and dataFimSearch:
                     querySearch = querySearch.join(OcorrenciaHistorico.ocorrencia).filter(Ocorrencia.dataInicio <= dataFimSearch)
 
-                listOcorrenciaHistorico = querySearch.order_by(OcorrenciaHistorico.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
+                listOcorrenciaHistorico = querySearch.order_by(OcorrenciaHistorico.dataInicio.desc())
             else:
                 return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
    
@@ -120,7 +120,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/prepareCadastrarOcorrencia', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def prepareCadastrarOcorrencia():
 
         global listTipoOcorrencia 
@@ -132,7 +132,7 @@ class ocorrenciaController():
     
     @ocorrencia_bp.route('/cadastrarOcorrencia', methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def cadastrarOcorrencia():
 
         try:
@@ -198,7 +198,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/prepareAtribuirOcorrencia/<idOcorrencia>/<lat>/<long>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def prepareAtribuirOcorrencia(idOcorrencia, lat, long):
         
         try:
@@ -235,10 +235,9 @@ class ocorrenciaController():
             flash('Erro: {}'.format(e), 'error')
             return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
 
-    @socketio.on("atribuir_ocorrencia")
     @ocorrencia_bp.route('/atribuirGrupoDespacho', methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_GOVERNO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def atribuirGrupoDespacho():
 
         try:
@@ -268,7 +267,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/finalizarOcorrencia/<idOcorrenciaHistorico>', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN', 'URBANCAD_DESPACHO')    
+    @roles_required('MACEIO_ADMIN')    
     def finalizarOcorrencia(idOcorrenciaHistorico):
         try:
 
@@ -282,9 +281,17 @@ class ocorrenciaController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
+            socketio.emit('atualizar_lista_ocorrencia')
             flash('Ocorrência finalizada com sucesso', 'sucess')
-            # return redirect(url_for('despacho.prepareSearchDespacho'))
+            return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error') 
-            # return redirect(url_for('despacho.prepareSearchDespacho'))
+            return redirect(url_for('despacho.telaDespacho'))
+
+    @ocorrencia_bp.route("/loadListOcorrencia",methods=["POST","GET"])
+    @login_required
+    def loadListOcorrencia():
+        form = OcorrenciaForm(request.form)
+        listOcorrenciaHistorico = ocorrenciaController.getListOcorrencia()
+        return render_template('loadListaOcorrencia.html', form=form, listOcorrenciaHistorico=listOcorrenciaHistorico)            

@@ -18,7 +18,7 @@ class composicaoController:
 
     @composicao_bp.route('/listarComposicao', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_AGENTE')
+    @roles_required('CAD_AGENTE')
     def listarComposicao():
         try:
             page = request.args.get('page', 1, type=int)
@@ -32,7 +32,7 @@ class composicaoController:
 
     @composicao_bp.route('/prepareCadastrarComposicao', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_AGENTE')
+    @roles_required('CAD_AGENTE')
     def prepareCadastrarComposicao():
 
         form = ComposicaoForm(request.form)
@@ -48,7 +48,7 @@ class composicaoController:
 
     @composicao_bp.route('/cadastrarComposicao' , methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_AGENTE')
+    @roles_required('CAD_AGENTE')
     def cadastrarComposicao():
 
         form = ComposicaoForm(request.form)
@@ -69,7 +69,7 @@ class composicaoController:
 
     @composicao_bp.route('/prepareFinalizarComposicao/<idComposicaoViatura>' , methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_AGENTE')
+    @roles_required('CAD_AGENTE')
     def prepareFinalizarComposicao(idComposicaoViatura):
         try:
             composicaoViatura = ComposicaoViatura.query.filter(ComposicaoViatura.id == idComposicaoViatura).first()
@@ -81,7 +81,7 @@ class composicaoController:
 
     @composicao_bp.route('/finalizarComposicao/<idComposicaoViatura>' , methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_AGENTE')
+    @roles_required('CAD_AGENTE')
     def finalizarComposicao(idComposicaoViatura):
         try:
             dataInicio = datetime.datetime.now()

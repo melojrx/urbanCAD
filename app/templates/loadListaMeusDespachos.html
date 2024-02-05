@@ -1,0 +1,47 @@
+{% if listDespachoHistorico %}
+<div class="table-responsive mt-2" style="font-size: 0.9em;">
+    <table class="table border table-striped table-hover table-borderless">
+        <thead>
+            <tr class="text-center table-secondary">
+                <th scope="col">Tipo Ocorrência</th>
+                <th scope="col">Nº da Ocorrência</th>
+                <th scope="col">Status</th>
+                <th scope="col">Despachado para</th>
+                <th scope="col">Data</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in listDespachoHistorico %}
+            <tr class="text-center">
+                <td>{{ row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
+                <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
+                <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
+                <td>{{ row.despacho.composicaoViatura.viatura }}</td>
+                <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+                <td>
+                    {% if row.statusDespacho.id == 1 %}
+                        <a
+                        href="{{ url_for('despacho.atenderDespacho', idDespachoHistorico=row.id) }}"
+                        class="btn btn-danger btn-sm"
+                        role="button"
+                        title="Atender">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    {% endif %}
+                    {% if row.statusDespacho.id == 2 %}
+                        <a
+                        href="{{ url_for('despacho.gerenciarDespacho', idDespachoHistorico=row.id) }}"
+                        class="btn btn-primary btn-sm"
+                        role="button"
+                        title="Gerenciar">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    {% endif %}                            
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div> 
+{% endif %}

@@ -29,7 +29,7 @@ class viaturaController:
 
         return render_template('listarDeteccao.html', listDeteccao=listDeteccao, form=form)
     
-    @roles_required('URBANCAD_ADMIN, URBANCAD_GOVERNO')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     @maleta_bp.route('/searchDeteccao', methods=['GET'])
     @login_required
     def searchDeteccao():

@@ -14,7 +14,7 @@ class instituicaoController():
 
     @instituicao_bp.route('/prepareSearchInstituicao', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def prepareSearchInstituicao():
         page = request.args.get('page', 1, type=int)
         form = InstituicaoForm(request.form)
@@ -24,14 +24,14 @@ class instituicaoController():
     
     @instituicao_bp.route('/prepareCadastrarInstituicao', methods=['GET'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def prepareCadastrarInstituicao():
         form = InstituicaoForm(request.form)
         return render_template('cadastrarInstituicao.html', form=form)    
     
     @instituicao_bp.route('/cadastrarInstituicao', methods=['POST'])
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN')
     def cadastrarInstituicao():
 
         try:

@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
 {% block conteudo %}
-<!-- Websocket -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 
 <div class="container-fluid mt-2 rounded mb-2" id="form-cadastro-evento">
    
     <div class="container-fluid mt-2">
-        <form method="POST" is="atribuirGrupoDespachoForm" enctype='multipart/form-data' action="{{ url_for('ocorrencia.atribuirGrupoDespacho') }}">
+        <form method="POST" is="atribuirGrupoDespachoForm" action="{{ url_for('ocorrencia.atribuirGrupoDespacho') }}">
             <div class="container-fluid " id="form_cad_evento">
                 <div class="card mb-2">
                     <div class="card-header">
@@ -51,29 +49,5 @@
     </div>
 
 </div>
-
-<script>
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-    socket.on('connect', function() {
-      console.log('Conectado ao servidor');
-    });
-
-    socket.on('disconnect', function() {
-      console.log('Desconectado do servidor');
-    });
-
-    // Intercepta o envio do formulário
-    document.getElementById('atribuirGrupoDespachoForm').addEventListener('submit', function(event) {
-      event.preventDefault();  // Evita o envio tradicional do formulário
-
-      // Emite o evento do Socket.IO
-      socket.emit('atribuir_ocorrencia');
-
-      // Envie o formulário manualmente se necessário
-      this.submit();
-    });
-
-  </script>
 
 {% endblock conteudo %}
