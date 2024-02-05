@@ -64,21 +64,21 @@ class loginController:
 
     @login_bp.route('/login', methods=['GET', 'POST'] )
     def login():
-        # form = LoginForm(request.form)
-        # if request.method == 'POST' and form.validate(): 
-        #     user = User.query.filter_by(email=form.email.data).first()
-        #     login_user(user)
-        #     if "admin" in user.email:
-        #         session["roles"] = 'MACEIO_ADMIN'
-        #         return redirect(url_for('ocorrencia.iniciar')) 
-        #     if "gd" in user.email:
-        #         session["roles"] = 'CAD_DESPACHO'
-        #         return redirect(url_for('despacho.telaDespacho')) 
-        #     if "agente" in user.email:
-        #         session["roles"] = 'CAD_AGENTE'
-        #         return redirect(url_for('despacho.meusDespachos'))             
-        # else:
-        #      return render_template('login.html', form=form)
+        form = LoginForm(request.form)
+        if request.method == 'POST' and form.validate(): 
+            user = User.query.filter_by(email=form.email.data).first()
+            login_user(user)
+            if "admin" in user.email:
+                session["roles"] = 'MACEIO_ADMIN'
+                return redirect(url_for('ocorrencia.iniciar')) 
+            if "gd" in user.email:
+                session["roles"] = 'CAD_DESPACHO'
+                return redirect(url_for('despacho.telaDespacho')) 
+            if "agente" in user.email:
+                session["roles"] = 'CAD_AGENTE'
+                return redirect(url_for('despacho.meusDespachos'))             
+        else:
+             return render_template('login.html', form=form)
         # ------------------------------------------------
         form = LoginForm(request.form)
 
