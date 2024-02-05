@@ -1,5 +1,5 @@
-{% include 'include.html' %}
 {% extends 'base.html' %}
+{% include 'include.html' %}
 {% block conteudo %}
 
 <div class="container-fluid mt-2 rounded mb-2">
@@ -31,10 +31,10 @@
     </div>
     <!-- Lista Viaturas -->
     <div class="table-resposive">
-      <table class="table border table-striped table-hover table-borderless">
+      <table class="table table-bordered" style="font-size: 14px;">
         {% if listAgente %}
           <thead>
-            <tr class="text-center table-secondary">
+            <tr class="text-center">
               <th scope="col">Usuário</th>
               <th scope="col">Instituição</th>
               <th scope="col">Criação</th>

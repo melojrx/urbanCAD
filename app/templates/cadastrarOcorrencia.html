@@ -1,155 +1,159 @@
 {% extends 'base.html' %}
-
+{% include 'include.html' %}
 {% block conteudo %}
+
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+<!-- Script Sidenav -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+<script src="{{url_for('static', filename='js/scripts.js')}}"></script>
 
 <div class="container-fluid rounded mb-2" id="form-cadastro-evento">
-
-<div class="container-fluid mt-3">
-    <form id="cadastrarOcorrenciaForm" method="POST" enctype='multipart/form-data' action="{{ url_for('ocorrencia.cadastrarOcorrencia') }}">
-        <div class="container-fluid " id="form_cad_evento">
-            <div class="card mb-2">
-                <div class="card-header">
-                    <h5 class="card-title">Cadastro de Ocorrências</h5>
-                    <span class="card-text">Nova ocorrência</span>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="mb-3">
-                                {{ form.endereco.label(class_="form-label") }}
-                                {{ form.endereco(class_="form-control", id="endereco") }}
-                                <div id="endereco-suggestions"></div>
-                                {% for error in form.endereco.errors %}
-                                <div class="important">
-                                    {{ error }}
-                                </div>
-                                {% endfor %}
-                            </div>
-                            <div class="d-none">
-                                {{form.latitude.label(class_="form-label")}}
-                                {{form.latitude(class_="form-control")}}
-                            </div>
-                            <div class="d-none">
-                                {{form.longitude.label(class_="form-label")}}
-                                {{form.longitude(class_="form-control")}}
-                            </div>
-                            <div class="row">
-                                <div class="mapa col-12 mb-3">
-                                    <div id="map"></div>
-                                </div>
-                            </div>
-                            <div class="row">
+    <div class="container-fluid mt-3">
+        <form id="cadastrarOcorrenciaForm" method="POST" enctype='multipart/form-data' action="{{ url_for('ocorrencia.cadastrarOcorrencia') }}">
+            <div class="container-fluid " id="form_cad_evento">
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h5 class="card-title">Cadastro de Ocorrências</h5>
+                        <span class="card-text">Nova ocorrência</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="mb-3">
-                                    {{form.problema.label(class_="form-label")}}
-                                    {{form.problema(class_="form-control")}}
-                                    {% for error in form.problema.errors %}
+                                    {{ form.endereco.label(class_="form-label") }}
+                                    {{ form.endereco(class_="form-control", id="endereco") }}
+                                    <div id="endereco-suggestions"></div>
+                                    {% for error in form.endereco.errors %}
                                     <div class="important">
-                                        {{error}}
+                                        {{ error }}
                                     </div>
                                     {% endfor %}
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
+                                <div class="d-none">
+                                    {{form.latitude.label(class_="form-label")}}
+                                    {{form.latitude(class_="form-control")}}
+                                </div>
+                                <div class="d-none">
+                                    {{form.longitude.label(class_="form-label")}}
+                                    {{form.longitude(class_="form-control")}}
+                                </div>
+                                <div class="row">
+                                    <div class="mapa col-12 mb-3">
+                                        <div id="map"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="mb-3">
-                                        {{form.txtInteressado.label(class_="form-label")}}
-                                        {{form.txtInteressado(class_="form-control")}}
-                                        {% for error in form.txtInteressado.errors %}
-                                        <div class="important">
-                                            {{error}}
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="mb-3">
-                                        {{form.isNoticianteVitima.label(class_="form-label")}}
-                                        {{form.isNoticianteVitima}}
-                                        {% for error in form.isNoticianteVitima.errors %}
-                                        <div class="important">
-                                            {{error}}
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="mb-3">
-                                        {{form.isNoticianteEstrangeiro.label(class_="form-label")}}
-                                        {{form.isNoticianteEstrangeiro}}
-                                        {% for error in form.isNoticianteEstrangeiro.errors %}
-                                        <div class="important">
-                                            {{error}}
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div id="passaporte" class="mb-3">
-                                        {{form.txtPassaporte.label(class_="form-label")}}
-                                        {{form.txtPassaporte(class_="form-control")}}
-                                        {% for error in form.txtPassaporte.errors %}
-                                        <div class="important">
-                                            {{error}}
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div id="cpf" class="mb-3">
-                                        {{form.txtCpf.label(class_="form-label")}}
-                                        {{form.txtCpf(class_="form-control cpf")}}
-                                        {% for error in form.txtCpf.errors %}
-                                        <div class="important">
-                                            {{error}}
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div id="rg" class="mb-3">
-                                        {{form.txtRg.label(class_="form-label")}}
-                                        {{form.txtRg(class_="form-control")}}
-                                        {% for error in form.txtRg.errors %}
+                                        {{form.problema.label(class_="form-label")}}
+                                        {{form.problema(class_="form-control")}}
+                                        {% for error in form.problema.errors %}
                                         <div class="important">
                                             {{error}}
                                         </div>
                                         {% endfor %}
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        {{form.tipoOcorrencia.label(class_="form-label")}}
-                                        {{form.tipoOcorrencia(class_="form-select")}}
-                                        {% for error in form.tipoOcorrencia.errors %}
-                                        <div class="important">
-                                            {{error}}
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            {{form.txtInteressado.label(class_="form-label")}}
+                                            {{form.txtInteressado(class_="form-control")}}
+                                            {% for error in form.txtInteressado.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
                                         </div>
-                                        {% endfor %}
+                                        <div class="mb-3">
+                                            {{form.isNoticianteVitima.label(class_="form-label")}}
+                                            {{form.isNoticianteVitima}}
+                                            {% for error in form.isNoticianteVitima.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{form.isNoticianteEstrangeiro.label(class_="form-label")}}
+                                            {{form.isNoticianteEstrangeiro}}
+                                            {% for error in form.isNoticianteEstrangeiro.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div id="passaporte" class="mb-3">
+                                            {{form.txtPassaporte.label(class_="form-label")}}
+                                            {{form.txtPassaporte(class_="form-control")}}
+                                            {% for error in form.txtPassaporte.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div id="cpf" class="mb-3">
+                                            {{form.txtCpf.label(class_="form-label")}}
+                                            {{form.txtCpf(class_="form-control cpf")}}
+                                            {% for error in form.txtCpf.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div id="rg" class="mb-3">
+                                            {{form.txtRg.label(class_="form-label")}}
+                                            {{form.txtRg(class_="form-control")}}
+                                            {% for error in form.txtRg.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
-                                    <div class="mb-3" id="showSubtipoOcorrencia"></div>
-                                    <div class="mb-2">
-                                        {{form.txtTelefone.label(class_="form-label")}}
-                                        {{form.txtTelefone(class_="form-control", id="phone" )}}
-                                        {% for error in form.txtTelefone.errors %}
-                                        <div class="important">
-                                            {{error}}
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            {{form.tipoOcorrencia.label(class_="form-label")}}
+                                            {{form.tipoOcorrencia(class_="form-select")}}
+                                            {% for error in form.tipoOcorrencia.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
                                         </div>
-                                        {% endfor %}
+                                        <div class="mb-3" id="showSubtipoOcorrencia"></div>
+                                        <div class="mb-2">
+                                            {{form.txtTelefone.label(class_="form-label")}}
+                                            {{form.txtTelefone(class_="form-control", id="phone" )}}
+                                            {% for error in form.txtTelefone.errors %}
+                                            <div class="important">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
-                            <button type="submit" class="btn btn-primary  ">Cadastrar</button>
-                            <button type="button" class="btn btn-danger"
-                                onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
-                            </button>
-                        </div>
-                    </div>    
+                            <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+                                <button type="submit" class="btn btn-primary  ">Cadastrar</button>
+                                <button type="button" class="btn btn-danger"
+                                    onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
+                                </button>
+                            </div>
+                        </div>    
+                    </div>  
                 </div>  
-            </div>  
-    </form>
-</div>
+        </form>
+    </div>
 </div>
 
 {% block scripts %}
 <script src="{{url_for('static', filename='js/map.js')}}"></script>
 {% endblock %}
 
-<!-- Máscaras -->
+<!-- Máscaras de CPF e Telefone -->
 <script>
         $(document).ready(function () {
             // Aplicar a máscara de CPF
