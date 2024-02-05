@@ -1,11 +1,11 @@
 from flask_login import LoginManager
 from flask import Blueprint, Flask, render_template
 from whitenoise import WhiteNoise
-# from flask_socketio import SocketIO
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.wsgi_app = WhiteNoise(app.wsgi_app, root='app/static/', prefix='static/')
-# socketio = SocketIO(app, async_mode='gevent', manage_session=False)
+socketio = SocketIO(app, async_mode='gevent', manage_session=False)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.debug = True
 # app.config['SQLALCHEMY_ECHO'] = True

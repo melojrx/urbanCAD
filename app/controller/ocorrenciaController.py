@@ -19,7 +19,7 @@ from ..forms.ocorrenciaForm import OcorrenciaForm
 from flask_login import login_required, current_user
 from sqlalchemy import and_
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
-# from app import socketio
+from app import socketio
 
 class ocorrenciaController():
         
@@ -257,7 +257,7 @@ class ocorrenciaController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
-            # socketio.emit('atualizar_lista_despachar')
+            socketio.emit('atualizar_lista_despachar')
             flash('Ocorrencia enviada para Grupo de Despacho com sucesso', 'sucess')
             return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
         except Exception as e:
@@ -281,7 +281,7 @@ class ocorrenciaController():
             db.session.add(newOcorrenciaHistorico)
             db.session.commit()
 
-            # socketio.emit('atualizar_lista_ocorrencia')
+            socketio.emit('atualizar_lista_ocorrencia')
             flash('Ocorrência finalizada com sucesso', 'sucess')
             return redirect(url_for('despacho.telaDespacho'))
         except Exception as e:
