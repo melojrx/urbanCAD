@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copie o restante do código
 COPY . .
-COPY app/static/ /home/ubuntu/maceio-server-cyro/urbanCAD/app/static/
+#COPY app/static/ /home/ubuntu/maceio-server-cyro/urbanCAD/app/static/
 
 
 CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8009", "--worker-class", "gevent", "--workers", "4", "--timeout", "60"]

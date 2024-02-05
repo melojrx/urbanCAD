@@ -3,13 +3,6 @@ from flask import Blueprint, Flask, render_template
 from whitenoise import WhiteNoise
 from flask_socketio import SocketIO
 
-
-public = Blueprint('public', __name__)
-@public.route('/')
-def home():
-        return render_template('index.html')
-
-
 app = Flask(__name__)
 app.wsgi_app = WhiteNoise(app.wsgi_app, root='app/static/', prefix='static/')
 socketio = SocketIO(app, async_mode='gevent', manage_session=False)
@@ -49,5 +42,10 @@ app.register_blueprint(tipopatrulha_bp)
 app.register_blueprint(viatura_bp)
 app.register_blueprint(usuariogrupodespacho_bp)
 app.register_blueprint(dashboard_bp)
-
 # print(list(app.url_map.iter_rules()), sep='\n')
+
+
+public = Blueprint('public', __name__)
+@public.route('/')
+def home():
+        return render_template('index.html')
