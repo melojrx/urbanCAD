@@ -1,5 +1,5 @@
 from app import app, socketio
 
 if __name__ == "__main__":
-        app.run(host='0.0.0.0', port=8009)
+        # app.run(host='0.0.0.0', port=8009)
         socketio.run(app, debug=True)
