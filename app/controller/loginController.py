@@ -64,9 +64,11 @@ class loginController:
 
     @login_bp.route('/login', methods=['GET', 'POST'] )
     def login():
+
         form = LoginForm(request.form)
         if request.method == 'POST' and form.validate(): 
             user = User.query.filter_by(email=form.email.data).first()
+
             login_user(user)
             if "admin" in user.email:
                 session["roles"] = 'MACEIO_ADMIN'

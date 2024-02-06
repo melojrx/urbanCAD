@@ -46,7 +46,7 @@
                 Dashboard
               </a>
               <div class="sb-sidenav-menu-heading">ATENDIMENTO</div>
-              {% if ('URBANCAD_GOVERNO' in session["roles"] or 'URBANCAD_ADMIN' in session["roles"]) %}
+              {% if ('CAD_DESPACHO' in session["roles"] or 'MACEIO_ADMIN' in session["roles"]) %}
               <a class="nav-link" href="#">
                 <div class="sb-nav-link-icon"><i class="fas fa-map-marker-alt"></i></div>
                 Monitoramento
@@ -56,7 +56,7 @@
                 Ocorrências
               </a>
               {% endif %}
-              {% if ('URBANCAD_ADMIN' in session["roles"] or 'URBANCAD_DESPACHO' in session["roles"]) %}
+              {% if ('MACEIO_ADMIN' in session["roles"] or 'CAD_DESPACHO' in session["roles"]) %}
               <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false"
                 aria-controls="collapseLayouts">
                 <div class="sb-nav-link-icon"><i class="fas fa-atlas"></i></div>
@@ -70,13 +70,13 @@
                 </nav>
               </div>
               {% endif %}
-              {% if ('URBANCAD_AGENTE' in session["roles"]) %}
+              {% if ('CAD_AGENTE' in session["roles"]) %}
               <a class="nav-link" href="{{url_for('despacho.meusDespachos')}}">
                 <div class="sb-nav-link-icon"><i class="fas fa-atlas"></i></div>
                 Meus Despachos
               </a>
               {% endif %}
-              {% if ('URBANCAD_ADMIN' in session["roles"]) %}
+              {% if ('MACEIO_ADMIN' in session["roles"]) %}
               <div class="sb-sidenav-menu-heading">ADMINISTRAÇÃO</div>
               <a class="nav-link" href="{{url_for('viatura.listarViaturas')}}">
                 <div class="sb-nav-link-icon"><i class="fas fa-car"></i></div>
