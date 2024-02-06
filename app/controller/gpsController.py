@@ -1,7 +1,6 @@
 from flask import request
-import socketio
 from ..rotas.gpsRout import gps_bp
-from app import logger
+from app import socketio, logger
 
 
 @gps_bp.route('/gps', methods=['POST'])
