@@ -26,6 +26,7 @@ from .rotas.agenteRout import agente_bp
 from .rotas.loginRout import login_bp
 from .rotas.composicaoRout import composicao_bp
 from .rotas.despachoRout import despacho_bp
+from .rotas.gpsRout import gps_bp
 from .rotas.endpointRout import json_bp
 from .rotas.grupoDespachoRout import grupodespacho_bp
 from .rotas.instituicaoRout import instituicao_bp
@@ -41,6 +42,7 @@ app.register_blueprint(public)
 app.register_blueprint(composicao_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(despacho_bp)
+app.register_blueprint(gps_bp)
 app.register_blueprint(grupodespacho_bp)
 app.register_blueprint(instituicao_bp)
 app.register_blueprint(json_bp)
