@@ -10,6 +10,8 @@
     crossorigin="anonymous"></script>
 <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
 
+<script src="{{url_for('static', filename='js/map.js')}}"></script>
+
 <div class="container-fluid rounded mb-2" id="form-cadastro-evento">
     <div class="container-fluid mt-3">
         <form id="cadastrarOcorrenciaForm" method="POST" enctype='multipart/form-data' action="{{ url_for('ocorrencia.cadastrarOcorrencia') }}">
@@ -148,10 +150,6 @@
         </form>
     </div>
 </div>
-
-{% block scripts %}
-<script src="{{url_for('static', filename='js/map.js')}}"></script>
-{% endblock %}
 
 <!-- Máscaras de CPF e Telefone -->
 <script>
