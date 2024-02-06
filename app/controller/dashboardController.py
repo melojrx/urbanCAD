@@ -13,6 +13,6 @@ class dashboardController():
 
     @dashboard_bp.route('/dashboard')
     @login_required
-    @roles_required('URBANCAD_ADMIN')
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def dashboard():
         return render_template('dashboard.html')
