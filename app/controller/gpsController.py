@@ -13,8 +13,8 @@ def gps():
         try:
 
             code = received_data["code"]
-            lat = received_data["gps_data"]["lat"]
-            lng = received_data["gps_data"]["lng"]
+            lat = received_data["lat"]
+            lng = received_data["lng"]
 
             socketio.emit('position', {'code': code, 'lat': lat, 'lng': lng})
         except KeyError as e:
