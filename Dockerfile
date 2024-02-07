@@ -18,4 +18,4 @@ COPY . .
 #COPY app/static/ /home/ubuntu/maceio-server-cyro/urbanCAD/app/static/
 
 
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8009", "--worker-class", "gevent", "--workers", "4", "--timeout", "60"]
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8009", "wsgi:app"]
