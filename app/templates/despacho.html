@@ -220,6 +220,26 @@
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
+    socket.on('position', function(data) {      
+        alert('viaturaMarker')
+
+        var figViatura = '../static/img/icons/viatura.png';
+
+        var iconViatura = L.icon({
+                iconUrl: figViatura,
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+
+        alert('POS viaturaMarker')
+        var lat = data.lat;
+        var lng = data.lng;
+        var viaturaMarker = L.marker([lat, lng], { icon: iconViatura }).addTo(map);
+        viaturaMarker.setLatLng([lat, lng]);
+
+    });
+
     axios.get('/regionaisjson')
         .then(function (response) {
             var regions_data = response.data;
@@ -302,8 +322,6 @@
         var marker = L.marker([ocorrenciaAtender.txtLat, ocorrenciaAtender.txtLong], { icon: iconAtendido }).addTo(map);
         marker.bindPopup(ocorrenciaAtender.txtProblema);
     });
-
-
     })
     .catch (function (error) {
     console.error('Erro ao buscar dados:', error);
@@ -312,25 +330,39 @@
 </script>
 
 <script>
-
-    var figViatura = '../static/img/icons/viatura.png';
-    var iconViatura = L.icon({
-            iconUrl: figViatura,
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-            popupAnchor: [0, -32]
-        });
-    var viaturaMarker = L.marker([lat, lng], { icon: iconViatura }).addTo(map);
-
-    socket.on('position', function(data) {
-
-        var lat = data.lat;
-        var lng = data.lng;
-        viaturaMarker.setLatLng([lat, lng]);
-
+    socket.on('atualizar_lista_despachar', function () {
+        atualizarListaDespachar();
     });
 
+    function atualizarListaDespachar() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var listaItens = document.getElementById('listADespachar');
+                listaItens.innerHTML = xhr.responseText;
+            }
+        };
+        xhr.open('GET', '/loadListADespachar', true);
+        xhr.send();
+    }
+
 </script>
+
+<script>
+    function prepareDespachar(idOcorrencia) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var listaItens = document.getElementById('formDespacho');
+                listaItens.innerHTML = xhr.responseText;
+            }
+        };
+        xhr.open('GET', '/prepareDespachar/' + idOcorrencia, true);
+        xhr.send();
+    }
+</script>
+
+<!-- ----------------------------------------------------------------------------- -->
 
 <script>
     // Função para formatar o número com zero à esquerda se necessário
@@ -382,39 +414,6 @@
     window.onload = function () {
         obterDataHora();
     };
-</script>
-
-<script>
-    socket.on('atualizar_lista_despachar', function () {
-        atualizarListaDespachar();
-    });
-
-    function atualizarListaDespachar() {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                var listaItens = document.getElementById('listADespachar');
-                listaItens.innerHTML = xhr.responseText;
-            }
-        };
-        xhr.open('GET', '/loadListADespachar', true);
-        xhr.send();
-    }
-
-</script>
-
-<script>
-    function prepareDespachar(idOcorrencia) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                var listaItens = document.getElementById('formDespacho');
-                listaItens.innerHTML = xhr.responseText;
-            }
-        };
-        xhr.open('GET', '/prepareDespachar/' + idOcorrencia, true);
-        xhr.send();
-    }
 </script>
 
 {% endblock conteudo %}
