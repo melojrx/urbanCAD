@@ -11,14 +11,7 @@
                 <div class="row d-flex align-items-center">
                     <div class="col-9">
                         <h5 class="card-title">Gerenciamento de Agentes</h5>
-                        <p class="card-text">Cadastro de Agentes</p>
-                    </div>
-                    <div class="col-3 d-flex justify-content-end">
-                        <!-- Botão Voltar -->
-                        <button class="btn btn-danger me-2" type="button"
-                        onclick="window.location.href='{{url_for('agente.listarAgente')}}';">Voltar</button>
-                        <!-- Botão Cadastrar VTR -->
-                        {{ form.submit(class_="btn btn-primary") }}
+                        <p class="card-text">{{ "Cadastro" if not form.id.data else "Exclusão" }} de Agentes</p>
                     </div>
                 </div>
             </div>
@@ -37,14 +30,28 @@
                         {% endfor %}    
                     </div>
                     <div class="col">        
-                        {{form.instituicao.label(class_="form-label")}}
-                        {{form.instituicao(class_="form-select")}}
-                        {% for error in form.instituicao.errors %}
+                        {{form.idInstituicao.label(class_="form-label")}}
+                        {{form.idInstituicao(class_="form-select")}}
+                        {% for error in form.idInstituicao.errors %}
                         <div class="important">
                             {{error}}
                         </div>
                         {% endfor %}
                     </div>    
+                </div>
+                <!-- Botões com ajuste para diferentes tamanhos de tela -->
+                <div class="d-flex justify-content-start mb-2">
+                    <!-- Botão Voltar-->
+                    <button class="btn btn-primary me-2" type="button" onclick="window.location.href='{{url_for('agente.listar')}}';">Voltar</button>                          
+                    {% if form.id.data %}
+                    <!-- Botão Excluir visível em todos os tamanhos -->
+                    <button class="btn btn-danger me-2" type="button"
+                        onclick="window.location.href='{{url_for('agente.excluir', id=form.id.data)}}';">Excluir</button>
+                    {% endif %}
+                    {% if not form.id.data %}
+                    <!-- Botão Cadastrar VTR visível em todos os tamanhos -->
+                    {{ form.submit(class="btn btn-success") }}
+                    {% endif %}
                 </div>
             </div>
         </div>

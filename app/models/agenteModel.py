@@ -12,8 +12,8 @@ class Agente(db.Model):
     dataInicio = db.Column('dat_inicio_age', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_age', db.DateTime, nullable=True)
 
-    instituicao = db.relationship(Instituicao)
-    usuario = db.relationship(User)
+    instituicao = db.relationship(Instituicao, lazy='joined', join_depth=1)
+    usuario = db.relationship(User, lazy='joined', join_depth=1)
 
     def __init__(self, idInstituicao, idUsuario, dataInicio):
         self.idInstituicao = idInstituicao

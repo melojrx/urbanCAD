@@ -1,7 +1,9 @@
-from wtforms import Form, SelectField, SubmitField
+from wtforms import Form, HiddenField, SelectField, SubmitField
 from wtforms.validators import DataRequired, InputRequired
 
 class AgenteForm(Form):  
+
+    id = HiddenField('id')
 
     usuario = SelectField(
         'Usuário',
@@ -11,7 +13,7 @@ class AgenteForm(Form):
             InputRequired(message=('*Campo Requerido'))
     ])
 
-    instituicao = SelectField(
+    idInstituicao = SelectField(
         'Instituição',
         coerce=int,
         validators = [
@@ -20,3 +22,11 @@ class AgenteForm(Form):
     ])
 
     submit = SubmitField('Cadastrar') 
+
+
+    def __init__(self, *args, **kwargs):
+        super(AgenteForm, self).__init__(*args, **kwargs)
+
+        # Preencher o campo usuario se houver um agente associado
+        if 'obj' in kwargs and kwargs['obj'] and kwargs['obj'].usuario:
+            self.usuario.data = kwargs['obj'].usuario.id

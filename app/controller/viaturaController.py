@@ -71,7 +71,7 @@ class viaturaController():
             return redirect(url_for('viatura.prepareCadastrar'))
 
 
-    @viatura_bp.route('/prepareExcluir/<id>', methods=['GET'])
+    @viatura_bp.route('/prepareExcluirViatura/<id>', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
     def prepareExcluir(id):
