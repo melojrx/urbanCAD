@@ -2,9 +2,9 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-2 rounded mb-2">
+<div class="container-fluid mt-4 rounded mb-2">
 
-  <div class="container-fluid mt-2">
+  <div class="container-fluid mt-4">
 
     <div class="card mb-2">
       <div class="card-header">
@@ -14,7 +14,6 @@
                   <p class="card-text">Gerencie aqui os Agentes de uma Composição do sistema</p>
               </div>
               <div class="col-3 d-flex justify-content-end">
-                   <!-- Botão Cadastrar VTR -->
                    <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('composicao.prepareCadastrarComposicao') }}';">Nova Composição</button>
               </div>
           </div>
@@ -23,15 +22,22 @@
     
     <div class="card mb-2">
           <div class="card-header">
-              <p class="card-text" style="font-weight: 600;">Consulta Composição</p>
+          <i class="fas fa-search"> </i> 
+          Consulta Composição
           </div>
           <div class="card-body" style="font-size: 0.8rem !important;">
             <!-- Parametros para consulta -->
           </div>    
     </div>
     <!-- Lista Viaturas -->
-    <div class="table-resposive">
-      <table class="table border table-striped table-hover table-borderless">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Tabela de Composições
+      </div>
+      <div class="card-body">
+        <div class="table-resposive">
+        <table class="table table-bordered" style="font-size: 14px;">
         {% if listComposicao %}
           <thead>
             <tr class="text-center table-secondary">
@@ -57,7 +63,7 @@
                     class="btn btn-danger btn-sm"
                     role="button"
                     title="Finalizar">
-                    <i class="bi bi-box-arrow-up-right"></i>
+                    <i class="fas fa-share-square"></i>
                   </a>
                 </td>
               </tr>

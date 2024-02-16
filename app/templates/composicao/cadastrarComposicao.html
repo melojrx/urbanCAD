@@ -4,14 +4,14 @@
 
 <div class="container-fluid mt-2 rounded mb-2">
 
-    <div class="container-fluid mt-2">
+    <div class="container-fluid mt-4">
         <form method="POST" enctype='multipart/form-data' action="{{ url_for('composicao.cadastrarComposicao') }}">
         <div class="card mb-2">
             <div class="card-header">
                 <div class="row d-flex align-items-center">
                     <div class="col-9">
                         <h5 class="card-title">Gerenciamento de Composição</h5>
-                        <span class="card-text">Cadastro de Agentesd e uma Composição</span>
+                        <span class="card-text">Cadastro de Agentes e Composição</span>
                     </div>
                     <div class="col-3 d-flex justify-content-end">
                         <!-- Botão Voltar -->
@@ -25,6 +25,10 @@
         </div>
 
         <div class="card mb-2">
+            <div class="card-header">
+            <i class="fas fa-car-side"></i>
+            Formação de Composição
+            </div>
             <div class="card-body">
                 <div class="form-group mb-3 row justify-content-between">
                     <div class="col">

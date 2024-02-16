@@ -2,11 +2,6 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<!-- Script Sidenav -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    crossorigin="anonymous"></script>
-<script src="{{url_for('static', filename='js/scripts.js')}}"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
 
@@ -99,7 +94,6 @@
             </div>
         </div>
         <div id="listDespachos">
-
             <!-- <div class="card-header d-flex" style="background-color: #525B62;">
                 <div class="form-check" style="color: antiquewhite;">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
@@ -121,35 +115,37 @@
                     Ocorrências a Despachar
                 </div>
                 <div class="card-body">
-                    <table class="table  table-bordered" style="font-size: 14px;">
-                        <thead>
-                            <tr>
-                                <th>COD. OCORRÊNCIA</th>
-                                <th>SOLICITANTE</th>
-                                <th>ENDEREÇO</th>
-                                <th>TIPO DE OCORRÊNCIA</th>
-                                <th>SITUAÇÃO</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listADespachar">
-                            {% for row in listDespachar %}
-                            <tr>
-                                <td> {{ row.ocorrencia.numOcorrencia}} </td>
-                                <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
-                                <td> {{ row.ocorrencia.txtEndereco}} </td>
-                                <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                <td class="text-start">
-                                    <a onclick="prepareDespachar('{{ row.ocorrencia.id }}')"
-                                        class="btn btn-danger btn-sm" role="button" title="Despachar">
-                                        <i class="bi bi-box-arrow-up-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="font-size: 14px;">
+                            <thead>
+                                <tr>
+                                    <th>COD. OCORRÊNCIA</th>
+                                    <th>SOLICITANTE</th>
+                                    <th>ENDEREÇO</th>
+                                    <th>TIPO DE OCORRÊNCIA</th>
+                                    <th>SITUAÇÃO</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listADespachar">
+                                {% for row in listDespachar %}
+                                <tr>
+                                    <td> {{ row.ocorrencia.numOcorrencia}} </td>
+                                    <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
+                                    <td> {{ row.ocorrencia.txtEndereco}} </td>
+                                    <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                    <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                    <td class="text-start">
+                                        <a onclick="prepareDespachar('{{ row.ocorrencia.id }}')"
+                                            class="btn btn-danger btn-sm" role="button" title="Despachar">
+                                            <i class="fas fa-share-square"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <!--DESPACHADO-->
@@ -159,40 +155,42 @@
                     Ocorrências Despachadas
                 </div>
                 <div class="card-body">
-                    <table class="table  table-bordered" style="font-size: 14px;">
-                        <thead>
-                            <tr>
-                                <th>COD. OCORRÊNCIA</th>
-                                <th>SOLICITANTE</th>
-                                <th>EQUIPE</th>
-                                <th>ENDEREÇO</th>
-                                <th>TIPO DE OCORRÊNCIA</th>
-                                <th>SITUAÇÃO</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listDespachada">
-                            {% for row in listOcorrenciaDespachada %}
-                            <tr>
-                                <td> {{ row.numOcorrencia}} </td>
-                                <td> {{ row.interessado.txtInteressado}} </td>
-                                <td>
-                                    {% for despacho in row.listDespacho %}
-                                    {{ despacho.composicaoViatura.viatura}}<br>
-                                    {% endfor %}
-                                </td>
-                                <td> {{ row.txtEndereco}} </td>
-                                <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                <td>
-                                    <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia
-                                        %}disabled{% endif %} type="button"
-                                        onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="font-size: 14px;">
+                            <thead>
+                                <tr>
+                                    <th>COD. OCORRÊNCIA</th>
+                                    <th>SOLICITANTE</th>
+                                    <th>EQUIPE</th>
+                                    <th>ENDEREÇO</th>
+                                    <th>TIPO DE OCORRÊNCIA</th>
+                                    <th>SITUAÇÃO</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listDespachada">
+                                {% for row in listOcorrenciaDespachada %}
+                                <tr>
+                                    <td> {{ row.numOcorrencia}} </td>
+                                    <td> {{ row.interessado.txtInteressado}} </td>
+                                    <td>
+                                        {% for despacho in row.listDespacho %}
+                                        {{ despacho.composicaoViatura.viatura}}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td> {{ row.txtEndereco}} </td>
+                                    <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                    <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                    <td>
+                                        <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia
+                                            %}disabled{% endif %} type="button"
+                                            onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

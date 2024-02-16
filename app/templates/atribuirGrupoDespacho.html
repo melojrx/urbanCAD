@@ -5,48 +5,45 @@
 <div class="container-fluid mt-2 rounded mb-2" id="form-cadastro-evento">
    
     <div class="container-fluid mt-2">
-        <form method="POST" is="atribuirGrupoDespachoForm" action="{{ url_for('ocorrencia.atribuirGrupoDespacho') }}">
-            <div class="container-fluid " id="form_cad_evento">
-                <div class="card mb-2">
-                    <div class="card-header">
-                        <h5 class="card-title">Atrubuir Ocorrências</h5>
-                        <p class="card-text">Grupo de Despacho</p>
+        <form method="POST" action="{{ url_for('ocorrencia.atribuirGrupoDespacho') }}">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="card-title">Atribuir Ocorrências</h5>
+                    <p class="card-text">Grupo de Despacho</p>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-folder-open"></i> Formulário de atribuição de ocorrências
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                {{form.idOcorrencia.label(class_="form-label")}}
+                                {{form.idOcorrencia(class_="form-control")}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-md-9">
+                            {{form.grupoDespacho.label(class_="form-label")}}
+                            {{form.grupoDespacho(class_="form-select")}}
+                            {% for error in form.grupoDespacho.errors %}
+                            <div class="important">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-3 d-flex mt-4">
+                            {{ form.submit(class_="btn btn-primary") }}
+                        </div>
                     </div>
                 </div>
-                <div class="card mb-2">
-                    <div class="card-header">
-                        <div class="card-title mt-2">
-                            <h6>Formulário de atribuição de ocorrências</h6>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div id="rg" class="mb-3">
-                                    {{form.idOcorrencia.label(class_="form-label")}}
-                                    {{form.idOcorrencia(class_="form-control")}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex align-items-center">
-                            <div class="col-9">
-                                {{form.grupoDespacho.label(class_="form-label")}}
-                                {{form.grupoDespacho(class_="form-select")}}
-                                {% for error in form.grupoDespacho.errors %}
-                                <div class="important">
-                                    {{error}}
-                                </div>
-                                {% endfor %}
-                            </div>
-                            <div class="col-3 d-flex justify-content-end align-items-end mt-4">
-                                    {{ form.submit(class_="btn btn-primary") }}
-                            </div>
-                        </div>
-                    </div>
-                </div>           
-            </div>  
+            </div>
         </form>
     </div>
+
 
 </div>
 

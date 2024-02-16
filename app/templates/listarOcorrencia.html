@@ -3,7 +3,7 @@
 {% block conteudo %}
 
 <div class="container-fluid mt-2 rounded mb-2">
-  <div class="container-fluid mt-3">
+  <div class="container-fluid px-4 mt-3">
     <div class="card mb-2">
       <div class="card-header">
         <div class="row d-flex align-items-center">
@@ -24,7 +24,7 @@
     <div class="card mb-2">
       <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
         <div class="card-header">
-          <i class="fas fa-table me-1"></i>
+          <i class="fas fa-search"></i>
           Consulta Ocorrências
         </div>
         <div class="card-body pb-0">
@@ -66,6 +66,7 @@
       </div>
       <div class="card-body" >
         {% if listOcorrenciaHistorico %}
+        <div class="table-responsive">
           <table class="table table-bordered" style="font-size: 14px;">
             <thead>
               <tr>
@@ -90,18 +91,19 @@
                 <td class="d-flex gap-2 align-items-center justify-content-start">
                   <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal"
                     data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
-                    <i class="bi bi-card-text" src="{{row.ocorrencia.txtProblema}}"></i>
+                    <i class="fas fa-table" src="{{row.ocorrencia.txtProblema}}"></i>
                   </a>
                   {% if row.statusOCorrencia.id == 1 %}
                   <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
                     class="btn btn-danger btn-sm" role="button" title="Enviar para Grupo de Despacho">
-                    <i class="bi bi-box-arrow-up-right"></i></a>
+                    <i class="fas fa-share-square"></i></a> 
                   {% endif %}
                 </td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
+        </div>
         {% endif %}
       </div>
     </div>
