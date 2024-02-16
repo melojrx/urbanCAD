@@ -8,14 +8,6 @@
   <li class="breadcrumb-item active">Tratamento de ocorrências</li>
 </ol>
     
-<div class="col-lg-3 col-md-6 col-sm-12 d-flex justify-content-start mb-3">
-  <!-- Botão Cadastrar Ocorrência -->
-  <button type="button" class="btn btn-primary bg-primary"
-    onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">
-    <span>Nova Ocorrência</span>
-  </button>
-</div>
-
 <!-- Parametros para consulta -->
 <div class="card mb-2">
   <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
@@ -46,9 +38,14 @@
       </div>
       <div class="col-12 mt-3 d-flex justify-content-lg-start justify-content-sm-center">
           {{ form.submit(class_="btn btn-primary me-2") }}
-          <button type="button" class="btn btn-outline-danger"
+          <button type="button" class="btn btn-outline-info"
             onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
             Limpar
+          </button>
+          <!-- Botão Cadastrar Ocorrência -->
+          <button type="button" class="btn btn-success ms-2"
+            onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">
+            Nova Ocorrência
           </button>
       </div>
     </div>

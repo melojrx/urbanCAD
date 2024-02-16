@@ -25,5 +25,5 @@ class OcorrenciaSearchForm(Form):
         )
     
     submit = SubmitField(
-        'Filtrar'
+        'Consultar'
     )

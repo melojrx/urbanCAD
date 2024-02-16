@@ -18,10 +18,6 @@
         </div>
         <div class="card-body">
             <div class="row mb-3">
-                <!-- Coluna escondida, apenas para manter o espaço do ID do formulário -->
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    {{form.id}}
-                </div>
                 <!-- Código e Placa com ajuste para diferentes tamanhos de tela -->
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     {{form.txtCodigo.label(class_="form-label")}}
@@ -36,6 +32,10 @@
                     {% for error in form.txtPlaca.errors %}
                     <div class="important">{{error}}</div>
                     {% endfor %}
+                </div>
+                <!-- Coluna escondida, apenas para manter o espaço do ID do formulário -->
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    {{form.id}}
                 </div>
             </div>
             <div class="row mb-3">
@@ -76,7 +76,7 @@
                 {% endif %}
                 {% if not form.id.data %}
                 <!-- Botão Cadastrar VTR visível em todos os tamanhos -->
-                {{ form.submit(class="btn btn-primary") }}
+                {{ form.submit(class="btn btn-success") }}
                 {% endif %}
             </div>
         </div>

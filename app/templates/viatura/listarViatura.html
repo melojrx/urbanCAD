@@ -7,11 +7,10 @@
   <li class="breadcrumb-item active">Gerencie aqui as Viaturas do sistema</li>
 </ol>
 
-<div class="col-lg-3 col-md-6 col-sm-12 d-flex justify-content-start mb-3">
-  <!-- Botão Cadastrar VTR -->
+<!-- <div class="col-lg-3 col-md-6 col-sm-12 d-flex justify-content-start mb-3">
   <button type="button" class="btn btn-primary bg-primary"
     onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';">Nova Viatura</button>
-</div>
+</div> -->
 
 <!-- Parametros para consulta -->
 <div class="card mb-2">
@@ -41,9 +40,12 @@
         </div>
         <div class="col-12 mt-3 d-flex justify-content-lg-start justify-content-sm-center">
           {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
-          <button type="button" class="btn btn-outline-danger"
+          <button type="button" class="btn btn-outline-info"
             onclick="window.location.href='{{ url_for('viatura.listar')}}';">Limpar</button>
-        </div>
+          <!-- Botão Cadastrar VTR -->
+          <button type="button" class="btn btn-success ms-2"
+            onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';">Nova Viatura</button>
+          </div>
       </div>
     </div>
   </form>
@@ -89,7 +91,7 @@
         {% endif %}
       </table>
     </div>
-    {% if not noPagination and listViatura.total >= 1 %}
+    {% if not noPagination and listViatura.total >= 10 %}
     <!-- Pagination Links-->
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-end">
