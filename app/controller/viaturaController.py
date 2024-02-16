@@ -103,17 +103,16 @@ class viaturaController():
             flash('Erro ao excluir viatura', 'error')
             return redirect(url_for('viatura.prepareExcluir', id=id))
         
-    @viatura_bp.route('/search', methods=['POST'])
+    @viatura_bp.route('/search', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
     def search():
-        searchForm = ViaturaSearchForm(request.form)
+        searchForm = ViaturaSearchForm(request.args)
         page = request.args.get('page', 1, type=int)
 
         querySearch = Viatura.query.filter(Viatura.dataFim.is_(None))
 
         if searchForm.idInstituicaoSearch.data:
-            print(searchForm.idInstituicaoSearch.data)
             querySearch = querySearch.join(Viatura.instituicao).filter(Instituicao.id == searchForm.idInstituicaoSearch.data)            
 
         if searchForm.idTipoPatrulhaSearch.data:
