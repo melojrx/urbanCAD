@@ -2,129 +2,121 @@
 {% extends 'base.html' %} 
 {% block conteudo %}
 
-<div class="container-fluid mt-2 rounded mb-2">
-  <div class="container-fluid px-4 mt-3">
-    <div class="card mb-2">
-      <div class="card-header">
-        <div class="row d-flex align-items-center">
-          <div class="col-9">
-            <h5 class="card-title">Gerenciamento de Ocorrências</h5>
-            <p class="card-text">Tratamento de ocorrências</p>
-          </div>
-          <div class="col-3 d-flex justify-content-end">
 
-            <button type="button" class="btn btn-primary bg-primary"
-              onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">
-              <span style="font-size: 0.9em">Nova Ocorrência</span>
-            </button>
-          </div>
+<h1 class="mt-4">Gerenciamento de Ocorrências</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Tratamento de ocorrências</li>
+</ol>
+    
+<!-- Parametros para consulta -->
+<div class="card mb-2">
+  <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
+    <div class="card-header">
+      <i class="fas fa-search"></i>
+      Consulta Ocorrências
+    </div>
+    <div class="card-body pb-0">
+      <!-- Ajuste das colunas para diferentes tamanhos de tela -->
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{form.numOcorrenciaSearch.label(class_="form-label")}} {{
+          form.numOcorrenciaSearch(class="form-control form-control")
+          }}
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{form.dataInicioSearch.label(class_="form-label")}} {{
+          form.dataInicioSearch(class="form-control form-control") }}
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{form.dataFimSearch.label(class_="form-label")}} {{
+          form.dataFimSearch(class="form-control form-control") }}
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{form.statusSearch.label(class_="form-label")}} {{
+          form.statusSearch(class="form-select") }}
         </div>
       </div>
-    </div>
-    <div class="card mb-2">
-      <form action="{{url_for('ocorrencia.searchOcorrencia')}}" method="GET">
-        <div class="card-header">
-          <i class="fas fa-search"></i>
-          Consulta Ocorrências
-        </div>
-        <div class="card-body pb-0">
-          <div class="row">
-            <div class="col-3">
-              {{form.numOcorrenciaSearch.label(class_="form-label")}} {{
-              form.numOcorrenciaSearch(class="form-control form-control")
-              }}
-            </div>
-            <div class="col-3">
-              {{form.dataInicioSearch.label(class_="form-label")}} {{
-              form.dataInicioSearch(class="form-control form-control") }}
-            </div>
-            <div class="col-3">
-              {{form.dataFimSearch.label(class_="form-label")}} {{
-              form.dataFimSearch(class="form-control form-control") }}
-            </div>
-            <div class="col-3">
-              {{form.statusSearch.label(class_="form-label")}} {{
-              form.statusSearch(class="form-select") }}
-            </div>
-          </div>
-          <div class="row mt-3 mb-0">
-            <div class="col-12 gap-2 d-flex justify-content-end">
-              {{ form.submit(class_="btn btn-primary") }}
-              <button type="button" class="btn btn-outline-danger"
-                onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
-                Limpar
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <i class="fas fa-table me-1"></i>
-        Tabela de Ocorrências 
+      <div class="col-12 mt-3 d-flex justify-content-lg-start justify-content-sm-center">
+          {{ form.submit(class_="btn btn-primary me-2") }}
+          <button type="button" class="btn btn-outline-info"
+            onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">
+            Limpar
+          </button>
+          <!-- Botão Cadastrar Ocorrência -->
+          <button type="button" class="btn btn-success ms-2"
+            onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';">
+            Nova Ocorrência
+          </button>
       </div>
-      <div class="card-body" >
-        {% if listOcorrenciaHistorico %}
-        <div class="table-responsive">
-          <table class="table table-bordered" style="font-size: 14px;">
-            <thead>
-              <tr>
-                <th >Noticiante</th>
-                <th >Tipo Ocorrência</th>
-                <th >Subtipo Ocorrência</th>
-                <th >Nº da Ocorrência</th>
-                <th >Status</th>
-                <th >Data</th>
-                <th >Ações</th>
-              </tr>
-            </thead>
-            <tbody class="text-center" id="listOcorrencia">
-              {% for row in listOcorrenciaHistorico %}
-              <tr>
-                <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
-                <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
-                <td>{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</td>
-                <td>{{ row.ocorrencia.numOcorrencia}}</td>
-                <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
-                <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
-                <td class="d-flex gap-2 align-items-center justify-content-start">
-                  <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#txtProblemaModal"
-                    data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
-                    <i class="fas fa-table" src="{{row.ocorrencia.txtProblema}}"></i>
-                  </a>
-                  {% if row.statusOCorrencia.id == 1 %}
-                  <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
-                    class="btn btn-danger btn-sm" role="button" title="Enviar para Grupo de Despacho">
-                    <i class="fas fa-share-square"></i></a> 
-                  {% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% endif %}
+    </div>
+  </form>
+</div>
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Tabela de Ocorrências 
+  </div>
+  <div class="card-body" >
+    {% if listOcorrenciaHistorico %}
+    <div class="table-responsive">
+      <table class="table table-bordered" style="font-size: 14px;">
+        <thead>
+          <tr class="text-center table-secondary">
+            <th >Noticiante</th>
+            <th >Tipo Ocorrência</th>
+            <th >Subtipo Ocorrência</th>
+            <th >Nº da Ocorrência</th>
+            <th >Status</th>
+            <th >Data</th>
+            <th >Ações</th>
+          </tr>
+        </thead>
+        <tbody class="text-center" id="listOcorrencia">
+          {% for row in listOcorrenciaHistorico %}
+          <tr>
+            <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
+            <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
+            <td>{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</td>
+            <td>{{ row.ocorrencia.numOcorrencia}}</td>
+            <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+            <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
+            <td class="d-flex gap-2 align-items-center justify-content-center">
+              <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#txtProblemaModal"
+                data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
+                <i class="fas fa-table" src="{{row.ocorrencia.txtProblema}}"></i>
+              </a>
+              {% if row.statusOCorrencia.id == 1 %}
+              <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
+                class="btn btn-danger" role="button" title="Enviar para Grupo de Despacho">
+                <i class="fas fa-share-square"></i></a> 
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="txtProblemaModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xb">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="txtProblemaModal">
+          Descrição da Ocorrência
+        </h5>
+      </div>
+      <div class="modal-body">
+        <p id="modalText"></p>
       </div>
     </div>
   </div>
-    <!-- Modal -->
-    <div class="modal fade" id="txtProblemaModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-xb">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="txtProblemaModal">
-              Descrição da Ocorrência
-            </h5>
-          </div>
-          <div class="modal-body">
-            <p id="modalText"></p>
-          </div>
-        </div>
-      </div>
-    </div>
 </div>
+
 
 <script>
   $("#txtProblemaModal").on("show.bs.modal", function (event) {

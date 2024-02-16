@@ -27,4 +27,4 @@ class ViaturaSearchForm(Form):
         coerce=int
     )
 
-    submitSearch = SubmitField('Pesquisar')
+    submitSearch = SubmitField('Consultar')
