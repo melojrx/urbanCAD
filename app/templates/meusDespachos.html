@@ -1,12 +1,9 @@
 {% include 'include.html' %}
 {% extends 'base.html' %}
-{% include 'include.html' %}
 {% block conteudo %}
 
 <div class="container-fluid mt-2 rounded mb-2">
-
     <div class="container-fluid mt-2">
-
         <div class="card mb-2">
             <div class="card-header">
                 <div class="row d-flex align-items-center">
@@ -22,11 +19,12 @@
                 <i class="fas fa-table me-1"></i>
                 Tabela de Despachos
             </div>
+            <div class="card-body">
             {% if listDespachoHistorico %}
-                <div class="table-responsive mt-2" style="font-size: 0.9em;">
-                    <table class="table border table-striped table-hover table-borderless">
+                <div class="table-responsive">
+                    <table class="table table-bordered" style="font-size: 14px;">
                         <thead>
-                            <tr class="text-center table-secondary">
+                            <tr>
                                 <th scope="col">Tipo Ocorrência</th>
                                 <th scope="col">Nº da Ocorrência</th>
                                 <th scope="col">Status</th>
@@ -50,7 +48,7 @@
                                         class="btn btn-danger btn-sm"
                                         role="button"
                                         title="Atender">
-                                        <i class="bi bi-box-arrow-up-right"></i>
+                                        <i class="fas fa-share-square"></i>
                                         </a>
                                     {% endif %}
                                     {% if row.statusDespacho.id == 2 %}
@@ -69,9 +67,9 @@
                     </table>
                 </div> 
             {% endif %}
+            </div>
         </div> 
     </div>
-
 </div>
 
 <script>
@@ -101,6 +99,6 @@
         xhr.send();
     }
   
-  </script>
+</script>
 
 {% endblock conteudo %}

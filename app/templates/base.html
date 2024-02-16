@@ -13,27 +13,53 @@
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
         class="fas fa-bars"></i></button>
     <!-- Navbar Search-->
-    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" style="visibility: hidden;">
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
       <div class="input-group">
-        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
+        <input class="form-control" type="text" placeholder="Procure aqui..." aria-label="Search for..."
           aria-describedby="btnNavbarSearch" />
         <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
       </div>
     </form>
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <li class="nav-link position-relative">
+        <i class="fa-solid fa-bell"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          99+
+          <span class="visually-hidden">unread messages</span>
+        </span>
+      </li>
+      <!-- Toggle Button -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="toggleThemeBtn" href="#" role="button" data-bs-toggle="dropdown"
+          aria-expanded="false"><i class="fas fa-adjust"></i></a>
+        <!-- Dropdown para Modo Light/Dark -->
+        <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#" onclick="setTheme('light')">
+              <i class="fas fa-sun"></i> Modo Light
+            </a></li>
+          <li><a class="dropdown-item" href="#" onclick="setTheme('dark')">
+              <i class="fas fa-moon"></i> Modo Dark
+            </a></li>
+          <li><a class="dropdown-item" href="#" onclick="setTheme('auto')">
+              <i class="fas fa-adjust"></i> Modo Auto
+            </a></li>
+        </ul>
+      </li>
+      <!-- User Login -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
           aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#!">Configurações</a></li>
-          <li><a class="dropdown-item" href="#!">Log de atividades</a></li>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#!"><i class="fas fa-user"></i> Olá, {{ current_user.name.capitalize() }}</a></li>
+          <li><a class="dropdown-item" href="#!"><i class="fas fa-user-cog"></i> Meus Dados</a></li>
           <li>
             <hr class="dropdown-divider" />
           </li>
-          <li><a class="dropdown-item" href="{{ url_for('login.logout') }}">Sair</a></li>
+          <li><a class="dropdown-item" href="{{url_for('login.logout')}}"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
         </ul>
       </li>
+      
     </ul>
   </nav>
 
@@ -42,13 +68,15 @@
       <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
           <div class="nav">
-            <div class="sb-sidenav-menu-heading"></div>
-            <div class="sb-sidenav-menu-heading">ATENDIMENTO</div>           
             {% if ('CAD_DESPACHO' in session["roles"] or 'MACEIO_ADMIN' in session["roles"]) %}
+            <div class="sb-sidenav-menu-heading"></div>
             <a class="nav-link" href="{{url_for('dashboard.dashboard')}}">
               <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
               Dashboard
             </a>
+            {% endif %}
+            <div class="sb-sidenav-menu-heading">ATENDIMENTO</div>           
+            {% if ('MACEIO_ADMIN' in session["roles"]) %}
             <a class="nav-link" href="#">
               <div class="sb-nav-link-icon"><i class="fas fa-map-marker-alt"></i></div>
               Monitoramento
@@ -177,9 +205,75 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     crossorigin="anonymous"></script>
   <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-    crossorigin="anonymous"></script>
+
+  <script>
+    // Função para definir o tema e ajustar o hover do mouse automaticamente
+    function setTheme(theme) {
+      const sidenav = document.getElementById('sidenavAccordion');
+      const dropdownThemeUls = document.querySelectorAll('.dropdown-theme-ul');
+      const isAuto = theme === 'auto';
+      let isDarkMode;
+
+      // Define a função para atualizar o tema com base na preferência do sistema
+      const updateThemeForAutoMode = () => {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        isDarkMode = prefersDark;
+        applyThemeClassesAndStyles(prefersDark ? 'dark' : 'light');
+      };
+
+      // Função para aplicar as classes de tema e estilos, incluindo hover
+      function applyThemeClassesAndStyles(selectedTheme) {
+        sidenav.classList.remove('sb-sidenav-light', 'sb-sidenav-dark');
+        sidenav.classList.add(`sb-sidenav-${selectedTheme}`);
+
+        dropdownThemeUls.forEach(dropdownThemeUl => {
+          dropdownThemeUl.classList.remove('sb-sidenav-light', 'sb-sidenav-dark');
+          dropdownThemeUl.classList.add(`sb-sidenav-${selectedTheme}`);
+        });
+
+        // Atualizar a cor e o hover dos itens de dropdown baseado no tema
+        updateDropdownItemsColorAndHover(selectedTheme === 'dark');
+      }
+
+      if (isAuto) {
+        updateThemeForAutoMode();
+        // Adiciona um listener para mudanças na preferência do sistema
+        window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+          updateThemeForAutoMode();
+        });
+      } else {
+        isDarkMode = theme === 'dark';
+        applyThemeClassesAndStyles(theme);
+      }
+    }
+
+    // Atualizar a cor dos itens de dropdown e aplicar/remover eventos de hover
+    function updateDropdownItemsColorAndHover(isDarkMode) {
+      document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.style.color = isDarkMode ? 'white' : 'black';
+        // Limpa estilos de hover prévios antes de adicionar novos
+        item.onmouseenter = null;
+        item.onmouseleave = null;
+
+        if (isDarkMode) {
+          // Aplicar estilos de hover para o tema escuro
+          item.onmouseenter = () => item.style.backgroundColor = 'rgba(255,255,255,0.1)';
+          item.onmouseleave = () => item.style.backgroundColor = '';
+        } else {
+          // Remover estilos de hover específicos, se necessário
+          item.onmouseenter = () => item.style.backgroundColor = 'rgba(0,0,0,0.05)';
+          item.onmouseleave = () => item.style.backgroundColor = '';
+        }
+      });
+    }
+
+    // Chamar a função com o tema inicial
+    document.addEventListener('DOMContentLoaded', function () {
+      setTheme('auto'); // Ajusta para 'auto', 'dark' ou 'light' conforme a necessidade
+    });
+
+
+  </script>
   {% endblock %}
 </body>
-
 </html>
