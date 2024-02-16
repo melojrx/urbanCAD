@@ -2,91 +2,87 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-2 rounded mb-2">
+<form method="POST" enctype='multipart/form-data' action="{{ url_for('viatura.cadastrar') }}">
 
-    <div class="container-fluid mt-2">
-        <form method="POST" enctype='multipart/form-data' action="{{ url_for('viatura.cadastrar') }}">
-        <div class="card mb-2">
-            <div class="card-body">
-                <div class="row d-flex align-items-center">
-                    <div class="col-9">
-                        <h5 class="card-title">Gerenciamento de Viaturas</h5>
-                        <p class="card-text"> {{ "Cadastro" if not form.id.data else "Exclusão" }} de Viaturas</p>
-                    </div>
-                    <div class="col-3 d-flex justify-content-end">
-                        <!-- Botão Voltar -->
-                        <button class="btn btn-danger me-2" type="button" onclick="window.location.href='{{url_for('viatura.listar')}}';">Voltar</button>
-                        <!-- Botão Excluir -->
-                        {% if form.id.data %}
-                            <button class="btn btn-danger me-2" type="button" onclick="window.location.href='{{url_for('viatura.excluir', id=form.id.data)}}';">Excluir</button>
-                        {% endif %}
-                        <!-- Botão Cadastrar VTR -->
-                        {% if not form.id.data %}
-                            {{ form.submit(class_="btn btn-primary") }}
-                        {% endif %}
-                    </div>
+    <h1 class="mt-4">Gerenciamento de Viaturas</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{url_for('viatura.listar')}}" style="color: gray">Tabela de Viaturas</a>
+        </li>
+        <li class="breadcrumb-item active">{{ "Cadastro" if not form.id.data else "Exclusão" }} de Viaturas</li>
+    </ol>
+
+    <div class="card mb-2">
+        <div class="card-header">
+            <i class="fas fa-car"></i>
+            Cadastro de Viaturas
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <!-- Coluna escondida, apenas para manter o espaço do ID do formulário -->
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    {{form.id}}
+                </div>
+                <!-- Código e Placa com ajuste para diferentes tamanhos de tela -->
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    {{form.txtCodigo.label(class_="form-label")}}
+                    {{form.txtCodigo(class_="form-control")}}
+                    {% for error in form.txtCodigo.errors %}
+                    <div class="important">{{error}}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    {{form.txtPlaca.label(class_="form-label")}}
+                    {{form.txtPlaca(class_="form-control")}}
+                    {% for error in form.txtPlaca.errors %}
+                    <div class="important">{{error}}</div>
+                    {% endfor %}
                 </div>
             </div>
-        </div>
-
-        <div class="card mb-2">
-            <div class="card-body">
-                <div class="form-group mb-3 row justify-content-between">
-                    <div>
-                        {{form.id}}
-                    </div>
-                    <div class="col">
-                        {{form.txtCodigo.label(class_="form-label")}}
-                        {{form.txtCodigo(class_="form-control")}}
-                        {% for error in form.txtCodigo.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col">        
-                        {{form.txtPlaca.label(class_="form-label")}}
-                        {{form.txtPlaca(class_="form-control")}}
-                        {% for error in form.txtPlaca.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div> 
-                        {% endfor %}
-                    </div>
+            <div class="row mb-3">
+                <!-- Tipo de Patrulha e Instituição com ajuste para diferentes tamanhos de tela -->
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    {{form.idTipoPatrulha.label(class_="form-label")}}
+                    {{form.idTipoPatrulha(class_="form-select")}}
+                    {% for error in form.idTipoPatrulha.errors %}
+                    <div class="important">{{error}}</div>
+                    {% endfor %}
                 </div>
-                <div class="form-group mb-3 row justify-content-between">
-                    <div class="col">
-                        {{form.idTipoPatrulha.label(class_="form-label")}}
-                        {{form.idTipoPatrulha(class_="form-select")}}
-                        {% for error in form.idTipoPatrulha.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div>
-                        {% endfor %}    
-                    </div>
-                    <div class="col">        
-                        {{form.idInstituicao.label(class_="form-label")}}
-                        {{form.idInstituicao(class_="form-select")}}
-                        {% for error in form.idInstituicao.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div>
-                        {% endfor %}
-                    </div>    
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    {{form.idInstituicao.label(class_="form-label")}}
+                    {{form.idInstituicao(class_="form-select")}}
+                    {% for error in form.idInstituicao.errors %}
+                    <div class="important">{{error}}</div>
+                    {% endfor %}
                 </div>
-                <div class="form-group mb-3">
+            </div>
+            <!-- Descrição com ajuste para ocupar toda a largura em diferentes tamanhos de tela -->
+            <div class="row mb-3">
+                <div class="col-12">
                     {{form.txtDescricao.label(class_="form-label")}}
                     {{form.txtDescricao(class_="form-control")}}
                     {% for error in form.txtDescricao.errors %}
-                        <div class="important">
-                            {{error}}
-                        </div> 
-                    {% endfor %} 
+                    <div class="important">{{error}}</div>
+                    {% endfor %}
                 </div>
             </div>
+            <!-- Botões com ajuste para diferentes tamanhos de tela -->
+            <div class="d-flex justify-content-start mb-2">
+                <!-- Botão Voltar
+                        <button class="btn btn-danger me-2" type="button" onclick="window.location.href='{{url_for('viatura.listar')}}';">Voltar</button> -->
+                {% if form.id.data %}
+                <!-- Botão Excluir visível em todos os tamanhos -->
+                <button class="btn btn-danger me-2" type="button"
+                    onclick="window.location.href='{{url_for('viatura.excluir', id=form.id.data)}}';">Excluir</button>
+                {% endif %}
+                {% if not form.id.data %}
+                <!-- Botão Cadastrar VTR visível em todos os tamanhos -->
+                {{ form.submit(class="btn btn-primary") }}
+                {% endif %}
+            </div>
         </div>
-        </form>
     </div>
 
-</div>
+</form>
+
+    
 {% endblock conteudo %}
