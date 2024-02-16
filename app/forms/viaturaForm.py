@@ -1,10 +1,11 @@
-from wtforms.widgets import TextArea
-from wtforms import Form, StringField, SelectField, FileField
+from wtforms import Form, HiddenField, StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired, InputRequired, Length
 
 class ViaturaForm(Form):
 
-    codigo = StringField(
+    id = HiddenField('id')
+
+    txtCodigo = StringField(
         'Código:',
         render_kw={"placeholder": "Código da viatura."},
         validators = [
@@ -12,7 +13,7 @@ class ViaturaForm(Form):
             Length(max=30, message='O código deve ter no mínimo %(max)d caracteres')
         ])
 
-    placa = StringField(
+    txtPlaca = StringField(
         'Placa:',
         render_kw={"placeholder": "Placa da viatura."},
         validators = [
@@ -20,7 +21,7 @@ class ViaturaForm(Form):
             Length(max=7, message='A placa deve ter no mínimo %(max)d caracteres')
         ])   
 
-    descricao = StringField(
+    txtDescricao = StringField(
         'Descrição:',
         render_kw={"placeholder": "Descrição da viatura."},
         validators = [
@@ -28,7 +29,7 @@ class ViaturaForm(Form):
             Length(max=100, message='O código deve ter no mínimo %(max)d caracteres')
         ])        
 
-    instituicao = SelectField(
+    idInstituicao = SelectField(
         'Instituição',
         coerce=int,
         validators = [
@@ -36,10 +37,12 @@ class ViaturaForm(Form):
             InputRequired(message=('*Campo Requerido'))
     ])
 
-    tipoPatrulha = SelectField(
+    idTipoPatrulha = SelectField(
         'Tipo Patrulha',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
             InputRequired(message=('*Campo Requerido'))
     ])
+
+    submit = SubmitField('Cadastrar')

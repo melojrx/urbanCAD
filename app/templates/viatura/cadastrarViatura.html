@@ -11,14 +11,19 @@
                 <div class="row d-flex align-items-center">
                     <div class="col-9">
                         <h5 class="card-title">Gerenciamento de Viaturas</h5>
-                        <p class="card-text">Cadastro de Viaturas</p>
+                        <p class="card-text"> {{ "Cadastro" if not form.id.data else "Exclusão" }} de Viaturas</p>
                     </div>
                     <div class="col-3 d-flex justify-content-end">
                         <!-- Botão Voltar -->
-                        <button class="btn btn-danger me-2" type="button"
-                        onclick="window.location.href='{{url_for('viatura.listarViaturas')}}';">Voltar</button>
+                        <button class="btn btn-danger me-2" type="button" onclick="window.location.href='{{url_for('viatura.listar')}}';">Voltar</button>
+                        <!-- Botão Excluir -->
+                        {% if form.id.data %}
+                            <button class="btn btn-danger me-2" type="button" onclick="window.location.href='{{url_for('viatura.excluir', id=form.id.data)}}';">Excluir</button>
+                        {% endif %}
                         <!-- Botão Cadastrar VTR -->
-                        <button type="submit" class="btn btn-primary bg-primary">Salvar</button>
+                        {% if not form.id.data %}
+                            {{ form.submit(class_="btn btn-primary") }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -27,19 +32,22 @@
         <div class="card mb-2">
             <div class="card-body">
                 <div class="form-group mb-3 row justify-content-between">
+                    <div>
+                        {{form.id}}
+                    </div>
                     <div class="col">
-                        {{form.codigo.label(class_="form-label")}}
-                        {{form.codigo(class_="form-control")}}
-                        {% for error in form.codigo.errors %}
+                        {{form.txtCodigo.label(class_="form-label")}}
+                        {{form.txtCodigo(class_="form-control")}}
+                        {% for error in form.txtCodigo.errors %}
                             <div class="important">
                                 {{error}}
                             </div>
                         {% endfor %}
                     </div>
                     <div class="col">        
-                        {{form.placa.label(class_="form-label")}}
-                        {{form.placa(class_="form-control")}}
-                        {% for error in form.placa.errors %}
+                        {{form.txtPlaca.label(class_="form-label")}}
+                        {{form.txtPlaca(class_="form-control")}}
+                        {% for error in form.txtPlaca.errors %}
                             <div class="important">
                                 {{error}}
                             </div> 
@@ -48,18 +56,18 @@
                 </div>
                 <div class="form-group mb-3 row justify-content-between">
                     <div class="col">
-                        {{form.tipoPatrulha.label(class_="form-label")}}
-                        {{form.tipoPatrulha(class_="form-select")}}
-                        {% for error in form.tipoPatrulha.errors %}
+                        {{form.idTipoPatrulha.label(class_="form-label")}}
+                        {{form.idTipoPatrulha(class_="form-select")}}
+                        {% for error in form.idTipoPatrulha.errors %}
                         <div class="important">
                             {{error}}
                         </div>
                         {% endfor %}    
                     </div>
                     <div class="col">        
-                        {{form.instituicao.label(class_="form-label")}}
-                        {{form.instituicao(class_="form-select")}}
-                        {% for error in form.instituicao.errors %}
+                        {{form.idInstituicao.label(class_="form-label")}}
+                        {{form.idInstituicao(class_="form-select")}}
+                        {% for error in form.idInstituicao.errors %}
                         <div class="important">
                             {{error}}
                         </div>
@@ -67,9 +75,9 @@
                     </div>    
                 </div>
                 <div class="form-group mb-3">
-                    {{form.descricao.label(class_="form-label")}}
-                    {{form.descricao(class_="form-control")}}
-                    {% for error in form.descricao.errors %}
+                    {{form.txtDescricao.label(class_="form-label")}}
+                    {{form.txtDescricao(class_="form-control")}}
+                    {% for error in form.txtDescricao.errors %}
                         <div class="important">
                             {{error}}
                         </div> 

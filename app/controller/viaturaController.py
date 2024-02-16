@@ -1,33 +1,41 @@
 import datetime
+from app.DAO.instituicaoDao import instituicaoDao
+from app.DAO.tipoPatrulhaDao import tipoPatrulhaDao
+from app.DAO.viaturaDao import viaturaDao
 
 from app.controller.roleRequired import roles_required
+from app.enum.rowPerPageEnum import RowPerPageEnum
+from app.forms.viaturaSearchForm import ViaturaSearchForm
+from app.models.instituicaoModel import Instituicao
+from app.models.tipoPatrulhaModel import TipoPatrulha
 from ..database import db
 from flask_login import login_required
 from ..models.viaturaModel import Viatura
-from ..models.instituicaoModel import Instituicao
-from ..models.tipoPatrulhaModel import TipoPatrulha
 from ..rotas.viaturaRout import viatura_bp
 from ..forms.viaturaForm import ViaturaForm
 from flask import render_template, request, redirect, url_for, flash
 
-class viaturaController:    
-
-    global ROWS_PER_PAGE 
-    ROWS_PER_PAGE = 10
+class viaturaController():    
 
     @viatura_bp.route('/listarViaturas', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
-    def listarViaturas():
+    def listar():
         try:
+            searchForm = ViaturaSearchForm(request.form)
             page = request.args.get('page', 1, type=int)
-            
-            listViatura = Viatura.query.order_by(Viatura.txtCodigo.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)    
+
+            listIntituicao = instituicaoDao.getlistInstituicao()
+            searchForm.idInstituicaoSearch.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
+            listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
+            searchForm.idTipoPatrulhaSearch.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha] 
+
+            listViatura = viaturaDao.getListDezViaturas(page)    
 
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
 
-        return render_template('viatura/listarViatura.html', listViatura=listViatura)
+        return render_template('viatura/listarViatura.html', listViatura=listViatura, searchForm=searchForm, noPagination=True)
 
     @viatura_bp.route('/prepareCadastrar', methods=['GET'])
     @login_required
@@ -35,11 +43,11 @@ class viaturaController:
     def prepareCadastrar():
         form = ViaturaForm(request.form)
 
-        listIntituicao = Instituicao.query.filter(Instituicao.dataFim.is_(None)).all()
-        form.instituicao.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
+        listIntituicao = instituicaoDao.getlistInstituicao()
+        form.idInstituicao.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
 
-        listTipoPatrulha = TipoPatrulha.query.filter(TipoPatrulha.dataFim.is_(None)).all()
-        form.tipoPatrulha.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha]
+        listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
+        form.idTipoPatrulha.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha]
 
         return render_template('viatura/cadastrarViatura.html', form=form)
 
@@ -52,12 +60,78 @@ class viaturaController:
         form = ViaturaForm(request.form)
         dataInicio = datetime.datetime.now()
         try:
-            viatura = Viatura(form.instituicao.data, form.tipoPatrulha.data, form.codigo.data, form.placa.data,form.descricao.data, dataInicio)
+            viatura = Viatura(form.idInstituicao.data, form.idTipoPatrulha.data, form.txtCodigo.data.upper(), form.txtPlaca.data.upper(),form.txtDescricao.data, dataInicio)
             db.session.add(viatura)
             db.session.commit()
             flash('Viatura cadastrada com sucesso', 'sucess')
-            return redirect(url_for('viatura.listarViaturas')) 
+            return redirect(url_for('viatura.listar')) 
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('viatura.prepareCadastrar'))          
+            return redirect(url_for('viatura.prepareCadastrar'))
+
+
+    @viatura_bp.route('/prepareExcluir/<id>', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def prepareExcluir(id):
+
+        viatura = viaturaDao.getViaturaById(id)
+        form = ViaturaForm(request.form, obj=viatura)
+
+        listIntituicao = instituicaoDao.getlistInstituicao()
+        form.idInstituicao.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
+        listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
+        form.idTipoPatrulha.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha]      
+
+        for field in form:
+            field.flags.disabled = True
+
+        return render_template('viatura/cadastrarViatura.html', form=form)
+    
+
+    @viatura_bp.route('/excluir/<id>', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def excluir(id):
+        dataFim = datetime.datetime.now()
+        try:
+            viaturaDao.delete(id, dataFim)
+            flash('Viatura excluída com sucesso', 'sucess')
+            return redirect(url_for('viatura.listar'))
+        except Exception as e:
+            flash('Erro ao excluir viatura', 'error')
+            return redirect(url_for('viatura.prepareExcluir', id=id))
+        
+    @viatura_bp.route('/search', methods=['POST'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def search():
+        searchForm = ViaturaSearchForm(request.form)
+        page = request.args.get('page', 1, type=int)
+
+        querySearch = Viatura.query.filter(Viatura.dataFim.is_(None))
+
+        if searchForm.idInstituicaoSearch.data:
+            print(searchForm.idInstituicaoSearch.data)
+            querySearch = querySearch.join(Viatura.instituicao).filter(Instituicao.id == searchForm.idInstituicaoSearch.data)            
+
+        if searchForm.idTipoPatrulhaSearch.data:
+            querySearch = querySearch.join(Viatura.tipoPatrulha).filter(TipoPatrulha.id == searchForm.idTipoPatrulhaSearch.data)
+
+        if searchForm.txtCodigoSearch.data:
+            querySearch = querySearch.filter(Viatura.txtCodigo == searchForm.txtCodigoSearch.data.upper())
+
+        if searchForm.txtPlacaSearch.data:
+            querySearch = querySearch.filter(Viatura.txtPlaca == searchForm.txtPlacaSearch.data.upper())
+
+        querySearch = querySearch.order_by(Viatura.txtCodigo.desc())
+
+        listViatura = querySearch.paginate(page=page, per_page=RowPerPageEnum.DEZ.value)  
+
+        listIntituicao = instituicaoDao.getlistInstituicao()
+        searchForm.idInstituicaoSearch.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
+        listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
+        searchForm.idTipoPatrulhaSearch.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha] 
+
+        return render_template('viatura/listarViatura.html', listViatura=listViatura, searchForm=searchForm, noPagination=False)

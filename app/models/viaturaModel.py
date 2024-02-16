@@ -14,8 +14,8 @@ class Viatura(db.Model):
     dataInicio = db.Column('dat_inicio_via', db.DateTime, nullable=False)
     dataFim = db.Column('dat_fim_via', db.DateTime, nullable=True)
 
-    instituicao = db.relationship("Instituicao")
-    tipoPatrulha = db.relationship(TipoPatrulha)
+    instituicao = db.relationship("Instituicao", lazy='joined', join_depth=1)
+    tipoPatrulha = db.relationship(TipoPatrulha, lazy='joined', join_depth=1)
 
     def __str__(self):
             return f"{self.tipoPatrulha.txtTipoPatrulha} {self.instituicao.txtInstituicao} {self.txtCodigo} {self.txtPlaca}"
