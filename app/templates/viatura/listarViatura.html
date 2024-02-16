@@ -8,93 +8,125 @@
 
     <div class="card mb-2">
       <div class="card-body">
-          <div class="row d-flex align-items-center">
-              <div class="col-9">
-                  <h5 class="card-title">Gerenciamento de Viaturas</h5>
-                  <p class="card-text">Gerencie aqui as Viaturas do sistema</p>
-              </div>
-              <div class="col-3 d-flex justify-content-end">
-                   <!-- Botão Cadastrar VTR -->
-                   <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('viatura.prepareCadastrar') }}';">Nova Viatura</button>
-              </div>
+        <div class="row d-flex align-items-center">
+          <div class="col-9">
+            <h5 class="card-title">Gerenciamento de Viaturas</h5>
+            <p class="card-text">Gerencie aqui as Viaturas do sistema</p>
           </div>
+          <div class="col-3 d-flex justify-content-end">
+            <!-- Botão Cadastrar VTR -->
+            <button type="button" class="btn btn-primary bg-primary"
+              onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';">Nova Viatura</button>
+          </div>
+        </div>
       </div>
     </div>
-    
-    <div class="card mb-2">
-          <div class="card-header">
-              <p class="card-text" style="font-weight: 600;">Consulta Viaturas</p>
+
+   <!-- Parametros para consulta -->
+
+   <div class="card mb-2">
+    <form action="{{url_for('viatura.search')}}" method="POST">
+      <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Consulta de Viaturas
+      </div>
+      <div class="card-body pb-0">
+        <div class="row">
+          <div class="col-3">
+            {{searchForm.txtCodigoSearch.label(class_="form-label")}} 
+            {{searchForm.txtCodigoSearch(class="form-control form-control")}}
           </div>
-          <div class="card-body" style="font-size: 0.8rem !important;">
-            <!-- Parametros para consulta -->
-          </div>    
-    </div>
-    <!-- Lista Viaturas -->
-    <div class="table-resposive text-center">
-      <table class="table border table-striped table-hover table-borderless">
-        {% if listViatura != None %}
-          <thead>
-            <tr class="text-center table-secondary">
-              <th scope="col">Código</th>
-              <th scope="col">Placa</th>
-              <th scope="col">Descrição</th>
-              <th scope="col">Instituição</th>
-              <th scope="col">Tipo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for viatura in listViatura.items %}
-              <tr>
-                <td>{{ viatura.txtCodigo }}</td>
-                <td>{{ viatura.txtPlaca }}</td>
-                <td>{{ viatura.txtDescricao.capitalize() }}</td>
-                <td>{{ viatura.instituicao.txtInstituicao }}</td>
-                <td>{{ viatura.tipoPatrulha.txtTipoPatrulha }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        {% else %}
-          <tr>
-            <td>Nenhuma solicitação cadastrada</td>
-          </tr>
-        {% endif %}
-      </table>
-    </div>
-      
-    {% if listViatura.total > 5 %}
-    <!-- Pagination Links-->
-    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-      <a href="{{ url_for('viatura.listarViaturas', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
+          <div class="col-3">
+            {{searchForm.txtPlacaSearch.label(class_="form-label")}}
+            {{searchForm.txtPlacaSearch(class="form-control form-control") }}
+          </div>
+          <div class="col-3">
+            {{searchForm.idInstituicaoSearch.label(class_="form-label")}}
+            {{searchForm.idInstituicaoSearch(class="form-control form-control") }}
+          </div>
+          <div class="col-3">
+            {{searchForm.idTipoPatrulhaSearch.label(class_="form-label")}}
+            {{searchForm.idTipoPatrulhaSearch(class="form-control form-control") }}
+          </div>                    
+          <div class="col-3">
+            {{ searchForm.submitSearch(class_="btn btn-success") }}
+            <button type="button" class="btn btn-success"  onclick="window.location.href='{{ url_for('viatura.listar')}}';">Limpar</button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista Viaturas -->
+  <div class="table-resposive text-center">
+    <table class="table border table-striped table-hover table-borderless">
+      {% if listViatura.items %}
+      <thead>
+        <tr class="text-center table-secondary">
+          <th scope="col">Código</th>
+          <th scope="col">Placa</th>
+          <th scope="col">Descrição</th>
+          <th scope="col">Instituição</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in listViatura.items %}
+        <tr>
+          <td>{{ row.txtCodigo }}</td>
+          <td>{{ row.txtPlaca }}</td>
+          <td>{{ row.txtDescricao.capitalize() }}</td>
+          <td>{{ row.instituicao.txtInstituicao }}</td>
+          <td>{{ row.tipoPatrulha.txtTipoPatrulha }}</td>
+          <td><button type="button" class="btn btn-danger"
+              onclick="window.location.href='{{ url_for('viatura.prepareExcluir', id=row.id) }}';">Excluir</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% else %}
+      <tr>
+        <td>Nenhuma registro encontrado</td>
+      </tr>
+      {% endif %}
+    </table>
+  </div>
+
+  {% if not noPagination and listViatura.total > 10 %}
+  <!-- Pagination Links-->
+  <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+    <a href="{{ url_for('viatura.search', page=listViatura.prev_num) }}" class="btn btn-outline-primary 
                 {% if listViatura.page == 1 %}disabled{% endif %}">
-        &laquo;
-      </a><!-- Loop through the number of pages to display a link for each-->
-      {% for page_num in listViatura.iter_pages(left_edge=1, right_edge=1, left_current=1,
-      right_current=2)
-      %}{% if page_num %}
-      <!-- Check for the active page and set the link to "Active"-->
-      {% if listViatura.page == page_num %}
-      <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-primary">
-        {{ page_num }}
-      </a>
-      {% else %}
-      <a href="{{ url_for('viatura.listarViaturas', page=page_num) }}" class="btn btn-outline-primary">
-        {{ page_num }}
-      </a>
-      {% endif %}
-      {% else %}
-      ...
-      {% endif %}
-      {% endfor %} <a href="{{ url_for('viatura.listarViaturas', page=listViatura.next_num) }}" class="btn btn-outline-primary 
-                {% if listViatura.page == listViatura.pages %}disabled{% endif %}">
-        &raquo;
-      </a>
-    </div>
-    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-      Página {{ listViatura.page }} de {{ listViatura.pages }}
-    </p>
-    <!-- End Pagination Links-->
+      &laquo;
+    </a><!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in listViatura.iter_pages(left_edge=1, right_edge=1, left_current=1,
+    right_current=2)
+    %}{% if page_num %}
+    <!-- Check for the active page and set the link to "Active"-->
+    {% if listViatura.page == page_num %}
+    <a href="{{ url_for('viatura.search', page=page_num) }}" class="btn btn-primary">
+      {{ page_num }}
+    </a>
+    {% else %}
+    <a href="{{ url_for('viatura.search', page=page_num) }}" class="btn btn-outline-primary">
+      {{ page_num }}
+    </a>
     {% endif %}
-    </div>
-    
+    {% else %}
+    ...
+    {% endif %}
+    {% endfor %} <a href="{{ url_for('viatura.search', page=listViatura.next_num) }}" class="btn btn-outline-primary 
+                {% if listViatura.page == listViatura.pages %}disabled{% endif %}">
+      &raquo;
+    </a>
+  </div>
+  <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+    Página {{ listViatura.page }} de {{ listViatura.pages }}
+  </p>
+  <!-- End Pagination Links-->
+  {% endif %}
+</div>
+
 </div>
 {% endblock %}
