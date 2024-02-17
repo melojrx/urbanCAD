@@ -2,116 +2,113 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-2 rounded mb-2">
 
-  <div class="container-fluid mt-2">
+<h1 class="mt-4">Gerenciamento de Agentes</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Gerencie aqui os Agentes do sistema</li>
+</ol>
 
-    <div class="card mb-2">
-      <div class="card-header">
-          <div class="row d-flex align-items-center">
-              <div class="col-9">
-                  <h5 class="card-title">Gerenciamento de Agentes</h5>
-                  <p class="card-text">Gerencie aqui os Agentes do sistema</p>
-              </div>
-          </div>
+<!-- Parametros para consulta -->
+<div class="card mb-2">
+  <form action="{{url_for('agente.search')}}" method="GET">
+    <div class="card-header">
+      <i class="fas fa-search me-1"></i>
+      Consulta de Agentes
+    </div>
+    <div class="card-body pb-0">
+      <div class="row">
+        <!-- Ajuste das colunas para diferentes tamanhos de tela -->
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{searchForm.agenteSearch.label(class_="form-label")}}
+          {{searchForm.agenteSearch(class="form-control form-control")}}
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{searchForm.idInstituicaoSearch.label(class_="form-label")}}
+          {{searchForm.idInstituicaoSearch(class="form-control form-control")}}
+        </div>
+        <div class="col-12 mt-3 d-flex justify-content-lg-start justify-content-sm-center">
+          {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
+          <button type="button" class="btn btn-outline-info"
+            onclick="window.location.href='{{ url_for('agente.listar')}}';">Limpar</button>
+          <!-- Botão Cadastrar VTR -->
+          <button type="button" class="btn btn-success ms-2"
+            onclick="window.location.href='{{ url_for('agente.prepareCadastrar')}}';">Novo Agente</button>
+        </div>
       </div>
     </div>
-    
-    <!-- Parametros para consulta -->
-    <div class="card mb-2">
-      <form action="{{url_for('agente.search')}}" method="GET">
-        <div class="card-header">
-          <i class="fas fa-search me-1"></i>
-          Consulta de Agentes
-        </div>
-        <div class="card-body pb-0">
-          <div class="row">
-            <!-- Ajuste das colunas para diferentes tamanhos de tela -->
-            <div class="col-lg-3 col-md-6 col-sm-12">
-              {{searchForm.agenteSearch.label(class_="form-label")}}
-              {{searchForm.agenteSearch(class="form-control form-control")}}
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12">
-              {{searchForm.idInstituicaoSearch.label(class_="form-label")}}
-              {{searchForm.idInstituicaoSearch(class="form-control form-control")}}
-            </div>
-            <div class="col-12 mt-3 d-flex justify-content-lg-start justify-content-sm-center">
-              {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
-              <button type="button" class="btn btn-outline-info"
-                onclick="window.location.href='{{ url_for('agente.listar')}}';">Limpar</button>
-              <!-- Botão Cadastrar VTR -->
-              <button type="button" class="btn btn-success ms-2"
-                onclick="window.location.href='{{ url_for('agente.prepareCadastrar')}}';">Novo Agente</button>
-              </div>
-          </div>
-        </div>
-      </form>
-    </div>
+  </form>
+</div>
 
-    <!-- Lista Viaturas -->
+<!-- Lista Viaturas -->
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Tabela de Agentes
+  </div>
+  <div class="card-body">
     <div class="table-resposive">
       <table class="table table-bordered" style="font-size: 14px;">
         {% if listAgente.items %}
-          <thead>
-            <tr class="text-center">
-              <th scope="col">Usuário</th>
-              <th scope="col">Instituição</th>
-              <th scope="col">Criação</th>
-              <th scope="col">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in listAgente.items %}
-              <tr class="text-center">
-                <td>{{ row.usuario.name.capitalize() }}</td>
-                <td>{{ row.instituicao.txtInstituicao }}</td>
-                <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                <td class="text-center"><button type="button" class="btn btn-danger"
-                  onclick="window.location.href='{{ url_for('agente.prepareExcluir', id=row.id) }}';"><i class="fas fa-trash-alt"></i> Excluir</button></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        {% else %}
-          <tr>
-            <td>Nenhuma solicitação cadastrada</td>
+        <thead>
+          <tr class="text-center table-secundary">
+            <th scope="col">Usuário</th>
+            <th scope="col">Instituição</th>
+            <th scope="col">Criação</th>
+            <th scope="col">Ações</th>
           </tr>
+        </thead>
+        <tbody>
+          {% for row in listAgente.items %}
+          <tr class="text-center">
+            <td>{{ row.usuario.name.capitalize() }}</td>
+            <td>{{ row.instituicao.txtInstituicao }}</td>
+            <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
+            <td class="text-center"><button type="button" class="btn btn-danger"
+                onclick="window.location.href='{{ url_for('agente.prepareExcluir', id=row.id) }}';"><i
+                  class="fas fa-trash-alt"></i> Excluir</button></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        {% else %}
+        <tr>
+          <td>Nenhuma solicitação cadastrada</td>
+        </tr>
         {% endif %}
       </table>
     </div>
-      {% if not noPagination and listAgente.total > 10 %}
-      <!-- Pagination Links-->
-      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-        <a href="{{ url_for('agente.search', page=listAgente.prev_num, **searchForm.data) }}" class="btn btn-outline-primary 
-            {% if listAgente.page == 1 %}disabled{% endif %}">
-            &laquo;
-        </a><!-- Loop through the number of pages to display a link for each-->
-        {% for page_num in listAgente.iter_pages(left_edge=1, right_edge=1, left_current=1,
-        right_current=2)
-        %}{% if page_num %}
-        <!-- Check for the active page and set the link to "Active"-->
-        {% if listAgente.page == page_num %}
-        <a href="{{ url_for('agente.search', page=page_num, **searchForm.data) }}" class="btn btn-primary">
-            {{ page_num }}
-        </a>
-        {% else %}
-        <a href="{{ url_for('agente.search', page=page_num, **searchForm.data) }}" class="btn btn-outline-primary">
-            {{ page_num }}
-        </a>
-        {% endif %}
-        {% else %}
-        ...
-        {% endif %}
-        {% endfor %} <a href="{{ url_for('agente.search', page=listAgente.next_num, **searchForm.data) }}" class="btn btn-outline-primary 
-            {% if listAgente.page == listAgente.pages %}disabled{% endif %}">
-            &raquo;
-        </a>
-      </div>
-      <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-          Página {{ listAgente.page }} de {{ listAgente.pages }}
-      </p>
+    {% if not noPagination and listAgente.total > 10 %}
+    <!-- Pagination Links-->
+    <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
+      <a href="{{ url_for('agente.search', page=listAgente.prev_num, **searchForm.data) }}" class="btn btn-outline-primary 
+                {% if listAgente.page == 1 %}disabled{% endif %}">
+        &laquo;
+      </a><!-- Loop through the number of pages to display a link for each-->
+      {% for page_num in listAgente.iter_pages(left_edge=1, right_edge=1, left_current=1,
+      right_current=2)
+      %}{% if page_num %}
+      <!-- Check for the active page and set the link to "Active"-->
+      {% if listAgente.page == page_num %}
+      <a href="{{ url_for('agente.search', page=page_num, **searchForm.data) }}" class="btn btn-primary">
+        {{ page_num }}
+      </a>
+      {% else %}
+      <a href="{{ url_for('agente.search', page=page_num, **searchForm.data) }}" class="btn btn-outline-primary">
+        {{ page_num }}
+      </a>
+      {% endif %}
+      {% else %}
+      ...
+      {% endif %}
+      {% endfor %} <a href="{{ url_for('agente.search', page=listAgente.next_num, **searchForm.data) }}" class="btn btn-outline-primary 
+                {% if listAgente.page == listAgente.pages %}disabled{% endif %}">
+        &raquo;
+      </a>
+    </div>
+    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+      Página {{ listAgente.page }} de {{ listAgente.pages }}
+    </p>
     {% endif %}
     <!-- End Pagination Links-->
   </div>
-
 </div>
 {% endblock %}
