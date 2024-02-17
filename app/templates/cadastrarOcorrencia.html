@@ -10,10 +10,16 @@
     <div class="container-fluid mt-3">
         <form id="cadastrarOcorrenciaForm" method="POST" enctype='multipart/form-data' action="{{ url_for('ocorrencia.cadastrarOcorrencia') }}">
             <div class="container-fluid " id="form_cad_evento">
+                <h1 class="mt-4">Cadastro de Ocorrências</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}" style="color: gray">Gerencia de Ocorrências</a>
+                    </li>
+                    <li class="breadcrumb-item active">Cadastro de Ocorrências</li>
+                </ol>
                 <div class="card mb-2">
                     <div class="card-header">
-                        <h5 class="card-title">Cadastro de Ocorrências</h5>
-                        <span class="card-text">Nova ocorrência</span>
+                        <i class="fas fa-book-open"></i>
+                        Cadastro de Ocorrências
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -132,15 +138,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
-                                <button type="submit" class="btn btn-primary  ">Cadastrar</button>
+                            <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-start mb-2 mt-2">
                                 <button type="button" class="btn btn-danger"
                                     onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar
                                 </button>
+                                <button type="submit" class="btn btn-primary  ">Cadastrar</button>
                             </div>
                         </div>    
                     </div>  
-                </div>  
+                </div> 
+            </div> 
         </form>
     </div>
 </div>
