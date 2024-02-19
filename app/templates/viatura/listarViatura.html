@@ -33,14 +33,14 @@
           {{searchForm.idTipoPatrulhaSearch.label(class_="form-label")}}
           {{searchForm.idTipoPatrulhaSearch(class="form-control form-control")}}
         </div>
-        <div class="col-12 mt-3 d-flex justify-content-lg-start justify-content-sm-center">
+        <div class="d-flex justify-content-start mt-3">
           {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
           <button type="button" class="btn btn-outline-info"
             onclick="window.location.href='{{ url_for('viatura.listar')}}';">Limpar</button>
           <!-- Botão Cadastrar VTR -->
           <button type="button" class="btn btn-success ms-2"
             onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';">Nova Viatura</button>
-          </div>
+        </div>
       </div>
     </div>
   </form>
