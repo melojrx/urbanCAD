@@ -13,24 +13,41 @@
                         <h5 class="card-title">Gerenciamento de Instituições</h5>
                         <p class="card-text">Listagem de Instituições</p>
                     </div>
-                    <div class="col-3 d-flex justify-content-end">
-                        <!-- Botão Cadastrar Instituição -->
-                        <button type="button" class="btn btn-primary bg-primary"
-                            onclick="window.location.href='{{ url_for('instituicao.prepareCadastrarInstituicao') }}';">Nova
-                            Instituicao</button>
-                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Parametros para consulta -->
         <div class="card mb-2">
-            <div class="card-header">
-                <p class="card-text" style="font-weight: 600;">Consulta de Instituições</p>
-            </div>
-            <div class="card-body" style="font-size: 0.8rem !important;">
-            <!-- Parametros para consulta -->
-            </div>    
-        </div>       
+            <form action="{{url_for('instituicao.search')}}" method="GET">
+                <div class="card-header">
+                    <i class="fas fa-search me-1"></i>
+                    Consulta de Instituições
+                </div>
+                <div class="card-body pb-0">
+                    <div class="row">
+                    <!-- Ajuste das colunas para diferentes tamanhos de tela -->
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        {{searchForm.txtInstituicaoSearch.label(class_="form-label")}}
+                        {{searchForm.txtInstituicaoSearch(class="form-control form-control")}}
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        {{searchForm.txtSiglaSearch.label(class_="form-label")}}
+                        {{searchForm.txtSiglaSearch(class="form-control form-control")}}
+                    </div>
+                    <div class="d-flex justify-content-start mt-3">
+                        {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
+                        <button type="button" class="btn btn-outline-info"
+                        onclick="window.location.href='{{ url_for('instituicao.listar')}}';">Limpar</button>
+                        <!-- Botão Cadastrar VTR -->
+                        <button type="button" class="btn btn-success ms-2"
+                        onclick="window.location.href='{{ url_for('instituicao.prepareCadastrar')}}';">Nova Instituição</button>
+                    </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+      
         <!-- Lista de Instutuições -->
         {% if listInstituicao.items %}
         <div class="table-responsive mt-2">
@@ -40,6 +57,7 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Sigla</th>
                         <th scope="col">Data</th>
+                        <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,15 +66,19 @@
                             <td>{{ row.txtInstituicao}}</td>
                             <td>{{ row.txtSigla}}</td>
                             <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
+                            <td class="text-center"><button type="button" class="btn btn-danger"
+                                onclick="window.location.href='{{ url_for('instituicao.prepareExcluir', id=row.id) }}';"><i class="fas fa-trash-alt"></i> Excluir</button></td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        {% if listInstituicao.total > 5 %}
+
+        <!-- Paginação -->
+        {% if not noPagination and listInstituicao.total > 10 %}
         <!-- Pagination Links-->
         <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-            <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=listInstituicao.prev_num) }}" class="btn btn-outline-primary 
+            <a href="{{ url_for('instituicao.searchInstituicao', page=listInstituicao.prev_num, **searchForm.data) }}" class="btn btn-outline-primary 
                 {% if listInstituicao.page == 1 %}disabled{% endif %}">
                 &laquo;
             </a><!-- Loop through the number of pages to display a link for each-->
@@ -64,18 +86,18 @@
             {% if page_num %}
             <!-- Check for the active page and set the link to "Active"-->
             {% if listInstituicao.page == page_num %}
-            <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=page_num) }}" class="btn btn-primary">
+            <a href="{{ url_for('instituicao.searchInstituicao', page=page_num, **searchForm.data) }}" class="btn btn-primary">
                 {{ page_num }}
             </a>
             {% else %}
-            <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=page_num) }}" class="btn btn-outline-primary">
+            <a href="{{ url_for('instituicao.searchInstituicao', page=page_num, **searchForm.data) }}" class="btn btn-outline-primary">
                 {{ page_num }}
             </a>
             {% endif %}
             {% else %}
             ...
             {% endif %}
-            {% endfor %} <a href="{{ url_for('instituicao.prepareSearchInstituicao', page=listInstituicao.next_num) }}" class="btn btn-outline-primary 
+            {% endfor %} <a href="{{ url_for('instituicao.searchInstituicao', page=listInstituicao.next_num, **searchForm.data) }}" class="btn btn-outline-primary 
                 {% if listInstituicao.page == listInstituicao.pages %}disabled{% endif %}">
                 &raquo;
             </a>
