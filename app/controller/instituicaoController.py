@@ -1,5 +1,8 @@
 import datetime
+from app.DAO.instituicaoDao import instituicaoDao
+from app.enum.rowPerPageEnum import RowPerPageEnum
 from app.forms.instituicaoForm import InstituicaoForm
+from app.forms.instituicaoSearchForm import InstituicaoSearchForm
 from ..database import db
 from ..models.instituicaoModel import Instituicao
 from ..rotas.instituicaoRout import instituicao_bp
@@ -9,25 +12,22 @@ from flask import flash, redirect, render_template, request, url_for
 
 class instituicaoController():
         
-    global ROWS_PER_PAGE 
-    ROWS_PER_PAGE = 10
-
-    @instituicao_bp.route('/prepareSearchInstituicao', methods=['GET'])
+    @instituicao_bp.route('/listarInstituicao', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
-    def prepareSearchInstituicao():
+    def listar():
         page = request.args.get('page', 1, type=int)
-        form = InstituicaoForm(request.form)
-        listInstituicao = Instituicao.query.filter(Instituicao.dataFim.is_(None)).order_by(Instituicao.dataInicio.desc()).paginate(page=page, per_page=ROWS_PER_PAGE)
-        return render_template('listarInstituicao.html', listInstituicao=listInstituicao, form=form)
+        searchForm = InstituicaoSearchForm(request.form)
+        listInstituicao = instituicaoDao.getListDezInstituicoes(page)
+        return render_template('instituicao/listarInstituicao.html', listInstituicao=listInstituicao, searchForm=searchForm, noPagination=True)
 
     
     @instituicao_bp.route('/prepareCadastrarInstituicao', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
-    def prepareCadastrarInstituicao():
+    def prepareCadastrar():
         form = InstituicaoForm(request.form)
-        return render_template('cadastrarInstituicao.html', form=form)    
+        return render_template('instituicao/cadastrarInstituicao.html', form=form)    
     
     @instituicao_bp.route('/cadastrarInstituicao', methods=['POST'])
     @login_required
@@ -51,4 +51,51 @@ class instituicaoController():
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')      
         
-        return redirect(url_for('instituicao.prepareSearchInstituicao'))
+        return redirect(url_for('instituicao.listar'))
+    
+    @instituicao_bp.route('/prepareExcluirInstituicao/<id>', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def prepareExcluir(id):
+
+        viatura = instituicaoDao.getInstituicaoById(id)
+        form = InstituicaoForm(request.form, obj=viatura)
+
+        for field in form:
+            field.flags.disabled = True
+
+        return render_template('instituicao/cadastrarInstituicao.html', form=form)
+    
+    @instituicao_bp.route('/excluir/<id>', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def excluir(id):
+        dataFim = datetime.datetime.now()
+        try:
+            instituicaoDao.delete(id, dataFim)
+            flash('Instituição excluída com sucesso', 'sucess')
+            return redirect(url_for('instituicao.listar'))
+        except Exception as e:
+            flash('Erro ao excluir Instituição', 'error')
+            return redirect(url_for('instituicao.prepareExcluir', id=id))
+
+    @instituicao_bp.route('/searchInstituicao', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def search():
+        searchForm = InstituicaoSearchForm(request.args)
+        page = request.args.get('page', 1, type=int)
+
+        querySearch = Instituicao.query.filter(Instituicao.dataFim.is_(None))
+
+        if searchForm.txtInstituicaoSearch.data:
+            querySearch = querySearch.filter(Instituicao.txtInstituicao.ilike('%' + searchForm.txtInstituicaoSearch.data + '%'))      
+
+        if searchForm.txtSiglaSearch.data:
+            querySearch = querySearch.filter(Instituicao.txtSigla.ilike('%' + searchForm.txtSiglaSearch.data + '%'))
+
+        querySearch = querySearch.order_by(Instituicao.txtInstituicao.desc())
+
+        listInstituicao = querySearch.paginate(page=page, per_page=RowPerPageEnum.DEZ.value)  
+
+        return render_template('instituicao/listarInstituicao.html', listInstituicao=listInstituicao, searchForm=searchForm, noPagination=False)           

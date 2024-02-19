@@ -5,20 +5,13 @@
 <div class="container-fluid mt-2 rounded mb-2">
 
     <div class="container-fluid mt-2">
-        <form method="POST" enctype='multipart/form-data' action="{{ url_for('instituicao.cadastrarInstituicao') }}">
+        <form method="POST"  action="{{ url_for('instituicao.cadastrarInstituicao') }}">
             <div class="card mb-2">
                 <div class="card-header">
                     <div class="row d-flex align-items-center">
                         <div class="col-9">
                             <h5 class="card-title">Gerenciamento de Instituições</h5>
-                            <p class="card-text">Cadastro de Instituições</p>
-                        </div>
-                        <div class="col-3 d-flex justify-content-end">
-                            <!-- Botão Voltar -->
-                            <button class="btn btn-danger me-2" type="button"
-                            onclick="window.location.href='{{url_for('instituicao.prepareSearchInstituicao')}}';">Voltar</button>
-                            <!-- Botão Cadastrar VTR -->
-                            <button type="submit" class="btn btn-primary bg-primary">Salvar</button>
+                            <p class="card-text">{{ "Cadastro" if not form.id.data else "Exclusão" }} de Instituições</p>
                         </div>
                     </div>
                 </div>
@@ -27,6 +20,9 @@
             <div class="card mb-2">
                 <div class="card-body">
                     <div class="form-group mb-3 row justify-content-between">
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            {{form.id}}
+                        </div>                        
                         <div class="col">
                             {{form.txtInstituicao.label(class_="form-label")}}
                             {{form.txtInstituicao(class_="form-control")}}
@@ -45,6 +41,20 @@
                                 </div> 
                             {% endfor %}
                         </div>
+                    </div>
+                    <!-- Botões com ajuste para diferentes tamanhos de tela -->
+                    <div class="d-flex justify-content-start mb-2">
+                        <!-- Botão Voltar-->
+                        <button class="btn btn-danger me-2" type="button" onclick="window.location.href='{{url_for('instituicao.listar')}}';">Voltar</button> 
+                        {% if form.id.data %}
+                        <!-- Botão Excluir visível em todos os tamanhos -->
+                        <button class="btn btn-danger me-2" type="button"
+                            onclick="window.location.href='{{url_for('instituicao.excluir', id=form.id.data)}}';">Excluir</button>
+                        {% endif %}
+                        {% if not form.id.data %}
+                        <!-- Botão Cadastrar VTR visível em todos os tamanhos -->
+                        {{ form.submit(class="btn btn-success") }}
+                        {% endif %}
                     </div>
                 </div>
             </div>

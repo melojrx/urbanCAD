@@ -1,7 +1,9 @@
-from wtforms import Form, StringField, SubmitField
+from wtforms import Form, HiddenField, StringField, SubmitField
 from wtforms.validators import InputRequired, Length
  
 class InstituicaoForm(Form):
+
+    id = HiddenField('id')
 
     txtInstituicao = StringField(
         'Nome da Instituição:',

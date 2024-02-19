@@ -103,7 +103,7 @@ class viaturaController():
             flash('Erro ao excluir viatura', 'error')
             return redirect(url_for('viatura.prepareExcluir', id=id))
         
-    @viatura_bp.route('/search', methods=['GET'])
+    @viatura_bp.route('/searchInstituicao', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
     def search():
