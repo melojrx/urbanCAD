@@ -2,118 +2,112 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-2 rounded mb-2">
+<h1 class="mt-4">Gerenciamento de Instituições</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Gerencie aqui as Instituições do Sistema</li>
+</ol>
 
-    <div class="container-fluid mt-2">  
-
-        <div class="card mb-2">
-            <div class="card-header">
-                <div class="row d-flex align-items-center">
-                    <div class="col-9">
-                        <h5 class="card-title">Gerenciamento de Instituições</h5>
-                        <p class="card-text">Listagem de Instituições</p>
-                    </div>
-                </div>
+<!-- Parametros para consulta -->
+<div class="card mb-2">
+    <form action="{{url_for('instituicao.search')}}" method="GET">
+        <div class="card-header">
+            <i class="fas fa-search me-1"></i>
+            Consulta de Instituições
+        </div>
+        <div class="card-body pb-0">
+            <div class="row">
+            <!-- Ajuste das colunas para diferentes tamanhos de tela -->
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                {{searchForm.txtInstituicaoSearch.label(class_="form-label")}}
+                {{searchForm.txtInstituicaoSearch(class="form-control form-control")}}
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                {{searchForm.txtSiglaSearch.label(class_="form-label")}}
+                {{searchForm.txtSiglaSearch(class="form-control form-control")}}
+            </div>
+            <div class="d-flex justify-content-start mt-3">
+                {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
+                <button type="button" class="btn btn-outline-info"
+                onclick="window.location.href='{{ url_for('instituicao.listar')}}';">Limpar</button>
+                <!-- Botão Cadastrar VTR -->
+                <button type="button" class="btn btn-success ms-2"
+                onclick="window.location.href='{{ url_for('instituicao.prepareCadastrar')}}';">Nova Instituição</button>
+            </div>
             </div>
         </div>
-
-        <!-- Parametros para consulta -->
-        <div class="card mb-2">
-            <form action="{{url_for('instituicao.search')}}" method="GET">
-                <div class="card-header">
-                    <i class="fas fa-search me-1"></i>
-                    Consulta de Instituições
-                </div>
-                <div class="card-body pb-0">
-                    <div class="row">
-                    <!-- Ajuste das colunas para diferentes tamanhos de tela -->
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        {{searchForm.txtInstituicaoSearch.label(class_="form-label")}}
-                        {{searchForm.txtInstituicaoSearch(class="form-control form-control")}}
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        {{searchForm.txtSiglaSearch.label(class_="form-label")}}
-                        {{searchForm.txtSiglaSearch(class="form-control form-control")}}
-                    </div>
-                    <div class="d-flex justify-content-start mt-3">
-                        {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
-                        <button type="button" class="btn btn-outline-info"
-                        onclick="window.location.href='{{ url_for('instituicao.listar')}}';">Limpar</button>
-                        <!-- Botão Cadastrar VTR -->
-                        <button type="button" class="btn btn-success ms-2"
-                        onclick="window.location.href='{{ url_for('instituicao.prepareCadastrar')}}';">Nova Instituição</button>
-                    </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-      
-        <!-- Lista de Instutuições -->
-        {% if listInstituicao.items %}
-        <div class="table-responsive mt-2">
-            <table class="table border table-striped table-hover table-borderless">
-                <thead>
-                    <tr class="text-center table-secondary">
-                        <th scope="col">Nome</th>
-                        <th scope="col">Sigla</th>
-                        <th scope="col">Data</th>
-                        <th scope="col">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in listInstituicao.items %}
-                        <tr class="text-center">
-                            <td>{{ row.txtInstituicao}}</td>
-                            <td>{{ row.txtSigla}}</td>
-                            <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
-                            <td class="text-center"><button type="button" class="btn btn-danger"
-                                onclick="window.location.href='{{ url_for('instituicao.prepareExcluir', id=row.id) }}';"><i class="fas fa-trash-alt"></i> Excluir</button></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Paginação -->
-        {% if not noPagination and listInstituicao.total > 10 %}
-        <!-- Pagination Links-->
-        <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-            <a href="{{ url_for('instituicao.searchInstituicao', page=listInstituicao.prev_num, **searchForm.data) }}" class="btn btn-outline-primary 
-                {% if listInstituicao.page == 1 %}disabled{% endif %}">
-                &laquo;
-            </a><!-- Loop through the number of pages to display a link for each-->
-            {% for page_num in listInstituicao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-            {% if page_num %}
-            <!-- Check for the active page and set the link to "Active"-->
-            {% if listInstituicao.page == page_num %}
-            <a href="{{ url_for('instituicao.searchInstituicao', page=page_num, **searchForm.data) }}" class="btn btn-primary">
-                {{ page_num }}
-            </a>
-            {% else %}
-            <a href="{{ url_for('instituicao.searchInstituicao', page=page_num, **searchForm.data) }}" class="btn btn-outline-primary">
-                {{ page_num }}
-            </a>
-            {% endif %}
-            {% else %}
-            ...
-            {% endif %}
-            {% endfor %} <a href="{{ url_for('instituicao.searchInstituicao', page=listInstituicao.next_num, **searchForm.data) }}" class="btn btn-outline-primary 
-                {% if listInstituicao.page == listInstituicao.pages %}disabled{% endif %}">
-                &raquo;
-            </a>
-        </div>
-        <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-            Página {{ listInstituicao.page }} de {{ listInstituicao.pages }}
-        </p>
-        {% endif %}
-        <!-- End Pagination Links-->
-        {% else %}
-        <p class="text-center">Nenhum registro encontrado.</p>
-        {% endif %}
-        
-    </div>
-        
-
+    </form>
 </div>
 
+<!-- Lista de Instutuições -->
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Tabela de Instituições
+    </div>
+    <div class="card-body">
+    {% if listInstituicao.items %}
+    <div class="table-responsive">
+        <table class="table table-bordered" style="font-size: 14px;">
+            <thead>
+                <tr class="text-center table-secondary">
+                    <th scope="col">Nome</th>
+                    <th scope="col">Sigla</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in listInstituicao.items %}
+                    <tr class="text-center">
+                        <td>{{ row.txtInstituicao}}</td>
+                        <td>{{ row.txtSigla}}</td>
+                        <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
+                        <td class="text-center"><button type="button" class="btn btn-danger"
+                            onclick="window.location.href='{{ url_for('instituicao.prepareExcluir', id=row.id) }}';"><i class="fas fa-trash-alt"></i> Excluir</button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Pagination -->
+    {% if not noPagination and listInstituicao.total > 10 %}
+    <!-- Pagination Links -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            <!-- Previous Page Link -->
+            <li class="page-item {% if listInstituicao.page == 1 %}disabled{% endif %}">
+                <a class="page-link"
+                    href="{{ url_for('instituicao.searchInstituicao', page=listInstituicao.prev_num, **searchForm.data) }}"
+                    tabindex="-1" aria-disabled="{% if listInstituicao.page == 1 %}true{% endif %}">Anterior</a>
+            </li>
+
+            <!-- Page Number Links -->
+            {% for page_num in listInstituicao.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+            <li class="page-item {% if listInstituicao.page == page_num %}active{% endif %}">
+                <a class="page-link"
+                    href="{{ url_for('instituicao.searchInstituicao', page=page_num, **searchForm.data) }}">{{ page_num
+                    }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+            {% endfor %}
+
+            <!-- Next Page Link -->
+            <li class="page-item {% if listInstituicao.page == listInstituicao.pages %}disabled{% endif %}">
+                <a class="page-link"
+                    href="{{ url_for('instituicao.searchInstituicao', page=listInstituicao.next_num, **searchForm.data) }}">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- Optional showing of current page and total pages, uncomment if needed
+    <p class="text-secondary fs-7 text-end">Página {{ listInstituicao.page }} de {{ listInstituicao.pages }}</p>
+    -->
+    <!-- End Pagination Links -->
+    {% endif %}
+    </div>
+</div>
+
+   
 {% endblock conteudo %}
