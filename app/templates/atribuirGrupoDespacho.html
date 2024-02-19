@@ -3,48 +3,49 @@
 {% block conteudo %}
 
 <div class="container-fluid mt-2 rounded mb-2" id="form-cadastro-evento">
-   
-    <div class="container-fluid mt-2">
-        <form method="POST" action="{{ url_for('ocorrencia.atribuirGrupoDespacho') }}">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h5 class="card-title">Atribuir Ocorrências</h5>
-                    <p class="card-text">Grupo de Despacho</p>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fas fa-folder-open"></i> Formulário de atribuição de ocorrências
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                {{form.idOcorrencia.label(class_="form-label")}}
-                                {{form.idOcorrencia(class_="form-control")}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-md-9">
-                            {{form.grupoDespacho.label(class_="form-label")}}
-                            {{form.grupoDespacho(class_="form-select")}}
-                            {% for error in form.grupoDespacho.errors %}
-                            <div class="important">
-                                {{error}}
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="col-md-3 d-flex mt-4">
-                            {{ form.submit(class_="btn btn-primary") }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
+    <h1 class="mt-4">Gerenciamento de Ocorrências</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}" style="color: gray">Gerenciamento de Ocorrências</a>
+        </li>
+        <li class="breadcrumb-item active">Atribuir Ocorrências</li>
+    </ol>
+    <form method="POST" action="{{ url_for('ocorrencia.atribuirGrupoDespacho') }}">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-folder-open"></i>
+                Formulário de atribuição de ocorrências
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Ajuste para usar em telas extra pequenas (col-12), pequenas (col-sm-12) e médias (col-md-12) -->
+                    <div class="col-12 col-sm-12 col-md-12 mb-3">
+                        {{form.idOcorrencia(class_="form-control")}}
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <!-- Ajuste para usar em telas extra pequenas (col-12), pequenas (col-sm-12) e médias (col-md-9) -->
+                    <div class="col-12 col-sm-12 col-md-9">
+                        {{form.grupoDespacho.label(class_="form-label")}}
+                        {{form.grupoDespacho(class_="form-select")}}
+                        {% for error in form.grupoDespacho.errors %}
+                        <div class="important">
+                            {{error}}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-start mt-3">
+                    <button class="btn btn-danger me-2" type="button"
+                        onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar</button>
+                    {{ form.submit(class_="btn btn-primary") }}
+                </div>
+            </div>
+        </div>
+    </form>
 
 </div>
+
+
 
 {% endblock conteudo %}

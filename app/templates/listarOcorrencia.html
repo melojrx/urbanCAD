@@ -78,7 +78,18 @@
             <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
             <td>{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</td>
             <td>{{ row.ocorrencia.numOcorrencia}}</td>
-            <td>{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+            {% if row.statusOCorrencia.id == 1 %}
+            <td class="badge text-bg-warning">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+            {% endif %}
+            {% if row.statusOCorrencia.id == 2 %}
+            <td class="badge text-bg-primary">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+            {% endif %}
+            {% if row.statusOCorrencia.id == 3 %}
+            <td class="badge text-bg-info">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+            {% endif %}
+            {% if row.statusOCorrencia.id == 4 %}
+            <td class="badge text-bg-success">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+            {% endif %}
             <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
             <td class="d-flex gap-2 align-items-center justify-content-center">
               <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#txtProblemaModal"
