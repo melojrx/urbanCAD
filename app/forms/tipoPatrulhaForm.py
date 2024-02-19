@@ -1,9 +1,11 @@
-from wtforms import Form, StringField, SubmitField
+from wtforms import Form, HiddenField, StringField, SubmitField
 from wtforms.validators import InputRequired
 
 class TipoPatrulhaForm(Form):
 
-    descricao = StringField(
+    id = HiddenField('id')
+
+    txtTipoPatrulha = StringField(
         'Tipo de Patrulha:',
         render_kw={"placeholder": "Tipo de Patrulha"},
         validators = [
