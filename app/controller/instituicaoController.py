@@ -12,9 +12,6 @@ from flask import flash, redirect, render_template, request, url_for
 
 class instituicaoController():
         
-    global ROWS_PER_PAGE 
-    ROWS_PER_PAGE = 10
-
     @instituicao_bp.route('/listarInstituicao', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
