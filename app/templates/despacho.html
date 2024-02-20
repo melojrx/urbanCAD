@@ -7,8 +7,6 @@
 
 <div class="container-fluid mt-2" id="form-cadastro-evento">
 
-    <div class="container-fluid">
-
         <div class="card mb-2">
             <div class="card-header" style="background-color: #525B62;">
                 <div class="card-title d-flex justify-content-center mt-1" style="color: antiquewhite;">
@@ -93,6 +91,7 @@
                 <div id="map"></div>
             </div>
         </div>
+        
         <div id="listDespachos">
             <!-- <div class="card-header d-flex" style="background-color: #525B62;">
                 <div class="form-check" style="color: antiquewhite;">
@@ -119,11 +118,11 @@
                         <table class="table table-bordered" style="font-size: 14px;">
                             <thead>
                                 <tr>
-                                    <th>COD. OCORRÊNCIA</th>
-                                    <th>SOLICITANTE</th>
-                                    <th>ENDEREÇO</th>
-                                    <th>TIPO DE OCORRÊNCIA</th>
-                                    <th>SITUAÇÃO</th>
+                                    <th>Cód.Ocorrência</th>
+                                    <th>Solicitante</th>
+                                    <th>Endereço</th>
+                                    <th>tipo de Ocorrência</th>
+                                    <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -134,10 +133,23 @@
                                     <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
                                     <td> {{ row.ocorrencia.txtEndereco}} </td>
                                     <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                    <td> {{ row.statusOCorrencia.txtStatusOcorrencia}} </td>
-                                    <td class="text-start">
+                                    <td class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                                        {% if row.statusOCorrencia.id == 1 %}
+                                        <span class="badge text-bg-warning">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.statusOCorrencia.id == 2 %}
+                                        <span class="badge text-bg-primary">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.statusOCorrencia.id == 3 %}
+                                        <span class="badge text-bg-info">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.statusOCorrencia.id == 4 %}
+                                        <span class="badge text-bg-success">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
                                         <a onclick="prepareDespachar('{{ row.ocorrencia.id }}')"
-                                            class="btn btn-danger btn-sm" role="button" title="Despachar">
+                                            class="btn btn-success btn-sm" role="button" title="Despachar">
                                             <i class="fas fa-share-square"></i>
                                         </a>
                                     </td>
@@ -159,30 +171,43 @@
                         <table class="table table-bordered" style="font-size: 14px;">
                             <thead>
                                 <tr>
-                                    <th>COD. OCORRÊNCIA</th>
-                                    <th>SOLICITANTE</th>
-                                    <th>EQUIPE</th>
-                                    <th>ENDEREÇO</th>
-                                    <th>TIPO DE OCORRÊNCIA</th>
-                                    <th>SITUAÇÃO</th>
+                                    <th>Cod. Ocorrência</th>
+                                    <th>Solicitante</th>
+                                    <th>Equipe</th>
+                                    <th>Endereço</th>
+                                    <th>tipo de Ocorrência</th>
+                                    <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="listDespachada">
                                 {% for row in listOcorrenciaDespachada %}
                                 <tr>
-                                    <td> {{ row.numOcorrencia}} </td>
-                                    <td> {{ row.interessado.txtInteressado}} </td>
+                                    <td>{{ row.numOcorrencia}}</td>
+                                    <td>{{ row.interessado.txtInteressado}}</td>
                                     <td>
                                         {% for despacho in row.listDespacho %}
                                         {{ despacho.composicaoViatura.viatura}}<br>
                                         {% endfor %}
                                     </td>
-                                    <td> {{ row.txtEndereco}} </td>
-                                    <td> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                    <td> {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}} </td>
+                                    <td>{{ row.txtEndereco}}</td>
+                                    <td>{{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
+                                <td class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 1 %}
+                                    <span class="badge text-bg-warning">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                    {% endif %}
+                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 2 %}
+                                    <span class="badge text-bg-primary">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                    {% endif %}
+                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 3 %}
+                                    <span class="badge text-bg-info">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                    {% endif %}
+                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 4 %}
+                                    <span class="badge text-bg-success">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                    {% endif %}
+                                </td>
                                     <td>
-                                        <button class="btn btn-danger me-2" {% if not row.exibeFinalizarOcorrencia
+                                        <button class="btn btn-success btn-sm me-2" {% if not row.exibeFinalizarOcorrencia
                                             %}disabled{% endif %} type="button"
                                             onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
                                     </td>
@@ -194,7 +219,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </div>
 
 <script>
