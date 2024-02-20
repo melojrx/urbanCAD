@@ -78,7 +78,7 @@ class agenteController:
     def prepareExcluir(id):
 
         agente = agenteDao.getAgenteById(id)
-        print(agente.usuario.id)
+
         form = AgenteForm(request.form, obj=agente)
 
         listUsuario = User.query.all()

@@ -1,16 +1,18 @@
-from wtforms import Form, SelectField, StringField, SubmitField
+from wtforms import Form, HiddenField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired, InputRequired
 
 class GrupoDespachoForm(Form):  
 
-    nome = StringField(
+    id = HiddenField('id')
+
+    txtNome = StringField(
         'Grupo de Despacho:',
         render_kw={"placeholder": "Nome da Regional"},
         validators = [
             InputRequired(message=('*Campo Requerido'))
         ])
 
-    regionais = SelectField(
+    idRegional = SelectField(
         'Regional',
         coerce=int,
         validators = [
