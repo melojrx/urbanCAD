@@ -1,6 +1,10 @@
 import datetime
+from app.DAO.grupoDespachoDao import grupoDespachoDao
+from app.DAO.regionalDao import regionalDao
+from app.enum.rowPerPageEnum import RowPerPageEnum
 
 from app.forms.grupoDespachoForm import GrupoDespachoForm
+from app.forms.grupoDespachoSearchForm import GrupoDespachoSearchForm
 from app.models.regionaisModel import Regional
 from ..database import db
 from flask_login import login_required
@@ -17,17 +21,19 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/listarGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
-    def listarGrupoDespacho():
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    def listar():
         try:
+            searchForm = GrupoDespachoSearchForm(request.form)
             page = request.args.get('page', 1, type=int)
-            
-            listGrupoDespacho= GrupoDespacho.query.join(Regional).order_by(Regional.txtRegiao.asc()).paginate(page=page, per_page=ROWS_PER_PAGE)    
-            return render_template('grupoDespacho/listarGrupoDespacho.html', listGrupoDespacho=listGrupoDespacho)
+            searchForm.idRegionalSearch.choices = GrupoDespachoController.populaRegionais()
+
+            listGrupoDespacho = grupoDespachoDao.getListDezGrupoDespacho(page)
 
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
 
+        return render_template('grupoDespacho/listarGrupoDespacho.html', listGrupoDespacho=listGrupoDespacho, searchForm=searchForm, noPagination=True)
 
     @grupodespacho_bp.route('/prepareCadastrarGrupoDespacho', methods=['GET'])
     @login_required
@@ -36,14 +42,13 @@ class GrupoDespachoController:
 
         try:
             form = GrupoDespachoForm(request.form)
-
-            listRegional = Regional.query.order_by(Regional.txtRegiao.asc()).all()
-            form.regionais.choices = [(0, "Selecione...")]+[(row.id, row.txtRegiao) for row in listRegional]
+            
+            form.idRegional.choices = GrupoDespachoController.populaRegionais()
             return render_template('grupoDespacho/cadastrarGrupoDespacho.html', form=form)
 
         except Exception as e:
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('usuariogrupodespacho.prepareCadastrarUsuarioGrupoDespacho'))
+            return redirect(url_for('grupodespacho.listar'))
 
 
     @grupodespacho_bp.route('/cadastrarGrupoDespacho' , methods=['POST'])
@@ -54,12 +59,67 @@ class GrupoDespachoController:
         form = GrupoDespachoForm(request.form)
         dataInicio = datetime.datetime.now()
         try:
-            grupoDespacho = GrupoDespacho(None, form.regionais.data , form.nome.data, dataInicio)
+            grupoDespacho = GrupoDespacho(None, form.idRegional.data , form.txtNome.data, dataInicio)
             db.session.add(grupoDespacho)
             db.session.commit()
             flash('Grupo de Despacho com sucesso', 'sucess')
-            return redirect(url_for('grupodespacho.listarGrupoDespacho'))
+            return redirect(url_for('grupodespacho.listar'))
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('grupodespacho.listarGrupoDespacho'))               
+            return redirect(url_for('grupodespacho.listar'))
+
+    @grupodespacho_bp.route('/prepareExcluirGrupoDespacho/<id>', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def prepareExcluir(id):
+
+        grupoDespacho = grupoDespachoDao.getGrupoDespachoById(id)
+        form = GrupoDespachoForm(request.form, obj=grupoDespacho)
+        form.idRegional.choices = GrupoDespachoController.populaRegionais()
+
+        for field in form:
+            field.flags.disabled = True
+
+        return render_template('grupoDespacho/cadastrarGrupoDespacho.html', form=form) 
+
+    @grupodespacho_bp.route('/excluirGrupoDespacho/<id>', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def excluir(id):
+        dataFim = datetime.datetime.now()
+        try:
+            grupoDespachoDao.delete(id, dataFim)
+            flash('Grupo de despacho excluído com sucesso', 'sucess')
+            return redirect(url_for('grupodespacho.listar'))
+        except Exception as e:
+            flash('Erro ao excluir Grupo de despacho', 'error')
+            return redirect(url_for('grupodespacho.prepareExcluir', id=id))
+
+    @grupodespacho_bp.route('/viatura.search', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN')
+    def search():
+        searchForm = GrupoDespachoSearchForm(request.args)
+        page = request.args.get('page', 1, type=int)
+
+        querySearch = GrupoDespacho.query.filter(GrupoDespacho.dataFim.is_(None))
+
+        if searchForm.txtNomeSearch.data:        
+            querySearch = querySearch.filter(GrupoDespacho.txtNome.ilike('%' + searchForm.txtNomeSearch.data + '%'))
+
+        if searchForm.idRegionalSearch.data:
+            querySearch = querySearch.join(GrupoDespacho.regional).filter(Regional.id == searchForm.idRegionalSearch.data)
+
+        querySearch = querySearch.order_by(GrupoDespacho.txtNome.asc())
+
+        listGrupoDespacho = querySearch.paginate(page=page, per_page=RowPerPageEnum.DEZ.value)  
+
+        searchForm.idRegionalSearch.choices = GrupoDespachoController.populaRegionais()
+
+        return render_template('grupoDespacho/listarGrupoDespacho.html', listGrupoDespacho=listGrupoDespacho, searchForm=searchForm, noPagination=False)
+
+    @staticmethod
+    def populaRegionais():
+        listRegional = regionalDao.getListRegionais()
+        return [(0, "Selecione...")]+[(row.id, row.txtRegiao) for row in listRegional]
