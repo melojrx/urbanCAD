@@ -2,51 +2,47 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-2 rounded mb-2">
+<h1 class="mt-4">Gerenciamento de tipos de patrulha</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Gerencie aqui os tipos de patrulhas do sistema</li>
+</ol>
 
-  <div class="container-fluid mt-2">
-
-    <div class="card mb-2">
-      <div class="card-header">
-          <div class="row d-flex align-items-center">
-              <div class="col-9">
-                  <h5 class="card-title">Gerenciamento de tipos de patrulha</h5>
-                  <p class="card-text">Gerencie aqui os tipos de patrulhas do sistema</p>
-              </div>
-          </div>
+<!-- Parametros para consulta -->
+<div class="card mb-2">
+  <form action="{{url_for('tipopatrulha.search')}}" method="GET">
+    <div class="card-header">
+      <i class="fas fa-search me-1"></i>
+      Consulta de Tipo de Patrulhas
+    </div>
+    <div class="card-body pb-0">
+      <div class="row">
+        <!-- Ajuste das colunas para diferentes tamanhos de tela -->
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{searchForm.txtTipoPatrulhaSearch.label(class_="form-label")}}
+          {{searchForm.txtTipoPatrulhaSearch(class="form-control form-control")}}
+        </div>
+        <div class="d-flex justify-content-start mt-3">
+          {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
+          <button type="button" class="btn btn-outline-info"
+            onclick="window.location.href='{{ url_for('tipopatrulha.listar')}}';">Limpar</button>
+          <!-- Botão Cadastrar VTR -->
+          <button type="button" class="btn btn-success ms-2"
+            onclick="window.location.href='{{ url_for('tipopatrulha.prepareCadastrar')}}';">Novo Tipo de Patrulha</button>
+        </div>
       </div>
     </div>
-    
-    <!-- Parametros para consulta -->
-    <div class="card mb-2">
-      <form action="{{url_for('tipopatrulha.search')}}" method="GET">
-        <div class="card-header">
-          <i class="fas fa-search me-1"></i>
-          Consulta de Tipo de Patrulhas
-        </div>
-        <div class="card-body pb-0">
-          <div class="row">
-            <!-- Ajuste das colunas para diferentes tamanhos de tela -->
-            <div class="col-lg-3 col-md-6 col-sm-12">
-              {{searchForm.txtTipoPatrulhaSearch.label(class_="form-label")}}
-              {{searchForm.txtTipoPatrulhaSearch(class="form-control form-control")}}
-            </div>
-            <div class="d-flex justify-content-start mt-3">
-              {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
-              <button type="button" class="btn btn-outline-info"
-                onclick="window.location.href='{{ url_for('tipopatrulha.listar')}}';">Limpar</button>
-              <!-- Botão Cadastrar VTR -->
-              <button type="button" class="btn btn-success ms-2"
-                onclick="window.location.href='{{ url_for('tipopatrulha.prepareCadastrar')}}';">Novo Tipo de Patrulha</button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+  </form>
+</div>
 
-    <!-- Lista Viaturas -->
+<!-- Lista de Tipos de Patrulhas -->
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Tabela de Tipos de Patrulhas
+  </div>
+  <div class="card-body">
     <div class="table-resposive">
-      <table class="table border table-striped table-hover table-borderless">
+      <table class="table table-bordered" style="font-size: 14px;"">
         {% if listTipoPatrulha.items %}
           <thead>
             <tr class="text-center table-secondary">
@@ -74,8 +70,8 @@
       <!-- Pagination Links-->
       <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
         <a href="{{ url_for('tipopatrulha.search', page=listTipoPatrulha.prev_num, **searchForm.data) }}" class="btn btn-outline-primary 
-            {% if listTipoPatrulha.page == 1 %}disabled{% endif %}">
-            &laquo;
+                  {% if listTipoPatrulha.page == 1 %}disabled{% endif %}">
+          &laquo;
         </a><!-- Loop through the number of pages to display a link for each-->
         {% for page_num in listTipoPatrulha.iter_pages(left_edge=1, right_edge=1, left_current=1,
         right_current=2)
@@ -83,27 +79,27 @@
         <!-- Check for the active page and set the link to "Active"-->
         {% if listTipoPatrulha.page == page_num %}
         <a href="{{ url_for('tipopatrulha.search', page=page_num, **searchForm.data) }}" class="btn btn-primary">
-            {{ page_num }}
+          {{ page_num }}
         </a>
         {% else %}
         <a href="{{ url_for('tipopatrulha.search', page=page_num, **searchForm.data) }}" class="btn btn-outline-primary">
-            {{ page_num }}
+          {{ page_num }}
         </a>
         {% endif %}
         {% else %}
         ...
         {% endif %}
         {% endfor %} <a href="{{ url_for('tipopatrulha.search', page=listTipoPatrulha.next_num, **searchForm.data) }}" class="btn btn-outline-primary 
-            {% if listTipoPatrulha.page == listTipoPatrulha.pages %}disabled{% endif %}">
-            &raquo;
+                  {% if listTipoPatrulha.page == listTipoPatrulha.pages %}disabled{% endif %}">
+          &raquo;
         </a>
-    </div>
-    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
+      </div>
+      <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
         Página {{ listTipoPatrulha.page }} de {{ listTipoPatrulha.pages }}
-    </p>
-  <!-- End Pagination Links-->
+      </p>
+      <!-- End Pagination Links-->
+      {% endif %}
   </div>
-  {% endif %}
-
 </div>
+
 {% endblock %}
