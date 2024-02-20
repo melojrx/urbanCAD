@@ -222,7 +222,7 @@ class DespachoController():
    
     @despacho_bp.route('/atenderDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')     
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')     
     def atenderDespacho(idDespachoHistorico):
 
         try:
@@ -245,7 +245,7 @@ class DespachoController():
         
     @despacho_bp.route('/gerenciarDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')     
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')
     def gerenciarDespacho(idDespachoHistorico):
 
         try:
