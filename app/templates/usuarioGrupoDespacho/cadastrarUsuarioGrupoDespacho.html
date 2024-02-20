@@ -11,14 +11,7 @@
                 <div class="row d-flex align-items-center">
                     <div class="col-9">
                         <h5 class="card-title">Gerenciamento de Usuário por Grupo de Despacho</h5>
-                        <p class="card-text">Cadastro de Usuário por Grupo de Despacho</p>
-                    </div>
-                    <div class="col-3 d-flex justify-content-end">
-                        <!-- Botão Voltar -->
-                        <button class="btn btn-danger me-2" type="button"
-                        onclick="window.location.href='{{url_for('usuariogrupodespacho.listarUsuarioGrupoDespacho')}}';">Voltar</button>
-                        <!-- Botão Cadastrar VTR -->
-                        {{ form.submit(class_="btn btn-primary") }}
+                        <p class="card-text">{{ "Cadastro" if not form.id.data else "Exclusão" }} de Usuário por Grupo de Despacho</p>
                     </div>
                 </div>
             </div>
@@ -27,24 +20,41 @@
         <div class="card mb-2">
             <div class="card-body">
                 <div class="form-group mb-3 row justify-content-between">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        {{form.id}}
+                    </div>                     
                     <div class="col">
-                        {{form.usuarios.label(class_="form-label")}}
-                        {{form.usuarios(class_="form-control")}}
-                        {% for error in form.usuarios.errors %}
+                        {{form.usuario.label(class_="form-label")}}
+                        {{form.usuario(class_="form-control")}}
+                        {% for error in form.usuario.errors %}
                         <div class="important">
                             {{error}}
                         </div>
                         {% endfor %}    
                     </div>
                     <div class="col">        
-                        {{form.gruposDeDespacho.label(class_="form-label")}}
-                        {{form.gruposDeDespacho(class_="form-select")}}
-                        {% for error in form.gruposDeDespacho.errors %}
+                        {{form.grupoDespacho.label(class_="form-label")}}
+                        {{form.grupoDespacho(class_="form-select")}}
+                        {% for error in form.grupoDespacho.errors %}
                         <div class="important">
                             {{error}}
                         </div>
                         {% endfor %}
-                    </div>    
+                    </div>
+                    <!-- Botões com ajuste para diferentes tamanhos de tela -->
+                    <div class="d-flex justify-content-start mb-2">
+                        <!-- Botão Voltar-->
+                        <button class="btn btn-danger me-2" type="button" onclick="window.location.href='{{url_for('usuariogrupodespacho.listar')}}';">Voltar</button> 
+                        {% if form.id.data %}
+                        <!-- Botão Excluir visível em todos os tamanhos -->
+                        <button class="btn btn-danger me-2" type="button"
+                            onclick="window.location.href='{{url_for('usuariogrupodespacho.excluir', id=form.id.data)}}';">Excluir</button>
+                        {% endif %}
+                        {% if not form.id.data %}
+                        <!-- Botão Cadastrar VTR visível em todos os tamanhos -->
+                        {{ form.submit(class="btn btn-success") }}
+                        {% endif %}
+                    </div>                      
                 </div>
             </div>
         </div>
