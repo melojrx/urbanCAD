@@ -7,6 +7,10 @@ from ..database import db
 class grupoDespachoDao:
    
     @staticmethod
+    def getListGrupoDespacho():
+        return GrupoDespacho.query.filter(GrupoDespacho.dataFim.is_(None)).all()
+
+    @staticmethod
     def delete(id, dataFim):
         GrupoDespacho.query.filter_by(id=id).update({"dataFim": dataFim})
         db.session.commit()

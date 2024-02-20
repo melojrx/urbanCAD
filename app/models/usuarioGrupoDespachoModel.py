@@ -1,4 +1,3 @@
-from app.models.ocorrenciaModel import Ocorrencia
 from app.models.grupoDespachoModel import GrupoDespacho
 from app.models.userModel import User
 from ..database import db
