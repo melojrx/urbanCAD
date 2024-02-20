@@ -19,3 +19,4 @@ COPY . .
 
 
 CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8009", "wsgi:app"]
+# CMD ["gunicorn", "-k", "eventlet", "-w", "1", "-b", "0.0.0.0:8009", "wsgi:app"]
