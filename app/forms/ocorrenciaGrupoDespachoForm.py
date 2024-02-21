@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, InputRequired
 class OcorrenciaGrupoDespachoForm(Form):
 
     grupoDespacho = SelectField(
-        'Grupo de Despacho',
+        'Grupo de Despacho:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),

@@ -30,7 +30,7 @@ class ViaturaForm(Form):
         ])        
 
     idInstituicao = SelectField(
-        'Instituição',
+        'Instituição:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
@@ -38,7 +38,7 @@ class ViaturaForm(Form):
     ])
 
     idTipoPatrulha = SelectField(
-        'Tipo Patrulha',
+        'Tipo Patrulha:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),

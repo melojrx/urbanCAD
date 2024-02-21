@@ -6,7 +6,7 @@ class UsuarioGrupoDespachoForm(Form):
     id = HiddenField('id')
 
     usuario = SelectField(
-        'Usuário',
+        'Usuário:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
@@ -14,7 +14,7 @@ class UsuarioGrupoDespachoForm(Form):
     ])
 
     grupoDespacho = SelectField(
-        'Grupo de Despacho',
+        'Grupo de Despacho:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),

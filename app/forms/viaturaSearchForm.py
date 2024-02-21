@@ -18,12 +18,12 @@ class ViaturaSearchForm(Form):
     )        
 
     idInstituicaoSearch = SelectField(
-        'Instituição',
+        'Instituição:',
         coerce=int
     )
 
     idTipoPatrulhaSearch = SelectField(
-        'Tipo Patrulha',
+        'Tipo Patrulha:',
         coerce=int
     )
 

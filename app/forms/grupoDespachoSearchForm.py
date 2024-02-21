@@ -8,7 +8,7 @@ class GrupoDespachoSearchForm(Form):
     )
 
     idRegionalSearch = SelectField(
-        'Regional',
+        'Regional:',
         coerce=int,
     )
 

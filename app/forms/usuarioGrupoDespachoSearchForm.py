@@ -4,12 +4,12 @@ from wtforms.validators import DataRequired, InputRequired
 class UsuarioGrupoDespachoSearchForm(Form):  
 
     usuarioSearch = SelectField(
-        'Usuário',
+        'Usuário:',
         coerce=int
     )
 
     grupoDespachoSearch = SelectField(
-        'Grupo de Despacho',
+        'Grupo de Despacho:',
         coerce=int
     )
 
