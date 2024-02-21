@@ -2,55 +2,52 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-2 rounded mb-2">
-
-  <div class="container-fluid mt-2">
-
-    <div class="card mb-2">
-      <div class="card-header">
-          <div class="row d-flex align-items-center">
-              <div class="col-9">
-                  <h5 class="card-title">Gerenciamento de usuário dos Grupos de Despacho</h5>
-                  <p class="card-text">Gerencie aqui os usuários responsáveis pelos Grupos de Despacho</p>
-              </div>
-          </div>
+<h1 class="mt-4">Gerenciamento de Usuários dos Grupos de Despacho</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Gerencie aqui os usuários de Grupos de Despacho</li>
+</ol>
+                  
+<!-- Parametros para consulta -->
+<div class="card mb-2">
+  <form action="{{url_for('usuariogrupodespacho.search')}}" method="GET">
+    <div class="card-header">
+      <i class="fas fa-search me-1"></i>
+      Consulta de Usuário Grupo de Despacho
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Ajuste das colunas para diferentes tamanhos de tela -->
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{searchForm.usuarioSearch.label(class_="form-label")}}
+          {{searchForm.usuarioSearch(class="form-control form-control")}}
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          {{searchForm.grupoDespachoSearch.label(class_="form-label")}}
+          {{searchForm.grupoDespachoSearch(class="form-control form-control")}}
+        </div>
+      </div>
+      <div class="d-flex justify-content-start mt-3">
+        {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
+        <button type="button" class="btn btn-outline-info"
+          onclick="window.location.href='{{ url_for('usuariogrupodespacho.listar')}}';">Limpar</button>
+        <!-- Botão Cadastrar VTR -->
+        <button type="button" class="btn btn-success ms-2"
+          onclick="window.location.href='{{ url_for('usuariogrupodespacho.prepareCadastrarUsuarioGrupoDespacho')}}';">Novo
+          Grupo de Despacho</button>
       </div>
     </div>
-    
-    <!-- Parametros para consulta -->
-    <div class="card mb-2">
-      <form action="{{url_for('usuariogrupodespacho.search')}}" method="GET">
-        <div class="card-header">
-          <i class="fas fa-search me-1"></i>
-          Consulta de Usuário Grupo de Despacho
-        </div>
-        <div class="card-body pb-0">
-          <div class="row">
-            <!-- Ajuste das colunas para diferentes tamanhos de tela -->
-            <div class="col-lg-3 col-md-6 col-sm-12">
-              {{searchForm.usuarioSearch.label(class_="form-label")}}
-              {{searchForm.usuarioSearch(class="form-control form-control")}}
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12">
-              {{searchForm.grupoDespachoSearch.label(class_="form-label")}}
-              {{searchForm.grupoDespachoSearch(class="form-control form-control")}}
-            </div>
-            <div class="d-flex justify-content-start mt-3">
-              {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
-              <button type="button" class="btn btn-outline-info"
-                onclick="window.location.href='{{ url_for('usuariogrupodespacho.listar')}}';">Limpar</button>
-              <!-- Botão Cadastrar VTR -->
-              <button type="button" class="btn btn-success ms-2"
-                onclick="window.location.href='{{ url_for('usuariogrupodespacho.prepareCadastrarUsuarioGrupoDespacho')}}';">Novo Grupo de Despacho</button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+  </form>
+</div>
 
-    <!-- Lista Viaturas -->
+<!-- Lista Usuários de Grupo de Despacho -->
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Tabela de Usuários de Grupos de Despacho
+  </div>
+  <div class="card-body">
     <div class="table-resposive">
-      <table class="table border table-striped table-hover table-borderless">
+      <table class="table table-bordered" style="font-size: 14px;">
         {% if listUsuarioGrupoDespacho.items %}
           <thead>
             <tr class="text-center table-secondary">
@@ -76,40 +73,43 @@
         {% endif %}
       </table>
     </div>
-      {% if not noPagination and listUsuarioGrupoDespacho.total > 10 %}
-      <!-- Pagination Links-->
-      <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
-        <a href="{{ url_for('usuariogrupodespacho.search', page=listUsuarioGrupoDespacho.prev_num, **searchForm.data) }}" class="btn btn-outline-primary 
-            {% if listUsuarioGrupoDespacho.page == 1 %}disabled{% endif %}">
-            &laquo;
-        </a><!-- Loop through the number of pages to display a link for each-->
-        {% for page_num in listUsuarioGrupoDespacho.iter_pages(left_edge=1, right_edge=1, left_current=1,
-        right_current=2)
-        %}{% if page_num %}
-        <!-- Check for the active page and set the link to "Active"-->
-        {% if listUsuarioGrupoDespacho.page == page_num %}
-        <a href="{{ url_for('usuariogrupodespacho.search', page=page_num, **searchForm.data) }}" class="btn btn-primary">
-            {{ page_num }}
-        </a>
+    {% if not noPagination and listUsuarioGrupoDespacho.total > 10 %}
+    <!-- Pagination Links -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-end">
+        <!-- Previous Page Link -->
+        <li class="page-item {% if listUsuarioGrupoDespacho.page == 1 %}disabled{% endif %}">
+          <a class="page-link"
+            href="{{ url_for('usuariogrupodespacho.search', page=listUsuarioGrupoDespacho.prev_num, **searchForm.data) }}"
+            tabindex="-1" aria-disabled="{% if listUsuarioGrupoDespacho.page == 1 %}true{% endif %}">Anterior</a>
+        </li>
+    
+        <!-- Page Number Links -->
+        {% for page_num in listUsuarioGrupoDespacho.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)
+        %}
+        {% if page_num %}
+        <li class="page-item {% if listUsuarioGrupoDespacho.page == page_num %}active{% endif %}">
+          <a class="page-link" href="{{ url_for('usuariogrupodespacho.search', page=page_num, **searchForm.data) }}">{{
+            page_num }}</a>
+        </li>
         {% else %}
-        <a href="{{ url_for('usuariogrupodespacho.search', page=page_num, **searchForm.data) }}" class="btn btn-outline-primary">
-            {{ page_num }}
-        </a>
+        <li class="page-item disabled"><span class="page-link">...</span></li>
         {% endif %}
-        {% else %}
-        ...
-        {% endif %}
-        {% endfor %} <a href="{{ url_for('usuariogrupodespacho.search', page=listUsuarioGrupoDespacho.next_num, **searchForm.data) }}" class="btn btn-outline-primary 
-            {% if listUsuarioGrupoDespacho.page == listUsuarioGrupoDespacho.pages %}disabled{% endif %}">
-            &raquo;
-        </a>
-    </div>
-    <p class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center text-primary ">
-        Página {{ listUsuarioGrupoDespacho.page }} de {{ listUsuarioGrupoDespacho.pages }}
-    </p>
-  <!-- End Pagination Links-->
+        {% endfor %}
+    
+        <!-- Next Page Link -->
+        <li class="page-item {% if listUsuarioGrupoDespacho.page == listUsuarioGrupoDespacho.pages %}disabled{% endif %}">
+          <a class="page-link"
+            href="{{ url_for('usuariogrupodespacho.search', page=listUsuarioGrupoDespacho.next_num, **searchForm.data) }}">Próxima</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Optionally showing current page and total pages -->
+    <!-- <p class="text-secondary fs-7 text-center">Página {{ listUsuarioGrupoDespacho.page }} de {{ listUsuarioGrupoDespacho.pages }}</p> -->
+    <!-- End Pagination Links -->
+    {% endif %}
   </div>
-  {% endif %}
-
 </div>
+
+
 {% endblock %}

@@ -13,7 +13,7 @@ class GrupoDespachoForm(Form):
         ])
 
     idRegional = SelectField(
-        'Regional',
+        'Regional:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
