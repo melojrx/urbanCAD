@@ -9,7 +9,7 @@
             
 <!-- Parametros para consulta -->
 <div class="card mb-2">
-  <form action="{{url_for('viatura.search')}}" method="GET">
+  <form action="{{url_for('grupodespacho.search')}}" method="GET">
     <div class="card-header">
       <i class="fas fa-search me-1"></i>
       Consulta de Grupo de Despacho
@@ -31,7 +31,7 @@
             onclick="window.location.href='{{ url_for('grupodespacho.listar')}}';">Limpar</button>
           <!-- Botão Cadastrar Grupo de Despacho  -->
           <button type="button" class="btn btn-success ms-2"
-            onclick="window.location.href='{{ url_for('grupodespacho.prepareCadastrarGrupoDespacho')}}';">Novo Grupo de Despacho</button>
+            onclick="window.location.href='{{ url_for('grupodespacho.prepareCadastrarGrupoDespacho')}}';">Novo</button>
         </div>
       </div>
     </div>

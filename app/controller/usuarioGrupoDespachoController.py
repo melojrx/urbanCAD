@@ -43,13 +43,10 @@ class UsuarioGrupoDespachoController:
     def prepareCadastrarUsuarioGrupoDespacho():
 
         try:
-            form = UsuarioGrupoDespachoForm(request.form)
+            form = UsuarioGrupoDespachoForm(data=request.args)
 
-            listUsuario = User.query.order_by(User.name.asc()).all()
-            form.usuario.choices = [(0, "Selecione...")]+[(row.id, row.name) for row in listUsuario]
-
-            listGrupoDespacho = GrupoDespacho.query.filter(GrupoDespacho.dataFim.is_(None)).order_by(GrupoDespacho.txtNome.asc()).all()
-            form.grupoDespacho.choices = [(0, "Selecione...")]+[(row.id, row.txtNome) for row in listGrupoDespacho]
+            form.usuario.choices = UsuarioGrupoDespachoController.populaUsuario()
+            form.grupoDespacho.choices = UsuarioGrupoDespachoController.populaGrupoDespacho()
             return render_template('usuarioGrupoDespacho/cadastrarUsuarioGrupoDespacho.html', form=form)
 
         except Exception as e:
@@ -63,17 +60,29 @@ class UsuarioGrupoDespachoController:
     def cadastrarUsuarioGrupoDespacho():
 
         form = UsuarioGrupoDespachoForm(request.form)
-        dataInicio = datetime.datetime.now()
+        usuario = form.usuario.data
+        grupoDespacho = form.grupoDespacho.data
+
+        if(usuario == 0):
+            flash('Informe os Usuário', 'error')
+            return redirect(url_for('usuariogrupodespacho.prepareCadastrarUsuarioGrupoDespacho', **form.data))
+        if(grupoDespacho == 0):
+            flash('Informe o Grupo de Despacho', 'error')
+            return redirect(url_for('usuariogrupodespacho.prepareCadastrarUsuarioGrupoDespacho', **form.data))
+        
         try:
-            usuarioGrupoDespacho = UsuarioGrupoDespacho(form.grupoDespacho.data , form.usuario.data, dataInicio)
+            dataInicio = datetime.datetime.now()
+            usuarioGrupoDespacho = UsuarioGrupoDespacho(grupoDespacho, usuario, dataInicio)
             db.session.add(usuarioGrupoDespacho)
             db.session.commit()
             flash('Usuário cadastrado a um Grupo de Despacho com sucesso', 'sucess')
             return redirect(url_for('usuariogrupodespacho.listar'))
+
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('usuariogrupodespacho.listar'))
+            
+        return redirect(url_for('usuariogrupodespacho.listar'))
 
     @usuariogrupodespacho_bp.route('/prepareExcluirUsuarioGrupoDespacho/<id>', methods=['GET'])
     @login_required
@@ -131,9 +140,9 @@ class UsuarioGrupoDespachoController:
     @staticmethod
     def populaUsuario():
         listUsuario = userDao.getListUsuario()
-        return [(0, "Selecione...")]+[(row.id, row.name) for row in listUsuario]
+        return ([(0, "Selecione...")]+[(row.id, row.name) for row in listUsuario])
 
     @staticmethod
     def populaGrupoDespacho():
         listGrupoDespacho = grupoDespachoDao.getListGrupoDespacho()
-        return [(0, "Selecione...")]+[(row.id, row.txtNome) for row in listGrupoDespacho]        
+        return ([(0, "Selecione...")]+[(row.id, row.txtNome) for row in listGrupoDespacho])       

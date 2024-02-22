@@ -41,13 +41,10 @@ class viaturaController():
     @login_required
     @roles_required('MACEIO_ADMIN')
     def prepareCadastrar():
-        form = ViaturaForm(request.form)
+        form = ViaturaForm(data=request.args)
 
-        listIntituicao = instituicaoDao.getlistInstituicao()
-        form.idInstituicao.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
-
-        listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
-        form.idTipoPatrulha.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha]
+        form.idInstituicao.choices = viaturaController.populaInstituicao()
+        form.idTipoPatrulha.choices = viaturaController.populaTipoPatrulha()
 
         return render_template('viatura/cadastrarViatura.html', form=form)
 
@@ -58,9 +55,20 @@ class viaturaController():
     def cadastrar():
 
         form = ViaturaForm(request.form)
-        dataInicio = datetime.datetime.now()
+
+        tipoPatrulha = form.idTipoPatrulha.data
+        instituicao = form.idInstituicao.data
+
+        if(tipoPatrulha == 0):
+            flash('Informe o Tipo de Patrulha', 'error')
+            return redirect(url_for('viatura.prepareCadastrar', **form.data))
+        if(instituicao == 0):
+            flash('Informe a Instituição', 'error')
+            return redirect(url_for('viatura.prepareCadastrar', **form.data))
+
         try:
-            viatura = Viatura(form.idInstituicao.data, form.idTipoPatrulha.data, form.txtCodigo.data.upper(), form.txtPlaca.data.upper(),form.txtDescricao.data, dataInicio)
+            dataInicio = datetime.datetime.now()
+            viatura = Viatura(instituicao, tipoPatrulha, form.txtCodigo.data.upper(), form.txtPlaca.data.upper(),form.txtDescricao.data, dataInicio)
             db.session.add(viatura)
             db.session.commit()
             flash('Viatura cadastrada com sucesso', 'sucess')
@@ -79,10 +87,8 @@ class viaturaController():
         viatura = viaturaDao.getViaturaById(id)
         form = ViaturaForm(request.form, obj=viatura)
 
-        listIntituicao = instituicaoDao.getlistInstituicao()
-        form.idInstituicao.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
-        listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
-        form.idTipoPatrulha.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha]      
+        form.idInstituicao.choices = viaturaController.populaInstituicao()
+        form.idTipoPatrulha.choices = viaturaController.populaTipoPatrulha()     
 
         for field in form:
             field.flags.disabled = True
@@ -90,7 +96,7 @@ class viaturaController():
         return render_template('viatura/cadastrarViatura.html', form=form)
     
 
-    @viatura_bp.route('/excluir/<id>', methods=['GET'])
+    @viatura_bp.route('/excluirViatura/<id>', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
     def excluir(id):
@@ -103,7 +109,7 @@ class viaturaController():
             flash('Erro ao excluir viatura', 'error')
             return redirect(url_for('viatura.prepareExcluir', id=id))
         
-    @viatura_bp.route('/viatura.search', methods=['GET'])
+    @viatura_bp.route('/viatura.searchViatura', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
     def search():
@@ -128,9 +134,17 @@ class viaturaController():
 
         listViatura = querySearch.paginate(page=page, per_page=RowPerPageEnum.DEZ.value)  
 
-        listIntituicao = instituicaoDao.getlistInstituicao()
-        searchForm.idInstituicaoSearch.choices = [(0, "Selecione...")]+[(ins.id, ins.txtInstituicao) for ins in listIntituicao]
-        listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
-        searchForm.idTipoPatrulhaSearch.choices = [(0, "Selecione...")]+[(tpa.id, tpa.txtTipoPatrulha) for tpa in listTipoPatrulha] 
+        searchForm.idInstituicaoSearch.choices = viaturaController.populaInstituicao()
+        searchForm.idTipoPatrulhaSearch.choices = viaturaController.populaTipoPatrulha()
 
         return render_template('viatura/listarViatura.html', listViatura=listViatura, searchForm=searchForm, noPagination=False)
+    
+    @staticmethod
+    def populaTipoPatrulha():
+        listTipoPatrulha = tipoPatrulhaDao.getlistTipoPatrulha()
+        return ([(0, "Selecione...")]+[(row.id, row.txtTipoPatrulha) for row in listTipoPatrulha])
+
+    @staticmethod
+    def populaInstituicao():
+        listIntituicao = instituicaoDao.getlistInstituicao()
+        return ([(0, "Selecione...")]+[(row.id, row.txtInstituicao) for row in listIntituicao])           
