@@ -16,9 +16,6 @@ from flask import render_template, request, redirect, url_for, flash
 
 class agenteController:    
 
-    global ROWS_PER_PAGE 
-    ROWS_PER_PAGE = 10
-
     @agente_bp.route('/listarAgente', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')

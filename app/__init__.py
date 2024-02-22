@@ -16,11 +16,6 @@ logger = logging.getLogger(__name__)
 # app.debug = True
 # app.config['SQLALCHEMY_ECHO'] = True
 
-public = Blueprint('public', __name__)
-@public.route('/')
-def home():
-        return render_template('index.html')
-
 login_manager = LoginManager(app)
 login_manager.login_view = "login.login"
 login_manager.login_message = u"Por favor, realize o login para acessar a página"
@@ -35,13 +30,14 @@ from .rotas.grupoDespachoRout import grupodespacho_bp
 from .rotas.instituicaoRout import instituicao_bp
 from .rotas.maletaRout import maleta_bp
 from .rotas.ocorrenciaRout import ocorrencia_bp
+from .rotas.publicRout import public_bp
 from .rotas.tipoPatrulhaRout import tipopatrulha_bp
 from .rotas.viaturaRout import viatura_bp
 from .rotas.usuarioGrupoDespachoRout import usuariogrupodespacho_bp
 from .rotas.dashboardRout import dashboard_bp
 
 app.register_blueprint(agente_bp)
-app.register_blueprint(public)
+app.register_blueprint(public_bp)
 app.register_blueprint(composicao_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(despacho_bp)
