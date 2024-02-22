@@ -1,6 +1,7 @@
 import datetime
 from app.DAO.agenteDao import agenteDao
 from app.DAO.instituicaoDao import instituicaoDao
+from app.DAO.userDao import userDao
 
 from app.controller.roleRequired import roles_required
 from app.enum.rowPerPageEnum import RowPerPageEnum
@@ -40,11 +41,11 @@ class agenteController:
     @agente_bp.route('/prepareCadastrarAgente', methods=['GET'])
     @login_required
     @roles_required('MACEIO_ADMIN')
-    def prepareCadastrar():
+    def prepareCadastrarAgente():
 
-        form = AgenteForm(request.form)
+        form = AgenteForm(data=request.args)
 
-        listUsuario = User.query.all()
+        listUsuario = userDao.getListUsuario()
         form.usuario.choices = [(0, "Selecione...")]+[(row.id, row.name) for row in listUsuario]
 
         listIntituicao = Instituicao.query.filter(Instituicao.dataFim.is_(None)).all()
@@ -59,10 +60,18 @@ class agenteController:
     def cadastrarAgente():
 
         form = AgenteForm(request.form)
-        dataInicio = datetime.datetime.now()
+        usuario = form.usuario.data
+        idInstituicao = form.idInstituicao.data
+        if(usuario == 0):
+            flash('Informe o Usuário', 'error')
+            return redirect(url_for('agente.prepareCadastrarAgente', **form.data))
+        if(idInstituicao == 0):
+            flash('Informe a Instituição', 'error')
+            return redirect(url_for('agente.prepareCadastrarAgente', **form.data))
 
         try:
-            agente = Agente(form.idInstituicao.data, form.usuario.data, dataInicio)
+            dataInicio = datetime.datetime.now()
+            agente = Agente(idInstituicao, usuario, dataInicio)
             db.session.add(agente)
             db.session.commit()
             flash('Agente cadastrado com sucesso', 'sucess')
@@ -70,7 +79,7 @@ class agenteController:
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')
-            return redirect(url_for('agente.prepareCadastrarAgente'))
+            return redirect(url_for('agente.prepareCadastrarAgente', **form.data))
 
     @agente_bp.route('/prepareExcluirAgente/<id>', methods=['GET'])
     @login_required

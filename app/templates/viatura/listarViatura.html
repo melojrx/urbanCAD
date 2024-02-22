@@ -39,7 +39,7 @@
             onclick="window.location.href='{{ url_for('viatura.listar')}}';">Limpar</button>
           <!-- Botão Cadastrar VTR -->
           <button type="button" class="btn btn-success ms-2"
-            onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';">Nova Viatura</button>
+            onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';">Novo</button>
         </div>
       </div>
     </div>
@@ -75,7 +75,7 @@
             <td>{{ row.instituicao.txtInstituicao }}</td>
             <td>{{ row.tipoPatrulha.txtTipoPatrulha }}</td>
             <td class="text-center"><button type="button" class="btn btn-danger"
-                onclick="window.location.href='{{ url_for('tipopatrulha.prepareExcluir', id=row.id) }}';"><i class="fas fa-trash-alt"></i> Excluir</button></td>
+                onclick="window.location.href='{{ url_for('viatura.prepareExcluir', id=row.id) }}';"><i class="fas fa-trash-alt"></i> Excluir</button></td>
           </tr>
           {% endfor %}
         </tbody>

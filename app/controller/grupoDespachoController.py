@@ -41,7 +41,7 @@ class GrupoDespachoController:
     def prepareCadastrarGrupoDespacho():
 
         try:
-            form = GrupoDespachoForm(request.form)
+            form = GrupoDespachoForm(data=request.args)
             
             form.idRegional.choices = GrupoDespachoController.populaRegionais()
             return render_template('grupoDespacho/cadastrarGrupoDespacho.html', form=form)
@@ -57,9 +57,16 @@ class GrupoDespachoController:
     def cadastrarGrupoDespacho():
 
         form = GrupoDespachoForm(request.form)
-        dataInicio = datetime.datetime.now()
+
+        idRegional = form.idRegional.data
+
+        if(idRegional == 0):
+            flash('Informe a Regional', 'error')
+            return redirect(url_for('grupodespacho.prepareCadastrarGrupoDespacho', **form.data))
+
         try:
-            grupoDespacho = GrupoDespacho(None, form.idRegional.data , form.txtNome.data, dataInicio)
+            dataInicio = datetime.datetime.now()
+            grupoDespacho = GrupoDespacho(None,  idRegional, form.txtNome.data, dataInicio)
             db.session.add(grupoDespacho)
             db.session.commit()
             flash('Grupo de Despacho com sucesso', 'sucess')
