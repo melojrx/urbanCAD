@@ -2,46 +2,33 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-4 rounded mb-2">
-
-    <div class="container-fluid mt-2">
-        <div class="card mb-2">
-            <div class="card-header">
-                <div class="row d-flex align-items-center">
-                    <div class="col-9">
-                        <h5 class="card-title">Gerenciamento de Composição</h5>
-                        <span class="card-text">Finalização de Composição</span>
-                    </div>
-                    <div class="col-3 d-flex justify-content-end">
-                        <!-- Botão Voltar -->
-                        <button class="btn btn-danger me-2" type="button"
-                        onclick="window.location.href='{{url_for('composicao.listarComposicao')}}';">Voltar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<h1 class="mt-4">Gerenciamento de Composições</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{{url_for('composicao.listarComposicao')}}" style="color: gray; text-decoration: underline;">Listar Composições</a></li>
+    <li class="breadcrumb-item active">Finalização de Composição</li>
+</ol>
         
-        <div class="card mb-2">
-            <div class="card-header">
-                <div class="card-title mt-1">
-                    <h6>Deseja realmente finalizar a composição?</h6>
-                </div>
+<div class="card mb-2">
+    <div class="card-header">
+        <span style="font-weight: bold;"> <i class="fas fa-question-circle"></i> Deseja realmente finalizar a composição?</span>
+    </div>
+    <div class="card-body">
+        <div class="form-group row d-flex align-items-center">
+            <div class="col-12 mb-2">
+                <span><strong>Viatura: </strong></span> {{composicaoViatura.viatura}}
             </div>
-            <div class="card-body">
-                <div class="form-group row d-flex align-items-center">
-                    <div class="col-6">
-                        <span><strong>Viatura: </strong></span> {{composicaoViatura.viatura}}
-                    </div>
-                    <div class="col-3 ">        
-                        <span><strong>Agente: </strong></span>  {{composicaoViatura.agente.usuario.name.capitalize()}}
-                    </div>  
-                    <div class="col-3 d-flex justify-content-end">
-                        <button class="btn btn-danger" type="button"
-                            onclick="window.location.href='{{ url_for('composicao.finalizarComposicao', idComposicaoViatura=composicaoViatura.id) }}';">Finalizar</button>
-                    </div>
-                </div>
+            <div class="col-12">        
+                <span><strong>Agente: </strong></span>  {{composicaoViatura.agente.usuario.name.capitalize()}}
+            </div>  
+            <div class="col-12 gap-2 mt-3 d-flex justify-content-start">
+                <!-- Botão Voltar -->
+                <button class="btn btn-danger me-2" type="button"
+                    onclick="window.location.href='{{url_for('composicao.listarComposicao')}}';">Voltar</button>
+                <button class="btn btn-danger" type="button"
+                    onclick="window.location.href='{{ url_for('composicao.finalizarComposicao', idComposicaoViatura=composicaoViatura.id) }}';"><i class="fas fa-times"></i> Finalizar</button>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock conteudo %}

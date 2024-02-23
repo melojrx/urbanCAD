@@ -2,34 +2,16 @@
 {% include 'include.html' %}
 {% block conteudo %}
 
-<div class="container-fluid mt-4 rounded mb-2">
-
-  <div class="container-fluid mt-4">
-
-    <div class="card mb-2">
-      <div class="card-header">
-          <div class="row d-flex align-items-center">
-              <div class="col-9">
-                  <h5 class="card-title">Gerenciamento de Composição</h5>
-                  <p class="card-text">Gerencie aqui os Agentes de uma Composição do sistema</p>
-              </div>
-              <div class="col-3 d-flex justify-content-end">
-                   <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('composicao.prepareCadastrarComposicao') }}';">Nova Composição</button>
-              </div>
-          </div>
-      </div>
+<h1 class="mt-4">Gerenciamento de Composição</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Gerencie aqui os Agentes de uma Composição do sistema</li>
+</ol>
+                  
+    <div class="col-3 d-flex justify-content-start mb-3">
+          <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('composicao.prepareCadastrarComposicao') }}';"><i class="fa fa-plus"></i> Nova Composição</button>
     </div>
-    
-    <div class="card mb-2">
-          <div class="card-header">
-          <i class="fas fa-search"> </i> 
-          Consulta Composição
-          </div>
-          <div class="card-body" style="font-size: 0.8rem !important;">
-            <!-- Parametros para consulta -->
-          </div>    
-    </div>
-    <!-- Lista Viaturas -->
+          
+    <!-- Lista de Composições -->
     <div class="card">
       <div class="card-header">
         <i class="fas fa-table me-1"></i>
@@ -60,10 +42,10 @@
                 <td>
                     <a
                     href="{{ url_for('composicao.prepareFinalizarComposicao', idComposicaoViatura=row.id) }}"
-                    class="btn btn-danger btn-sm"
+                    class="btn btn-danger"
                     role="button"
                     title="Finalizar">
-                    <i class="fas fa-share-square"></i>
+                    <i class="fas fa-times"></i>
                   </a>
                 </td>
               </tr>

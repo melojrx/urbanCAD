@@ -29,10 +29,10 @@
         <div class="col-12 mt-3 d-flex justify-content-lg-start justify-content-sm-center">
           {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
           <button type="button" class="btn btn-outline-info"
-            onclick="window.location.href='{{ url_for('agente.listar')}}';">Limpar</button>
+            onclick="window.location.href='{{ url_for('agente.listar')}}';"><i class="fa fa-eraser"></i> Limpar</button>
           <!-- Botão Cadastrar VTR -->
           <button type="button" class="btn btn-success ms-2"
-            onclick="window.location.href='{{ url_for('agente.prepareCadastrarAgente')}}';">Novo</button>
+            onclick="window.location.href='{{ url_for('agente.prepareCadastrarAgente')}}';"><i class="fa fa-plus"></i> Adicionar</button>
         </div>
       </div>
     </div>
