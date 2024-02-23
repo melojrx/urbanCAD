@@ -40,8 +40,9 @@ class loginController:
                 user = User(name, email, txtcpf)
                 db.session.add(user)
                 
-                url = 'http://10.82.85.8:8080/api/b2in/user/role'
-                data = {'institution_external_id': institution_external_id, 'email': email, 'password': pwd, "application_external_id": app_key, "role_name": "MACEIO_USER", 'type': 'USER'}
+                url = 'http://10.82.85.8:8012/api/b2in/user/role'
+                data = {'institution_external_id': institution_external_id, 'email': email, 'password': 
+                        pwd, "application_external_id": app_key, "role_name": "MACEIO_USER", 'type': 'USER'}
                 headers = {'Content-Type': 'application/json'}
                 response = requests.post(url, json=data, headers=headers)
                 data = response.json() 
@@ -91,7 +92,7 @@ class loginController:
 
             try:
 
-                url = 'http://10.82.85.8:8080/api/b2in/auth'
+                url = 'http://10.82.85.8:8012/api/b2in/auth'
                 data = {'email': email, 'password': pwd, 'app_key': app_key, 'type': 'WEB'}
                 headers = {'Content-Type': 'application/json'}
                 response = requests.post(url, json=data, headers=headers)
