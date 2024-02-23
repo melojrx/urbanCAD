@@ -28,10 +28,10 @@
         <div class="d-flex justify-content-start mt-3">
           {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
           <button type="button" class="btn btn-outline-info"
-            onclick="window.location.href='{{ url_for('grupodespacho.listar')}}';">Limpar</button>
+            onclick="window.location.href='{{ url_for('grupodespacho.listar')}}';"><i class="fa fa-eraser"></i> Limpar</button>
           <!-- Botão Cadastrar Grupo de Despacho  -->
           <button type="button" class="btn btn-success ms-2"
-            onclick="window.location.href='{{ url_for('grupodespacho.prepareCadastrarGrupoDespacho')}}';">Novo</button>
+            onclick="window.location.href='{{ url_for('grupodespacho.prepareCadastrarGrupoDespacho')}}';"><i class="fa fa-plus"></i> Adicionar</button>
         </div>
       </div>
     </div>

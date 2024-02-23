@@ -36,10 +36,10 @@
         <div class="d-flex justify-content-start mt-3">
           {{ searchForm.submitSearch(class_="btn btn-primary me-2") }}
           <button type="button" class="btn btn-outline-info"
-            onclick="window.location.href='{{ url_for('viatura.listar')}}';">Limpar</button>
+            onclick="window.location.href='{{ url_for('viatura.listar')}}';"><i class="fa fa-eraser"></i>Limpar</button>
           <!-- Botão Cadastrar VTR -->
           <button type="button" class="btn btn-success ms-2"
-            onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';">Novo</button>
+            onclick="window.location.href='{{ url_for('viatura.prepareCadastrar')}}';"><i class="fa fa-plus"></i> Adicionar</button>
         </div>
       </div>
     </div>
