@@ -145,19 +145,6 @@
 </script>
 
 <script>
-  var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-  socket.on('connect', function () {
-      console.log('Conectado ao servidor');
-  });
-
-  socket.on('disconnect', function () {
-      console.log('Desconectado do servidor');
-  });
-
-  socket.on('atualizar_lista_ocorrencia', function () {
-      atualizarListaDespachar();
-  });
 
   function atualizarListaDespachar() {
       var xhr = new XMLHttpRequest();
