@@ -6,57 +6,57 @@
 
     <div class="container-fluid">
         <div class="card mb-2">
-            <div class="card-header">
-                <h5 class="card-title">Ocorrência</h5>
-                <span class="card-text">Nº: {{despachoHistorico.despacho.ocorrencia.numOcorrencia}}</span>
-            </div>
-            <div class="card-body">
+            <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+            <i class="fas fa-bell fw-bold" style="color: yellow;"></i>
+            Ocorrência Nº: {{despachoHistorico.despacho.ocorrencia.numOcorrencia}}
+            </h5>
+            <div class="card-body" style="background-color: rgb(183, 172, 172);">
                 <div class="mb-2">
-                    Problema: {{despachoHistorico.despacho.ocorrencia.txtProblema}}
+                    <p><strong>Problema:</strong> {{despachoHistorico.despacho.ocorrencia.txtProblema}}</p>
                 </div>
                 <div class="mb-2">
-                    Endereço: {{despachoHistorico.despacho.ocorrencia.txtEndereco}}
+                    <p><strong>Endereço:</strong> {{despachoHistorico.despacho.ocorrencia.txtEndereco}}</p>
                 </div>
                 <div class="mb-2">
-                    Status:
-                    {{despachoHistorico.despacho.ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
+                    <p><strong>Status:</strong>{{despachoHistorico.despacho.ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</p>
                 </div>
                 <div class="mb-2">
-                    Tipo de Ocorrência:
-                    {{despachoHistorico.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                    <p><strong>Tipo de Ocorrência:</strong>
+                    {{despachoHistorico.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</p>
                 </div>
                 <div class="mb-2">
-                    Subtipo de Ocorrência:
-                    {{despachoHistorico.despacho.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}
+                    <p><strong>Subtipo de Ocorrência:</strong>
+                    {{despachoHistorico.despacho.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</p>
                 </div>
                 <div class="mb-2">
-                    Início: {{despachoHistorico.despacho.ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M'+'h')}}
+                    <p><strong>Início:</strong> {{despachoHistorico.despacho.ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M'+'h')}}</p>
                 </div>
             </div>
         </div>
         <div class="card mb-2">
-            <div class="card-header">
-                <h5 class="card-title">Despacho</h5>
-                <span class="card-text">Viaturaº: {{despachoHistorico.despacho.composicaoViatura.viatura}}</span>
-            </div>
-            <div class="card-body">
+            <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                <!-- Despacho  -->
+                <i class="fas fa-car fw-bold" style="color: white;"></i> Viatura {{despachoHistorico.despacho.composicaoViatura.viatura}}
+            </h5>
+            <div class="card-body" style="background-color: rgb(183, 172, 172);">
                 <div class="mb-2">
-                    Agente: {{despachoHistorico.despacho.composicaoViatura.agente.usuario.name.capitalize()}}
+                    <p><strong>Agente:</strong> {{despachoHistorico.despacho.composicaoViatura.agente.usuario.name.capitalize()}}</p>
                 </div>
                 <div class="mb-2">
-                    Status:
-                    {{despachoHistorico.statusDespacho.txtStatusDespacho}}
+                    <p><strong>Status:</strong>
+                    {{despachoHistorico.statusDespacho.txtStatusDespacho}}</p>
                 </div>                
                 <div class="mb-2">
-                    Início: {{despachoHistorico.dataInicio.strftime('%d/%m/%Y %H:%M')}}
+                    <p><strong>Início:</strong> {{despachoHistorico.dataInicio.strftime('%d/%m/%Y' + ' às ' + '%H:%M' + 'h')}}</p>
                 </div>
             </div>
         </div>
         <div class="card mb-2">
-            <div class="card-header">
-                <h6 class="card-title mt-2">Observações</h6>
-            </div>
-            <div class="card-body">
+            <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                <i class="fas fa-user-edit"></i>
+                Observações
+            </h5>
+            <div class="card-body" style="background-color: rgb(183, 172, 172);">
                 {% for obs in despachoHistorico.listObservacao %}
                 <span class="font-weight-bold">{{obs.usuario.name.capitalize()}}</span> em
                 <span class="fw-normal">{{obs.dataInicio.strftime('%d/%m/%Y %H:%M')}}: </span>
@@ -72,7 +72,7 @@
     <div class="container-fluid">
         <form method="POST" enctype='multipart/form-data' action="{{ url_for('despacho.cadastrarObservacao') }}">
             <div class="card mb-2">
-                <div class="card-body">
+                <div class="card-body" style="background-color: rgb(183, 172, 172);">
                     <div class="row">
                         <div class="col">
                             <div>

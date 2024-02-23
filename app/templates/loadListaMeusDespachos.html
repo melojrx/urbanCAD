@@ -1,4 +1,83 @@
-<div class="card-header">
+<h1 class="mt-4">Gerenciamento de Despachos</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Gerencie aqui seus despachos</li>
+</ol>
+
+<div class="container-fluid" id="listMeusDespachos">
+
+    <div class="container">
+        {% if listDespachoHistorico %}
+
+        <div class="row justify-content-center">
+            {% for row in listDespachoHistorico %}
+            <div class="col mb-3 mb-sm-0 d-flex justify-content-start">
+                <div class="card" style="max-width: 320px;">
+                    <div class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                        <i class="fas fa-bell fw-bold" style="color: yellow;"></i>
+                        Ocorrência: {{ row.despacho.ocorrencia.numOcorrencia}}
+                    </div>
+                    <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                        <p><strong>Tipo de Ocorrência: </strong>{{
+                            row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</p>
+                        {% if row.statusDespacho.id == 1 %}
+                        <Strong>Status: </Strong><span class="badge text-bg-warning"> {{
+                            row.statusDespacho.txtStatusDespacho}}</span>
+                        {% endif %}
+                        {% if row.statusDespacho.id == 2 %}
+                        <Strong>Status: </Strong><span class="badge text-bg-info"> {{
+                            row.statusDespacho.txtStatusDespacho}}</span>
+                        {% endif %}
+                        {% if row.statusDespacho.id == 3 %}
+                        <Strong>Status: </Strong><span class="badge text-bg-success"> {{
+                            row.statusDespacho.txtStatusDespacho}}</span>
+                        {% endif %}
+                        <p><strong>Enviado para:</strong> {{ row.despacho.composicaoViatura.viatura }}</p>
+                        <p><strong>Data: </strong>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</p>
+                        <div class="d-grid gap-2 mt-2">
+                            {% if row.statusDespacho.id == 1 %}
+                            <a href="{{ url_for('despacho.atenderDespacho', idDespachoHistorico=row.id) }}"
+                                class="btn btn-primary w-100" role="button" title="Atender">
+                                <i class="fas fa-share-square"></i> Atender
+                            </a>
+                            {% endif %}
+                            {% if row.statusDespacho.id == 2 %}
+                            <a href="{{ url_for('despacho.gerenciarDespacho', idDespachoHistorico=row.id) }}"
+                                class="btn btn-primary w-100" role="button" title="Gerenciar">
+                                <i class="fas fa-cogs"></i> Gerenciar
+                            </a>
+                            {% endif %}
+                            {% if row.statusDespacho.id == 3 %}
+                            <a href="#" class="btn btn-success w-100" role="button"
+                                title="Finalizada em: {% if row.dataFim %}{{ row.dataFim.strftime('%d/%m/%Y %H:%M') }}{% else %}Data não disponível{% endif %}">
+                                <i class="fas fa-check-circle"></i> Finalizada!
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="card-header">
     <i class="fas fa-table me-1"></i>
     Tabela de Despachos
 </div>
@@ -48,4 +127,4 @@
         </tbody>
     </table>
 </div> 
-{% endif %}
+{% endif %} -->

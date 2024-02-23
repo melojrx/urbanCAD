@@ -7,9 +7,9 @@
   <li class="breadcrumb-item active">Gerencie aqui os Agentes de uma Composição do sistema</li>
 </ol>
                   
-    <div class="col-3 d-flex justify-content-start mb-3">
-          <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('composicao.prepareCadastrarComposicao') }}';"><i class="fa fa-plus"></i> Nova Composição</button>
-    </div>
+<div class="col-3 d-flex justify-content-start mb-3">
+      <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('composicao.prepareCadastrarComposicao') }}';"><i class="fa fa-plus"></i> Nova Composição</button>
+</div>
           
     <!-- Lista de Composições -->
     <div class="card">
@@ -18,7 +18,7 @@
         Tabela de Composições
       </div>
       <div class="card-body">
-        <div class="table-resposive">
+        <div class="table-responsive">
         <table class="table table-bordered" style="font-size: 14px;">
         {% if listComposicao %}
           <thead>
