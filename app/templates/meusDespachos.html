@@ -18,7 +18,7 @@
         <div class="table-responsive">
             <table class="table table-bordered" style="font-size: 14px;">
                 <thead>
-                    <tr>
+                    <tr class="text-center table-secondary">
                         <th scope="col">Tipo Ocorrência</th>
                         <th scope="col">Nº da Ocorrência</th>
                         <th scope="col">Status</th>
@@ -32,7 +32,15 @@
                     <tr class="text-center">
                         <td>{{ row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
                         <td>{{ row.despacho.ocorrencia.numOcorrencia}}</td>
-                        <td>{{ row.statusDespacho.txtStatusDespacho}}</td>
+                            {% if row.statusDespacho.id == 1 %}
+                            <td><span class="badge text-bg-warning">{{ row.statusDespacho.txtStatusDespacho}}</span></td>
+                            {% endif %}
+                            {% if row.statusDespacho.id == 2 %}
+                            <td><span class="badge text-bg-info">{{ row.statusDespacho.txtStatusDespacho}}</span></td>
+                            {% endif %}
+                            {% if row.statusDespacho.id == 3 %}
+                            <td><span class="badge text-bg-success">{{ row.statusDespacho.txtStatusDespacho}}</span></td>
+                            {% endif %}
                         <td>{{ row.despacho.composicaoViatura.viatura }}</td>
                         <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
                         <td>
@@ -48,10 +56,10 @@
                             {% if row.statusDespacho.id == 2 %}
                                 <a
                                 href="{{ url_for('despacho.gerenciarDespacho', idDespachoHistorico=row.id) }}"
-                                class="btn btn-primary btn-sm"
+                                class="btn btn-primary"
                                 role="button"
                                 title="Gerenciar">
-                                <i class="bi bi-box-arrow-up-right"></i>
+                                <i class="fas fa-cogs"></i>
                                 </a>
                             {% endif %}                            
                         </td>
