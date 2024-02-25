@@ -7,57 +7,50 @@
   <li class="breadcrumb-item active">Gerencie aqui os Agentes de uma Composição do sistema</li>
 </ol>
                   
-<div class="col-3 d-flex justify-content-start mb-3">
+<div class="col d-flex justify-content-start mb-3">
       <button type="button" class="btn btn-primary bg-primary" onclick="window.location.href='{{ url_for('composicao.prepareCadastrarComposicao') }}';"><i class="fa fa-plus"></i> Nova Composição</button>
 </div>
-          
-    <!-- Lista de Composições -->
-    <div class="card">
-      <div class="card-header">
-        <i class="fas fa-table me-1"></i>
-        Tabela de Composições
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-        <table class="table table-bordered" style="font-size: 14px;">
-        {% if listComposicao %}
-          <thead>
-            <tr class="text-center table-secondary">
-              <th scope="col">Viatura</th>
-              <th scope="col">Agente</th>
-              <th scope="col">Instituição</th>
-              <th scope="col">Início</th>
-              <th scope="col">Finalização</th>
-              <th scope="col">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
+
+<div class="container-fluid" >
+
+  <div class="container">
+    {% if listComposicao %}
+      <div class="row justify-content-start">
             {% for row in listComposicao.items %}
-              <tr class="text-center">
-                <td>{{ row.viatura.txtPlaca }}</td>
-                <td>{{ row.agente.usuario.name }}</td>
-                <td>{{ row.agente.instituicao.txtInstituicao }}</td>
-                <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</td>
-                <td>{{row.dataFim.strftime('%d/%m/%Y %H:%M') if row.dataFim else "" }}</td>
-                <td>
+              <div class="col-lg-3 col-sm-12 mb-3 d-flex justify-content-start align-items-center">
+                <div class="card" style="max-width: 320px;">
+                  <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                  <i class="fas fa-car fw-bold" style="color: white;"></i>
+                    Viatura: {{ row.viatura.txtPlaca }}
+                  </h5>  
+                  <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                    <p><strong>Agente: </strong> {{ row.agente.usuario.name }}</p>
+                    <p><strong>Instituição: </strong>{{ row.agente.instituicao.txtInstituicao }}</p>
+                    <p><strong>Data: </strong>{{row.dataInicio.strftime('%d/%m/%Y' + ' às ' '%H:%M' + 'h')}}</p>
+                    <p><strong>Finalização: </strong>{{row.dataFim.strftime('%d/%m/%Y %H:%M') if row.dataFim else "" }}</p>
+                    <div class="d-grid gap-2 mt-2">
                     <a
                     href="{{ url_for('composicao.prepareFinalizarComposicao', idComposicaoViatura=row.id) }}"
                     class="btn btn-danger"
                     role="button"
                     title="Finalizar">
-                    <i class="fas fa-times"></i>
-                  </a>
-                </td>
-              </tr>
+                    <i class="fas fa-times"></i> Finalizar
+                    </a>
+                    </div>
+                  </div>
+                </div>
+              </div>  
             {% endfor %}
-          </tbody>
-        {% else %}
+      </div>    
+        <!-- {% else %}
           <tr>
             <td>Nenhuma solicitação cadastrada</td>
-          </tr>
-        {% endif %}
-      </table>
-    </div>
+          </tr> -->
+    {% endif %}
+      
+  </div>
+
+</div>
   {% if listComposicao.total >= 10 %}
   <!-- Pagination Links-->
   <div class="col m-0 d-grid gap-2 d-md-flex mx-auto justify-content-md-center">
@@ -91,7 +84,5 @@
   </p>
   {% endif %}
 <!-- End Pagination Links-->
-  </div>
-
-</div>
+ 
 {% endblock %}
