@@ -146,6 +146,10 @@
 
 <script>
 
+  socket.on('atualizar_lista_ocorrencia', function () {
+        atualizarListaDespachar();
+    });
+
   function atualizarListaDespachar() {
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
