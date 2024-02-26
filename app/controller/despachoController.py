@@ -283,7 +283,7 @@ class DespachoController():
     @login_required
     @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')
     def meusDespachos():
-        listDespachoHistorico = DespachoHistorico.query.join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).all()
+        listDespachoHistorico = DespachoHistorico.query.filter(DespachoHistorico.idStatusDespacho != statusDespachoEnum.StatusDespachoEnum.CONCLUIDO.value).join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).all()
         return render_template('meusDespachos.html', listDespachoHistorico=listDespachoHistorico)
     
     @despacho_bp.route('/finalizarDespacho/<idDespachoHistorico>', methods=['GET'])
