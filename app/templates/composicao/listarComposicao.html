@@ -19,10 +19,10 @@
             {% for row in listComposicao.items %}
               <div class="col-lg-3 col-sm-12 mb-3 d-flex justify-content-start align-items-center">
                 <div class="card" style="max-width: 320px;">
-                  <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                  <h6 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
                   <i class="fas fa-car fw-bold" style="color: white;"></i>
                     Viatura: {{ row.viatura.txtPlaca }}
-                  </h5>  
+                  </h6>  
                   <div class="card-body" style="background-color: rgb(183, 172, 172);">
                     <p><strong>Agente: </strong> {{ row.agente.usuario.name }}</p>
                     <p><strong>Instituição: </strong>{{ row.agente.instituicao.txtInstituicao }}</p>

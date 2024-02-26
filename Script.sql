@@ -487,10 +487,10 @@ ALTER TABLE cad.tb_tipo_ocorrencia_toc ALTER COLUMN txt_icon_toc SET NOT NULL;
 -- ####################################
 
 INSERT INTO cad.tb_tipo_ocorrencia_toc
-(id_tipo_ocorrencia_toc, txt_tipo_ocorrencia_toc, txt_icon_toc)
-VALUES(3, 'Incêndio', 'fire');
+(id_tipo_ocorrencia_toc, txt_tipo_ocorrencia_toc, dat_inicio_toc, dat_fim_toc, txt_icon_toc)
+VALUES(3, 'incêncio ', '2024-02-25 22:51:00.817', NULL, 'fire');
 INSERT INTO cad.tb_tipo_ocorrencia_toc
-(id_tipo_ocorrencia_toc, txt_tipo_ocorrencia_toc, txt_icon_toc)
-VALUES(4, 'Desmoronamento', 'Collapse');
+(id_tipo_ocorrencia_toc, txt_tipo_ocorrencia_toc, dat_inicio_toc, dat_fim_toc, txt_icon_toc)
+VALUES(4, 'Desmoronamento ', '2024-02-25 22:51:00.817', NULL, 'collapse');
 
 
