@@ -1,8 +1,7 @@
 {% include 'include.html' %}
-<div class="card-header text-center" style="background-color: #525B62;">
-    <div class="card-title text-center" style="color: antiquewhite;"><strong>Ocorrência Atual</strong></div>
+<h5 class="card-header text-center" style="background-color: #525B62; color: antiquewhite;"><strong>Ocorrência Atual</strong>
     <span style="color: antiquewhite;">{{ocorrencia.numOcorrencia}}</span>
-</div>
+</h5>
 <div class="card-body" style="font-size: 0.9em; background-color: gray;  color: white;">
     <div class="mb-1">
         <strong>Descrição:</strong> {{ocorrencia.txtProblema}}
@@ -60,7 +59,7 @@
                 </div>
             </div>
             <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mt-2">
-                {{ form.submit(class_="btn btn-primary btn-sm") }}
+                {{ form.submit(class_="btn btn-primary") }}
             </div>
         </form>
     </div>

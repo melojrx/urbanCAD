@@ -43,10 +43,10 @@
         <i class="fas fa-table me-1"></i>
         Tabela de Instituições
     </div>
-    <div class="card-body">
+    <div class="card-body p-0">
     {% if listInstituicao.items %}
     <div class="table-responsive">
-        <table class="table table-bordered" style="font-size: 14px;">
+        <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
             <thead>
                 <tr class="text-center table-secondary">
                     <th scope="col">Nome</th>
@@ -71,6 +71,7 @@
     </div>
     <!-- Pagination -->
     {% if not noPagination and listInstituicao.total > 10 %}
+    <div class="d-flex justify-content-end m-3 mr-3">
     <!-- Pagination Links -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
@@ -105,6 +106,7 @@
     <p class="text-secondary fs-7 text-end">Página {{ listInstituicao.page }} de {{ listInstituicao.pages }}</p>
     -->
     <!-- End Pagination Links -->
+    </div>
     {% endif %}
     </div>
 </div>

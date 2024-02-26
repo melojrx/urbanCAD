@@ -6,92 +6,92 @@
 
 <div class="container-fluid mt-2" id="form-cadastro-evento">
 
-        <div class="card mb-2">
-            <div class="card-header" style="background-color: #525B62;">
-                <div class="card-title d-flex justify-content-center mt-1" style="color: antiquewhite;">
-                    <span style="font-size: 1.5em;">Central de Despachos</span>
-                </div>
+        <div class="container-fluid">
+            <div class="card mb-2">
+                <h3 class="card-header text-center" style="background-color: #525B62; color: antiquewhite;">
+                    <strong >CENTRAL DE DESPACHOS</strong>
+                </h3>
             </div>
         </div>
-
-        <div class="d-flex justify-content-center gap-1 mb-2">
-            <div class="card col-3" id="formDespacho">
-                <div class="card-header text-center" style="background-color: #525B62;">
-                    <div class="card-title text-center" style="color: antiquewhite;"><strong>Ocorrência Atual</strong>
-                    </div>
-                    <span style="color: antiquewhite;"></span>
-                </div>
-                <div class="card-body" style="font-size: 0.9em; background-color: gray;  color: white;">
-                    <div class="mb-1">
-                        <strong>Descrição:</strong>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Endereço:</strong>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Status:</strong>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Tipo de Ocorrência:</strong>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Subtipo de Ocorrência:</strong>
-                    </div>
-                    <div class="mb-1">
-                        <strong>Início:</strong>
-                    </div>
-                    <div class="mb-1">
-                        <form method="POST" id="despacharForm" action="{{ url_for('despacho.despachar') }}">
-                            <div class="mb-1">
-                                <div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="d-none">
-                                                {{form.ocorrencia.label(class_="form-label")}}
-                                                {{form.ocorrencia(class_="form-control")}}
-                                                {% for error in form.ocorrencia.errors %}
-                                                <div class="important">
-                                                    {{error}}
+        
+        <div class="container-fluid mb-2">
+            <div class="row g-1">
+                <div class="card col-3 border-0" id="formDespacho">
+                    <h5 class="card-header text-center" style="background-color: #525B62; color: antiquewhite;"><strong>Ocorrência Atual</strong>
+                        <span style="color: antiquewhite;"></span>
+                    </h5>
+                    <div class="card-body" style="font-size: 0.9em; background-color: gray;  color: white;">
+                        <div class="mb-1">
+                            <strong>Descrição:</strong>
+                        </div>
+                        <div class="mb-1">
+                            <strong>Endereço:</strong>
+                        </div>
+                        <div class="mb-1">
+                            <strong>Status:</strong>
+                        </div>
+                        <div class="mb-1">
+                            <strong>Tipo de Ocorrência:</strong>
+                        </div>
+                        <div class="mb-1">
+                            <strong>Subtipo de Ocorrência:</strong>
+                        </div>
+                        <div class="mb-1">
+                            <strong>Início:</strong>
+                        </div>
+                        <div class="mb-1">
+                            <form method="POST" id="despacharForm" action="{{ url_for('despacho.despachar') }}">
+                                <div class="mb-1">
+                                    <div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="d-none">
+                                                    {{form.ocorrencia.label(class_="form-label")}}
+                                                    {{form.ocorrencia(class_="form-control")}}
+                                                    {% for error in form.ocorrencia.errors %}
+                                                    <div class="important">
+                                                        {{error}}
+                                                    </div>
+                                                    {% endfor %}
                                                 </div>
-                                                {% endfor %}
-                                            </div>
-                                            <div class="d-none">
-                                                {{form.idRegiao.label(class_="form-label")}}
-                                                {{form.idRegiao(class_="form-control")}}
-                                                {% for error in form.idRegiao.errors %}
-                                                <div class="important">
-                                                    {{error}}
+                                                <div class="d-none">
+                                                    {{form.idRegiao.label(class_="form-label")}}
+                                                    {{form.idRegiao(class_="form-control")}}
+                                                    {% for error in form.idRegiao.errors %}
+                                                    <div class="important">
+                                                        {{error}}
+                                                    </div>
+                                                    {% endfor %}
                                                 </div>
-                                                {% endfor %}
-                                            </div>
-                                            <div class="mb-1">
-                                                {{form.despacharPara.label(class_="form-label")}}
-                                                {{form.despacharPara(class_="form-control")}}
-                                                {% for error in form.despacharPara.errors %}
-                                                <div class="important">
-                                                    {{error}}
+                                                <div class="mb-1">
+                                                    {{form.despacharPara.label(class_="form-label")}}
+                                                    {{form.despacharPara(class_="form-control")}}
+                                                    {% for error in form.despacharPara.errors %}
+                                                    <div class="important">
+                                                        {{error}}
+                                                    </div>
+                                                    {% endfor %}
                                                 </div>
-                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="mt-auto">
-                        <div id="dataDiv" class="text-center pt-1 pb-0" style="color: yellow;"></div>
-                        <div id="HoraDiv" class="text-center pt-1 pb-0"
-                            style="font-weight: bold; color: yellow;font-size: 1.5em;"> </div>
+                            </form>
+                        </div>
+                        <div class="mb-0">
+                            <div id="dataDiv" class="text-center pt-1 pb-0" style="color: yellow;"></div>
+                            <div id="HoraDiv" class="text-center pt-1 pb-0"
+                                style="font-weight: bold; color: yellow;font-size: 1.5em;"> </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="mapa col-9">
-                <div id="map"></div>
+                <div class="mapa col-9">
+                    <div id="map"></div>
+                </div>
             </div>
         </div>
-        
-        <div id="listDespachos">
+
+        <div class="container-fluid"   id="listDespachos">
             <!-- <div class="card-header d-flex" style="background-color: #525B62;">
                 <div class="form-check" style="color: antiquewhite;">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
@@ -108,13 +108,13 @@
             </div> -->
             <!--A DEPACHAR-->
             <div class="card mb-2">
-                <div class="card-header">
+                <div class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
                     <i class="fas fa-table me-1"></i>
                     Ocorrências a Despachar
                 </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered" style="font-size: 14px;">
+                        <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
                             <thead>
                                 <tr class="text-center table-secondary">
                                     <th>Cód.Ocorrência</th>
@@ -161,13 +161,13 @@
             </div>
             <!--DESPACHADO-->
             <div class="card mb-2">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
+                <div class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                    <i class="far fa-calendar-check me-1"></i> 
                     Ocorrências Despachadas
                 </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered" style="font-size: 14px;">
+                        <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
                             <thead>
                                 <tr class="text-center table-secondary">
                                     <th>Cod. Ocorrência</th>
@@ -218,7 +218,6 @@
                 </div>
             </div>
         </div>
-
 </div>
 
 <script>
