@@ -45,7 +45,7 @@
           <!-- Botão Cadastrar Ocorrência -->
           <button type="button" class="btn btn-success ms-2"
             onclick="window.location.href='{{ url_for('ocorrencia.prepareCadastrarOcorrencia') }}';"><i class="fa fa-plus"></i>
-            Nova Ocorrência
+            Adicionar
           </button>
       </div>
     </div>
@@ -92,9 +92,14 @@
             {% endif %}
             <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
             <td class="d-flex gap-2 align-items-center justify-content-center">
-              <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#txtProblemaModal"
-                data-imgsrc="{{row.ocorrencia.txtProblema}}" role="button" title="Detalhar Ocorrência">
-                <i class="fas fa-table" src="{{row.ocorrencia.txtProblema}}"></i>
+              <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#txtProblemaModal" data-target="#txtProblemaModal"
+                data-interessado="{{ row.ocorrencia.interessado.txtInteressado.capitalize() }}"
+                data-tipo="{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia }}"
+                data-subtipo="{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia }}"
+                data-numero="{{ row.ocorrencia.numOcorrencia }}" data-status="{{ row.statusOCorrencia.txtStatusOcorrencia }}"
+                data-datainicio="{{ row.dataInicio.strftime('%d/%m/%Y %H:%M') }}" data-txtproblema="{{ row.ocorrencia.txtProblema }}"
+                role="button" title="Detalhar Ocorrência">
+                <i class="fas fa-eye"></i>
               </a>
               {% if row.statusOCorrencia.id == 1 %}
               <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
@@ -115,14 +120,16 @@
 <div class="modal fade" id="txtProblemaModal" tabindex="-1" role="dialog" aria-labelledby="enlargedImageModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xb">
-    <div class="modal-content">
+    <div class="modal-content" >
       <div class="modal-header">
-        <h5 class="modal-title" id="txtProblemaModal">
-          Descrição da Ocorrência
-        </h5>
+        <h1 class="modal-title fs-5" id="txtProblemaModal"><i class="fas fa-bell fw-bold fs-4"></i> Descrição da Ocorrência</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
       </div>
       <div class="modal-body">
         <p id="modalText"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
       </div>
     </div>
   </div>
@@ -130,17 +137,36 @@
 
 
 <script>
-  $("#txtProblemaModal").on("show.bs.modal", function (event) {
-    var button = $(event.relatedTarget); // Botão que acionou o modal
-    var txtProblema = button.data("imgsrc"); // Obtém o atributo 'data-imgsrc' do botão
+  $(document).ready(function () {
+    $("#txtProblemaModal").on("show.bs.modal", function (event) {
+      var button = $(event.relatedTarget); // Botão que acionou o modal
+      var modal = $(this);
 
-    var modal = $(this);
-    modal.find("#modalText").text(txtProblema);
-  });
+      // Extrai os dados dos atributos data-
+      var interessado = button.data("interessado");
+      var tipo = button.data("tipo");
+      var subtipo = button.data("subtipo");
+      var numero = button.data("numero");
+      var status = button.data("status");
+      var dataInicio = button.data("datainicio");
+      var txtProblema = button.data("txtproblema");
 
-  $("#txtProblemaModal").on("hidden.bs.modal", function () {
-    var modal = $(this);
-    modal.find("#modalText").text(""); // Limpa a imagem quando o modal for fechado
+      // Insere os dados no modal
+      modal.find('.modal-body').html(`
+        <p><strong>Número da Ocorrência:</strong> ${numero}</p>
+        <p><strong>Interessado:</strong> ${interessado}</p>
+        <p><strong>Tipo de Ocorrência:</strong> ${tipo}</p>
+        <p><strong>Subtipo de Ocorrência:</strong> ${subtipo}</p>
+        <p><strong>Status:</strong> ${status}</p>
+        <p><strong>Data de Início:</strong> ${dataInicio}</p>
+        <p><strong>Descrição do Problema:</strong> ${txtProblema}</p>
+      `);
+    });
+
+    $("#txtProblemaModal").on("hidden.bs.modal", function () {
+      var modal = $(this);
+      modal.find('.modal-body').html(''); // Limpa o conteúdo do modal
+    });
   });
 </script>
 
