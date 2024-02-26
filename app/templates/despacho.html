@@ -229,8 +229,8 @@
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
+    var viaturaMarkers = {};
     socket.on('position', function(data) {      
-
         var figViatura = '../static/img/icons/viatura.png';
 
         var iconViatura = L.icon({
@@ -240,10 +240,19 @@
                 popupAnchor: [0, -32]
             });
 
+        var code = data.code;
         var lat = data.lat;
         var lng = data.lng;
-        var viaturaMarker = L.marker([lat, lng], { icon: iconViatura }).addTo(map);
-        viaturaMarker.setLatLng([lat, lng]);
+
+        // Verifica se já existe um marcador para esta viatura
+        if (code in viaturaMarkers) {
+            // Remove o marcador antigo antes de criar o novo
+            map.removeLayer(viaturaMarkers[code]);
+        }
+
+        // Cria um novo marcador se não existir
+        var viaturaMarker = L.marker([data.lat, data.lng], { icon: iconViatura }).addTo(map);
+        viaturaMarkers[code] = viaturaMarker;
 
     });
 
