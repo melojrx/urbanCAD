@@ -45,12 +45,12 @@
     <i class="fas fa-table me-1"></i>
     Tabela de Agentes
   </div>
-  <div class="card-body">
+  <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table table-bordered" style="font-size: 14px;">
+      <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
         {% if listAgente.items %}
         <thead>
-          <tr class="text-center table-secundary">
+          <tr class="text-center table-secondary">
             <th scope="col">Usuário</th>
             <th scope="col">Instituição</th>
             <th scope="col">Criação</th>
@@ -77,6 +77,7 @@
       </table>
     </div>
     {% if not noPagination and listAgente.total > 10 %}
+    <div class="d-flex justify-content-end m-3 mr-3">
     <!-- Pagination Links -->
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
@@ -107,6 +108,7 @@
     <!-- Optionally showing current page and total pages -->
     <!-- <p class="text-secondary fs-7 text-center">Página {{ listAgente.page }} de {{ listAgente.pages }}</p> -->
     <!-- End Pagination Links -->
+    </div>
     {% endif %}
 
   </div>

@@ -44,9 +44,9 @@
     <i class="fas fa-table me-1"></i>
     Tabela de Usuários de Grupos de Despacho
   </div>
-  <div class="card-body">
+  <div class="card-body p-0">
     <div class="table-resposive">
-      <table class="table table-bordered" style="font-size: 14px;">
+      <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
         {% if listUsuarioGrupoDespacho.items %}
           <thead>
             <tr class="text-center table-secondary">
@@ -73,6 +73,7 @@
       </table>
     </div>
     {% if not noPagination and listUsuarioGrupoDespacho.total > 10 %}
+    <div class="d-flex justify-content-end m-3 mr-3">
     <!-- Pagination Links -->
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-end">
@@ -106,6 +107,7 @@
     <!-- Optionally showing current page and total pages -->
     <!-- <p class="text-secondary fs-7 text-center">Página {{ listUsuarioGrupoDespacho.page }} de {{ listUsuarioGrupoDespacho.pages }}</p> -->
     <!-- End Pagination Links -->
+    </div>
     {% endif %}
   </div>
 </div>

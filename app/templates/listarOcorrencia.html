@@ -56,10 +56,10 @@
     <i class="fas fa-table me-1"></i>
     Tabela de Ocorrências 
   </div>
-  <div class="card-body" >
+  <div class="card-body p-0" >
     {% if listOcorrenciaHistorico %}
     <div class="table-responsive">
-      <table class="table table-bordered" style="font-size: 14px;">
+      <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
         <thead>
           <tr class="text-center table-secondary">
             <th >Noticiante</th>
@@ -79,7 +79,7 @@
             <td>{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</td>
             <td>{{ row.ocorrencia.numOcorrencia}}</td>
             {% if row.statusOCorrencia.id == 1 %}
-            <td class="badge text-bg-warning ms-1 me-1">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
+            <td class="badge text-bg-warning">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
             {% endif %}
             {% if row.statusOCorrencia.id == 2 %}
             <td class="badge text-bg-primary">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
