@@ -18,6 +18,7 @@ COPY . .
 #COPY app/static/ /home/ubuntu/maceio-server-cyro/urbanCAD/app/static/
 
 
+CMD ["gunicorn", "--bind", "0.0.0.0:8009", "--workers", "1", "--worker-class", "eventlet", "wsgi:app"]
 #CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8009", "wsgi:app"]
-CMD ["gunicorn", "wsgi:app", "-b", "0.0.0.0:8009", "--worker-class", "eventlet", "--workers", "4", "--log-level", "debug"]
+#CMD ["gunicorn", "wsgi:app", "-b", "0.0.0.0:8009", "--worker-class", "eventlet", "--workers", "4", "--log-level", "debug"]
 #CMD ["gunicorn", "app:app", "-w","4", "-b", "0.0.0.0:8009", "--worker-class", "eventlet", "--workers", "4", "wsgi:app"]

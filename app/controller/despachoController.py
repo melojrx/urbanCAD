@@ -141,7 +141,7 @@ class DespachoController():
     def telaDespacho():
         form = DespachoForm(request.form)
 
-        form.idRegiao.data = DespachoController.getIdRegiaoByUser();
+        form.idRegiao.data = DespachoController.getIdRegiaoByUser()
 
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
         return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
