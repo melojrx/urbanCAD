@@ -1,22 +1,61 @@
-{% include 'include.html' %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URBANCAD</title>
+
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- CSS do Projeto -->
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/styles_site.css')}}">
+</head>
 
 <body>
-  <header class="menu-bg">
-      <div class="menu-site">
-          <div class="menu-logo">
-              <a href="#">URBANCAD</a>
-          </div>
-          <nav class="menu-nav"> 
-              <ul> 
-                  <li> <a href="{{url_for('login.login')}}">Entrar</a></li>
-              </ul>    
-          </nav>
+  <!-- Responsive navbar-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container menu-site px-5">
+      <div class="menu-logo">
+      <a class="navbar-brand" href="#!">URBANCAD</a>
       </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+          class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <!-- <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{url_for('login.login')}}">Entrar</a></li> -->
+          <li class="nav-item"><a class="nav-link" href="#features">Sobre</a></li>
+          <li class="nav-item"><a class="nav-link" href="#!">Contato</a></li>
+          <li class="nav-item"><a class="nav-link" href="#!">Serviços</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Header -->
+  <header class="bg-dark py-5">
+    <div class="container px-5">
+      <div class="row gx-5 justify-content-center">
+        <div class="col-lg-6">
+          <div class="text-center my-5">
+            <h1 class="display-6 fw-bolder text-white mb-2">Gestão de Atendimento e Despacho</h1>
+            <p class="lead text-white-50 mb-4">Processos de atendimento, despacho e monitoramento em tempo real!</p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+              <a class="btn btn-primary btn-lg px-4 me-sm-3" href="{{url_for('login.login')}}">Entrar</a>
+              <a class="btn btn-outline-light btn-lg px-4" href="#features">Saiba Mais</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
   
   <main class="conteudo_site">
+     
+      <!-- Carousel -->
       <section class="conteudo_principal">
-          <!-- Carrocel -->
       <div id="carouselExampleCaptions" class="carousel slide mx-auto" data-bs-ride="carousel" >
           <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -27,24 +66,32 @@
             <div class="carousel-item active">
               <img src="/static/img/body_login_cad.png" class="d-block w-100 img-fluid" alt="...">
               <div class="carousel-caption d-none d-md-block">
-                <h2>Sistema de Gestão de Atendimento e Despacho</h2>
-                <p>UrbanCAD: Solução de suporte a serviços públicos emergenciais.</p>
+                <div class="carousel-caption-sombra"
+                  style="background-color: rgba(0, 0, 0, 0.6); color: white; padding: 15px; border-radius: 5px;">
+                  <h2>Sistema de Gestão de Atendimento e Despacho</h2>
+                  <p>UrbanCAD: Solução de suporte a serviços públicos emergenciais.</p>
+                </div>
               </div>
             </div>
             <div class="carousel-item">
               <img src="/static/img/body_register_cad.png" class="d-block w-100 img-fluid" alt="...">
               <div class="carousel-caption d-none d-md-block">
-                <h2><a href="#">Transformação Digital</a></h2>
-                <p>Integração do atendimento de forças de Segurança Pública</p>
+                <div class="carousel-caption-sombra"
+                  style="background-color: rgba(0, 0, 0, 0.6); color: white; padding: 15px; border-radius: 5px;">
+                  <h2>Transformação Digital</h2>
+                  <p>Integração do atendimento de forças de Segurança Pública</p>
+                </div>
               </div>
             </div>
             <div class="carousel-item">
               <img src="/static/img/body_site_cad3.png" class="d-block w-100 img-fluid" alt="...">
               <div class="carousel-caption d-none d-md-block">
-                <h2>Gestão mais eficaz dos recursos humanos e operacionais disponíveis.</h2>
-                <p>Processos de atendimento, despacho e fechamento dos atendimentos, 
-                  além da integração entre as agências de segurança
-                pública.</p>
+                <div class="carousel-caption-sombra" style="background-color: rgba(0, 0, 0, 0.6); color: white; padding: 15px; border-radius: 5px;">
+                  <h2>Gestão mais eficaz dos recursos disponíveis.</h2>
+                  <p>Processos de atendimento, despacho e fechamento dos atendimentos, 
+                    além da integração entre as agências de segurança
+                  pública.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -56,30 +103,55 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Próximo</span>
           </button>
-        </div>
       </div>
       </section>
+
+      <!-- Features section-->
+      <section class="py-5 border-bottom" id="features">
+        <div class="container px-5 my-5">
+          <div class="row gx-5">
+            <div class="col-lg-4 mb-5 mb-lg-0">
+              <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-bell"></i></div>
+              <h2 class="h4 fw-bolder">Sistema de Gestão de Atendimento e Despacho</h2>
+              <p>Solução de suporte a serviços públicos emergenciais.</p>
+              <a class="text-decoration-none" href="#!">
+                Saiba mais
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+            <div class="col-lg-4 mb-5 mb-lg-0">
+              <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-car-front-fill"></i></div>
+              <h2 class="h4 fw-bolder">Transformação Digital</h2>
+              <p>Integração do atendimento de forças de Segurança Pública.</p>
+              <a class="text-decoration-none" href="#!">
+                Saiba mais
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+            <div class="col-lg-4">
+              <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-geo-alt-fill"></i></div>
+              <h2 class="h4 fw-bolder">Monitoramento em tempo real</h2>
+              <p>Processos de atendimento, despacho e fechamento dos atendimentos,
+                além da integração entre as agências de segurança
+                pública.</p>
+              <a class="text-decoration-none" href="#!">
+                Saiba mais
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
       
-  
   </main> 
 
-  <footer class="footer-bg">
-      <div class="footer-menu">
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+  <div class="container px-5">
+    <p class="m-0 text-center text-white">Copyright &copy; Tiger Soluções 2024</p>
+  </div>
+</footer>
 
-          <div class="copy-footer-site">
-          Copyright © 2024 Tiger Soluções. Todos os direitos reservados
-          </div>
-
-          <div class="contato-footer">
-              <a href="#" class="link-mail d-flex align-items-center gap-2"><i class="fas fa-envelope"></i>contato@tiger.com</a>
-          </div>
-
-          <div class="social-footer">
-              <i class="bi bi-linkedin"></i>
-              <i class="bi bi-instagram"></i>
-              <i class="bi bi-facebook"></i>
-          </div>
-          
-      </div>
-  </footer>  
 </body>
+
+</html>
