@@ -58,7 +58,7 @@
   <div class="card-body p-0" >
     {% if listOcorrenciaHistorico %}
     <div class="table-responsive">
-      <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
+      <table class="table table-bordered table-hover m-0" style="font-size: 14px;">
         <thead>
           <tr class="text-center table-secondary">
             <th >Noticiante</th>
@@ -91,7 +91,7 @@
             {% endif %}
             <td>{{row.dataInicio.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
             <td class="d-flex gap-2 align-items-center justify-content-center">
-              <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#txtProblemaModal" data-target="#txtProblemaModal"
+              <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#txtProblemaModal" data-target="#txtProblemaModal"
                 data-interessado="{{ row.ocorrencia.interessado.txtInteressado.capitalize() }}"
                 data-tipo="{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia }}"
                 data-subtipo="{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia }}"
@@ -102,7 +102,7 @@
               </a>
               {% if row.statusOCorrencia.id == 1 %}
               <a href="{{ url_for('ocorrencia.prepareAtribuirOcorrencia', idOcorrencia=row.ocorrencia.id, lat=row.ocorrencia.txtLat, long=row.ocorrencia.txtLong) }}"
-                class="btn btn-success" role="button" title="Enviar para Grupo de Despacho">
+                class="btn btn-success btn-sm" role="button" title="Enviar para Grupo de Despacho">
                 <i class="fas fa-share-square"></i></a> 
               {% endif %}
             </td>
