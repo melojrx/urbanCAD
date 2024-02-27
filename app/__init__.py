@@ -1,14 +1,16 @@
 from flask_login import LoginManager
-from flask import Blueprint, Flask, render_template
+from flask import Flask
 from whitenoise import WhiteNoise
 from flask_socketio import SocketIO
 from flask_cors import CORS
 import logging
+import secrets
 
 app = Flask(__name__)
 app.wsgi_app = WhiteNoise(app.wsgi_app, root='app/static/', prefix='static/')
 # socketio = SocketIO(app, async_mode='gevent', manage_session=False)
-socketio = SocketIO(app)
+socketio = SocketIO(app, manage_session=False, session_cookie=True)
+app.config['SECRET_KEY'] = secrets.token_hex(16)
 CORS(app, resources={r"/socket.io/*": {"origins": "*"}})
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
