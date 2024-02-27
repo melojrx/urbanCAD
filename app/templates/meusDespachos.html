@@ -11,31 +11,35 @@
     <div class="container">
         {% if listDespachoHistorico %}
 
-        <div class="row justify-content-start">
+        <div class="row justify-content-center align-items-center">
             {% for row in listDespachoHistorico %}
-            <div class="col-lg-4 mb-3 mb-sm-0 d-flex justify-content-start">
+            <div class="col-lg-4 col-sm-12 mb-3 d-flex justify-content-center align-items-center">
                 <div class="card" style="max-width: 320px;">
                     <div class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
-                        <i class="fas fa-bell fw-bold" style="color: yellow;"></i>
-                        Ocorrência: {{ row.despacho.ocorrencia.numOcorrencia}}
+                        <div class="row d-flex justify-content-center mb-2 mt-2">
+                            <i class="fas fa-bell fw-bold fs-2" style="color: yellow;"></i>
+                        </div>
+                       <div class="row text-center">
+                            <h6><strong>Ocorrência: {{ row.despacho.ocorrencia.numOcorrencia}}</strong></h6>
+                        </div>
                     </div>
                     <div class="card-body" style="background-color: rgb(183, 172, 172);">
                         <p><strong>Tipo de Ocorrência: </strong>{{
-                            row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</p>
+                            row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia.capitalize()}}</p>
                         {% if row.statusDespacho.id == 1 %}
-                        <Strong>Status: </Strong><span class="badge text-bg-warning"> {{
+                        <Strong>Status: </Strong><span class="badge text-bg-warning p-2"> {{
                             row.statusDespacho.txtStatusDespacho}}</span>
                         {% endif %}
                         {% if row.statusDespacho.id == 2 %}
-                        <Strong>Status: </Strong><span class="badge text-bg-info"> {{
+                        <Strong>Status: </Strong><span class="badge text-bg-info p-2"> {{
                             row.statusDespacho.txtStatusDespacho}}</span>
                         {% endif %}
                         {% if row.statusDespacho.id == 3 %}
-                        <Strong>Status: </Strong><span class="badge text-bg-success"> {{
+                        <Strong>Status: </Strong><span class="badge text-bg-success p-2"> {{
                             row.statusDespacho.txtStatusDespacho}}</span>
                         {% endif %}
                         <p><strong>Enviado para:</strong> {{ row.despacho.composicaoViatura.viatura }}</p>
-                        <p><strong>Data: </strong>{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}}</p>
+                        <p><strong>Data: </strong>{{row.dataInicio.strftime('%d/%m/%Y' + ' às ' '%H:%M' + 'h')}}</p>
                         <div class="d-grid gap-2 mt-2"> 
                             {% if row.statusDespacho.id == 1 %}
                             <a href="{{ url_for('despacho.atenderDespacho', idDespachoHistorico=row.id) }}" class="btn btn-primary w-100"

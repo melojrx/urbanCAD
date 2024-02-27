@@ -114,7 +114,7 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
+                        <table class="table table-bordered table-hover m-0" style="font-size: 14px;">
                             <thead>
                                 <tr class="text-center table-secondary">
                                     <th>Cód.Ocorrência</th>
@@ -132,18 +132,18 @@
                                     <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
                                     <td> {{ row.ocorrencia.txtEndereco}} </td>
                                     <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
-                                    <td class="d-flex align-items-center justify-content-center" style="height: 100%;">
+                                    <td class="d-flex align-items-center justify-content-center p-3" >
                                         {% if row.statusOCorrencia.id == 1 %}
-                                        <span class="badge text-bg-warning">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        <span class="badge text-bg-warning p-2">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
                                         {% endif %}
                                         {% if row.statusOCorrencia.id == 2 %}
-                                        <span class="badge text-bg-primary">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        <span class="badge text-bg-primary p-2">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
                                         {% endif %}
                                         {% if row.statusOCorrencia.id == 3 %}
-                                        <span class="badge text-bg-info">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        <span class="badge text-bg-info p-2">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
                                         {% endif %}
                                         {% if row.statusOCorrencia.id == 4 %}
-                                        <span class="badge text-bg-success">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        <span class="badge text-bg-success p-2">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
                                         {% endif %}
                                     </td>
                                     <td class="text-center">
@@ -167,7 +167,7 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped m-0" style="font-size: 14px;">
+                        <table class="table table-bordered table-hover m-0" style="font-size: 14px;">
                             <thead>
                                 <tr class="text-center table-secondary">
                                     <th>Cod. Ocorrência</th>
@@ -191,25 +191,27 @@
                                     </td>
                                     <td>{{ row.txtEndereco}}</td>
                                     <td>{{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
-                                <td class="d-flex align-items-center justify-content-center" style="height: 100%;">
-                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 1 %}
-                                    <span class="badge text-bg-warning">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
-                                    {% endif %}
-                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 2 %}
-                                    <span class="badge text-bg-primary">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
-                                    {% endif %}
-                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 3 %}
-                                    <span class="badge text-bg-info">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
-                                    {% endif %}
-                                    {% if row.ocorrenciaHistorico.statusOCorrencia.id == 4 %}
-                                    <span class="badge text-bg-success">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
-                                    {% endif %}
-                                </td>
-                                    <td>
-                                        <button class="btn btn-success btn-sm me-2" {% if not row.exibeFinalizarOcorrencia
+                                    <td class="d-flex align-items-center justify-content-center p-3" >
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 1 %}
+                                        <span class="badge text-bg-warning p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 2 %}
+                                        <span class="badge text-bg-primary p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 3 %}
+                                        <span class="badge text-bg-info p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 4 %}
+                                        <span class="badge text-bg-success p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="pt-3">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                        <button class="btn btn-success btn-sm" {% if not row.exibeFinalizarOcorrencia
                                             %}disabled{% endif %} type="button"
                                             onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
-                                    </td>
+                                        </div>
+                                        </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
