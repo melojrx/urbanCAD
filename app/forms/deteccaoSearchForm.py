@@ -3,7 +3,7 @@ from wtforms import Form, SubmitField, BooleanField, DateField, TimeField
 class DeteccaoSearchForm(Form):
   
     dataInicioSearch = DateField(
-        'Data de Início', 
+        'Data de Início:', 
         format='%Y-%m-%d',
         render_kw={"placeholder": "dd/mm/aa"}
     )
@@ -13,7 +13,7 @@ class DeteccaoSearchForm(Form):
     )
 
     dataFimSearch = DateField(
-        'Data de Fim', 
+        'Data de Fim:', 
         format='%Y-%m-%d',
         render_kw={"placeholder": "dd/mm/aa"}
     )
@@ -27,5 +27,5 @@ class DeteccaoSearchForm(Form):
     )
 
     submit = SubmitField(
-        'Filtrar'
+        'Consultar'
     )

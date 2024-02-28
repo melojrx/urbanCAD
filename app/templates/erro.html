@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
+
 {% block conteudo %}
 
-ERRO. {{e}}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="error-template text-center">
+                <h1> <i class="fas fa-exclamation-triangle fs-1"></i> Oops! Erro!</h1>
+                <div class="error-details">
+                    Desculpe, ocorreu um erro durante o processamento de sua solicitação.
+                </div>
+            </div>
+            <div class="error-actions mt-4">
+                <div class="mb-2">
+                    <a href="{{url_for('despacho.telaDespacho')}}" class="btn btn-primary">
+                        <span class="fa fa-home"></span>
+                        Voltar para a página inicial
+                    </a>
+                </div>
+            </div>
+            <div class="error-details mt-5">
+                <p><strong>Detalhes do erro:</strong> {{ e }}</p>
+            </div>
+            <div class="mb-2 mt-2">
+                <a href="mailto:support@example.com" class="btn btn-default btn-lg">
+                    <span class="fa fa-envelope"></span>
+                    Contate o Suporte
+                </a>
+            </div>
+        </div>   
+    </div>      
+</div>
 
 {% endblock conteudo %}
