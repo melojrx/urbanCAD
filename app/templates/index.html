@@ -19,27 +19,33 @@
 </head>
 
 <body>
-  <!-- Responsive navbar-->
+  <!-- NavBar Responsiva -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container menu-site px-5">
       <div class="menu-logo">
-      <a class="navbar-brand" href="#!">URBANCAD</a>
+        <a class="navbar-brand" href="#!">URBANCAD</a>
       </div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-          class="navbar-toggler-icon"></span></button>
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <!-- <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{url_for('login.login')}}">Entrar</a></li> -->
           <li class="nav-item"><a class="nav-link" href="#features">Sobre</a></li>
           <li class="nav-item"><a class="nav-link" href="#!">Contato</a></li>
           <li class="nav-item"><a class="nav-link" href="#!">Serviços</a></li>
+          <!-- Mostra apenas em telas médias e grandes -->
+          <li class="nav-item d-none  d-lg-block">
+            <a class="btn btn-primary btn-sm px-3 ms-3 mt-1" aria-current="page"
+              href="{{url_for('login.login')}}">Entrar</a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
+
   <!-- Header -->
-  <header class="bg-dark py-5">
+  <header class="bg-dark py-3 d-block d-lg-none">
     <div class="container px-5">
       <div class="row gx-5 justify-content-center">
         <div class="col-lg-6">
