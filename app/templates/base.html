@@ -46,6 +46,8 @@
             </a></li>
         </ul>
       </li>
+
+      {% if current_user %}
       <!-- User Login -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
@@ -59,6 +61,7 @@
           <li><a class="dropdown-item" href="{{url_for('login.logout')}}"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
         </ul>
       </li>
+      {% endif %}
       
     </ul>
   </nav>
