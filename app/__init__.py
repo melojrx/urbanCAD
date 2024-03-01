@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # app.debug = True
-# app.config['SQLALCHEMY_ECHO'] = True
+#app.config['SQLALCHEMY_ECHO'] = True
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login.login"
@@ -39,6 +39,7 @@ from .rotas.tipoPatrulhaRout import tipopatrulha_bp
 from .rotas.viaturaRout import viatura_bp
 from .rotas.usuarioGrupoDespachoRout import usuariogrupodespacho_bp
 from .rotas.dashboardRout import dashboard_bp
+from .rotas.usuarioRout import usuario_bp
 
 app.register_blueprint(agente_bp)
 app.register_blueprint(public_bp)
@@ -55,5 +56,6 @@ app.register_blueprint(tipopatrulha_bp)
 app.register_blueprint(viatura_bp)
 app.register_blueprint(usuariogrupodespacho_bp)
 app.register_blueprint(dashboard_bp)
+app.register_blueprint(usuario_bp)
 
 # print(list(app.url_map.iter_rules()), sep='\n')

@@ -13,10 +13,20 @@
         <strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}
     </div>
     <div class="mb-1">
-        <strong>Tipo de Ocorrência:</strong> {{ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+        <strong>Tipo de Ocorrência:</strong>
+        {% if ocorrencia.subtipoOcorrencia %}
+            {{ ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+        {% else %}
+            Não Informada
+        {% endif %} 
     </div>
     <div class="mb-1">
         <strong>Subtipo de Ocorrência:</strong> {{ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}
+        {% if ocorrencia.subtipoOcorrencia %}
+            {{ ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}
+        {% else %}
+            Não Informada
+        {% endif %} 
     </div>
     <div class="mb-1">
         <strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y'+' às '+ '%H:%M'+'h')}}

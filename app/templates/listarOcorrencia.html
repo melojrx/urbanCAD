@@ -75,8 +75,20 @@
           {% for row in listOcorrenciaHistorico %}
           <tr>
             <td>{{ row.ocorrencia.interessado.txtInteressado.capitalize()}}</td>
-            <td>{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
-            <td>{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</td>
+            <td>
+              {% if row.ocorrencia.subtipoOcorrencia %}
+                  {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia }}
+              {% else %}
+                  Não Informada
+              {% endif %}
+            </td>
+            <td>
+              {% if row.ocorrencia.subtipoOcorrencia %}
+                {{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}
+              {% else %}
+                Não Informada
+              {% endif %}                
+            </td>
             <td>{{ row.ocorrencia.numOcorrencia}}</td>
             {% if row.statusOCorrencia.id == 1 %}
             <td class="badge text-bg-warning">{{ row.statusOCorrencia.txtStatusOcorrencia}}</td>
@@ -94,8 +106,10 @@
             <td class="d-flex gap-2 align-items-center justify-content-center">
               <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#txtProblemaModal" data-target="#txtProblemaModal"
                 data-interessado="{{ row.ocorrencia.interessado.txtInteressado.capitalize() }}"
-                data-tipo="{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia }}"
-                data-subtipo="{{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia }}"
+
+                data-tipo="{% if row.ocorrencia.subtipoOcorrencia  %} {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia }}{% else %}Não Informada{% endif %}"
+                data-subtipo="{% if row.ocorrencia.subtipoOcorrencia %} {{ row.ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia }}{% else %}Não Informada{% endif %}"
+                
                 data-numero="{{ row.ocorrencia.numOcorrencia }}" data-status="{{ row.statusOCorrencia.txtStatusOcorrencia }}"
                 data-datainicio="{{ row.dataInicio.strftime('%d/%m/%Y %H:%M') }}" data-txtproblema="{{ row.ocorrencia.txtProblema }}"
                 role="button" title="Detalhar Ocorrência">

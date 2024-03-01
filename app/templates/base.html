@@ -54,7 +54,7 @@
           aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
         <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="navbarDropdown">
           <li><a class="dropdown-item" href="#!"><i class="fas fa-user"></i> Olá, {{ current_user.name.split()[0].capitalize() }}</a></li>
-          <li><a class="dropdown-item" href="#!"><i class="fas fa-user-cog"></i> Meus Dados</a></li>
+          <li><a class="dropdown-item" href="{{url_for('usuario.prepareUpdate')}}"><i class="fas fa-user-cog"></i> Meus Dados</a></li>
           <li>
             <hr class="dropdown-divider" />
           </li>
