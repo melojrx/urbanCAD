@@ -24,8 +24,14 @@
                         </div>
                     </div>
                     <div class="card-body" style="background-color: rgb(183, 172, 172);">
-                        <p><strong>Tipo de Ocorrência: </strong>{{
-                            row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia.capitalize()}}</p>
+                        <p> 
+                            <strong>Tipo de Ocorrência: </strong>
+                            {% if row.despacho.ocorrencia.subtipoOcorrencia %}
+                                {{ row.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia.capitalize()}}
+                            {% else %}
+                                Não Informada
+                            {% endif %} 
+                        </p>
                         {% if row.statusDespacho.id == 1 %}
                         <Strong>Status: </Strong><span class="badge text-bg-warning p-2"> {{
                             row.statusDespacho.txtStatusDespacho}}</span>

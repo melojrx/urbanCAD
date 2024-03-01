@@ -5,6 +5,7 @@ from app.models.agenteModel import Agente
 from app.models.composicaoViaturaModel import ComposicaoViatura
 from app.models.despachoObservacaoModel import DespachoObservacao
 from app.models.interessadoModel import Interessado
+from app.models.tipoOcorrenciaModel import TipoOcorrencia
 from ..database import db
 from sqlalchemy import and_, text
 from flask import flash, redirect, render_template, request, session, url_for
@@ -38,11 +39,12 @@ class DespachoController():
         querySearchADespachar = None
 
         if not 'MACEIO_ADMIN' in session["roles"]:  
-              
+
             querySearchDespacho = (Ocorrencia.query
                         .join(Interessado)
                         .join(Despacho)
-                        .join(SubtipoOcorrencia, 'subtipoOcorrencia')
+                        .outerjoin(SubtipoOcorrencia)
+                        .outerjoin(TipoOcorrencia)
                         .join(ComposicaoViatura)
                         .join(OcorrenciaHistorico)
                         .join(OcorrenciaGrupoDespacho)
@@ -50,9 +52,9 @@ class DespachoController():
                         .join(UsuarioGrupoDespacho)
                         .join(User)
                         .options(
-                            joinedload('interessado')
-                            ,joinedload('listDespacho')
-                            ,joinedload('subtipoOcorrencia').joinedload('tipoOcorrencia')
+                            joinedload('interessado'),
+                            joinedload('listDespacho'),
+                            joinedload('subtipoOcorrencia')
                         )
                         .filter(
                             OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
@@ -60,35 +62,40 @@ class DespachoController():
                             OcorrenciaHistorico.dataFim.is_(None))
                         )
 
+            
+           
             querySearchADespachar = (OcorrenciaHistorico.query
                 .join(Ocorrencia)
                 .join(Interessado)
-                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
+                .outerjoin(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
                 .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
                 .join(OcorrenciaGrupoDespacho)
                 .join(GrupoDespacho)
                 .join(UsuarioGrupoDespacho)
                 .options(
-                            joinedload('ocorrencia').joinedload('interessado')
-                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
+                            joinedload('ocorrencia').joinedload('interessado'),
+                            joinedload('ocorrencia.subtipoOcorrencia')
                         )
                 .filter(
                     OcorrenciaHistorico.dataFim.is_(None),
                     Despacho.id.is_(None),
-                    UsuarioGrupoDespacho.idUsuario == current_user.id
+                    UsuarioGrupoDespacho.idUsuario == current_user.id,
+                    UsuarioGrupoDespacho.dataFim.is_(None)
                 )
             )
         else:
+
             querySearchDespacho = (Ocorrencia.query
                         .join(Interessado)
                         .join(Despacho)
-                        .join(SubtipoOcorrencia, 'subtipoOcorrencia')
+                        .outerjoin(SubtipoOcorrencia, 'subtipoOcorrencia')
+                        .outerjoin(TipoOcorrencia, SubtipoOcorrencia.tipoOcorrencia)
                         .join(ComposicaoViatura)
                         .join(OcorrenciaHistorico)
                         .options(
-                            joinedload('interessado')
-                            ,joinedload('listDespacho')
-                            ,joinedload('subtipoOcorrencia').joinedload('tipoOcorrencia')
+                            joinedload('interessado'),
+                            joinedload('listDespacho'),
+                            joinedload('subtipoOcorrencia')
                         )
                         .filter(
                             OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
@@ -98,11 +105,12 @@ class DespachoController():
             querySearchADespachar = (OcorrenciaHistorico.query
                 .join(Ocorrencia)
                 .join(Interessado)
-                .join(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
+                .outerjoin(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
+                .outerjoin(TipoOcorrencia, SubtipoOcorrencia.tipoOcorrencia)
                 .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
                 .options(
-                            joinedload('ocorrencia').joinedload('interessado')
-                            ,joinedload('ocorrencia.subtipoOcorrencia').joinedload('tipoOcorrencia')
+                            joinedload('ocorrencia').joinedload('interessado'),
+                            joinedload('ocorrencia.subtipoOcorrencia')
                         )
                 .filter(
                     OcorrenciaHistorico.dataFim.is_(None),
@@ -117,9 +125,11 @@ class DespachoController():
                 if all(row.despachoHistorico.idStatusDespacho == statusDespachoEnum.StatusDespachoEnum.CONCLUIDO.value for row in ocorrencia.listDespacho):
                     ocorrencia.exibeFinalizarOcorrencia = True
 
-        listDespachar = querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
+        listDespachar =  querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
 
 
+        print('-----------------------listDespachar------------------------------', len(listDespachar))
+        print('---------------------listOcorrenciaDespachada--------------------------', len(listOcorrenciaDespachada))
 
         return  listOcorrenciaDespachada, listDespachar
 

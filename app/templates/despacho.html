@@ -131,7 +131,13 @@
                                     <td> {{ row.ocorrencia.numOcorrencia}} </td>
                                     <td> {{ row.ocorrencia.interessado.txtInteressado}} </td>
                                     <td> {{ row.ocorrencia.txtEndereco}} </td>
-                                    <td> {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}} </td>
+                                    <td> 
+                                        {% if row.ocorrencia.subtipoOcorrencia %}
+                                            {{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                                        {% else %}
+                                            Não Informada
+                                        {% endif %} 
+                                    </td>
                                     <td class="d-flex align-items-center justify-content-center p-3" >
                                         {% if row.statusOCorrencia.id == 1 %}
                                         <span class="badge text-bg-warning p-2">{{ row.statusOCorrencia.txtStatusOcorrencia }}</span>
@@ -190,7 +196,13 @@
                                         {% endfor %}
                                     </td>
                                     <td>{{ row.txtEndereco}}</td>
-                                    <td>{{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</td>
+                                    <td>
+                                        {% if row.subtipoOcorrencia %}
+                                            {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                                        {% else %}
+                                            Não Informada
+                                        {% endif %}                                         
+                                    </td>
                                     <td class="d-flex align-items-center justify-content-center p-3" >
                                         {% if row.ocorrenciaHistorico.statusOCorrencia.id == 1 %}
                                         <span class="badge text-bg-warning p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
@@ -291,15 +303,15 @@
                 txtLat: '{{ row.txtLat }}',
                 txtLong: '{{ row.txtLong }}',
                 txtProblema: '{{ row.txtProblema }}',
-                icon: '{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}'
-            },
-            {% if not loop.last %}, {% endif %}
-    {% endfor %}
+                icon: '{% if row.subtipoOcorrencia %}{{ row.subtipoOcorrencia.tipoOcorrencia.icon }}{% else %}default{% endif %}'
+                },
+                {% if not loop.last %}, {% endif %}
+                {% endfor %}
             ];
     // var ocorrenciasJSON = JSON.stringify(ocorrenciasEmAtendimento);
 
     ocorrenciasEmAtendimento.forEach(function (ocorrenciaAtendida) {
-
+        
         var iconAtendidaUrl = '../static/img/icons/' + ocorrenciaAtendida.icon + 'Green.png';
 
         var iconAtendido = L.icon({
@@ -315,16 +327,15 @@
 
     // OCORRÊNCIAS PARA ATENDER
     var ocorrenciasParaAtender = [
-        {% for row in listDespachar %}
-    {
+        {% for row in listDespachar %}{
         txtLat: '{{ row.ocorrencia.txtLat }}',
-            txtLong: '{{ row.ocorrencia.txtLong }}',
-                txtProblema: '{{ row.ocorrencia.txtProblema }}',
-                    icon: '{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}'
-    },
-    {% if not loop.last %}, {% endif %}
-    {% endfor %}
-                ];
+        txtLong: '{{ row.ocorrencia.txtLong }}',
+        txtProblema: '{{ row.ocorrencia.txtProblema }}',
+        icon: '{% if row.ocorrencia.subtipoOcorrencia %}{{ row.ocorrencia.subtipoOcorrencia.tipoOcorrencia.icon }}{% else %}default{% endif %}'
+        },
+        {% if not loop.last %}, {% endif %}
+        {% endfor %}
+    ];
 
     ocorrenciasParaAtender.forEach(function (ocorrenciaAtender) {
 

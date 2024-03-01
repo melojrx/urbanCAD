@@ -21,7 +21,12 @@
                 </div>
                 <div class="mb-2">
                     <p><strong>Tipo de Ocorrência:</strong>
-                    {{despachoHistorico.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</p>
+                        {% if despachoHistorico.despacho.ocorrencia.subtipoOcorrencia %}
+                            {{ despachoHistorico.despacho.ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                        {% else %}
+                            Não Informada
+                        {% endif %} 
+                    </p>
                 </div>
                 <div class="mb-2">
                     <p><strong>Subtipo de Ocorrência:</strong>

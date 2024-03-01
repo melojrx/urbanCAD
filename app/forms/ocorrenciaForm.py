@@ -33,18 +33,20 @@ class OcorrenciaForm(Form):
     tipoOcorrencia = SelectField(
         'Tipo de Ocorrência:',
         coerce=int,
-        validators = [
-            DataRequired(message='*Campo Requerido'),
-            InputRequired(message=('*Campo Requerido'))
-    ])
+    #     validators = [
+    #         DataRequired(message='*Campo Requerido'),
+    #         InputRequired(message=('*Campo Requerido'))
+    # ]
+    )
 
     subtipoOcorrencia = SelectField(
         'Subtipo de Ocorrência:',
         coerce=int,
-        validators = [
-            DataRequired(message='*Campo Requerido'),
-            InputRequired(message=('*Campo Requerido'))
-    ])
+    #     validators = [
+    #         DataRequired(message='*Campo Requerido'),
+    #         InputRequired(message=('*Campo Requerido'))
+    # ]
+    )
 
     # Dados do interessdo
 
@@ -78,10 +80,11 @@ class OcorrenciaForm(Form):
     txtTelefone = StringField(
         'Telefone do Noticiante:',
         render_kw={'placeholder': 'DDD + Telefone. Digite apenas números', 'class': 'form-control'}, 
-        validators = [
-            DataRequired(message='*Campo Requerido'),
-            Length(max=11, min=11, message='O Telefone deve ter conter exatamente 11 caracteres'),
-    ])
+    #     validators = [
+    #         DataRequired(message='*Campo Requerido'),
+    #         Length(max=11, min=11, message='O Telefone deve ter conter exatamente 11 caracteres'),
+    # ]
+    )
 
     isNoticianteVitima = BooleanField(
         'Noticiante é a vítima?'

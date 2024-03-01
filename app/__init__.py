@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # app.debug = True
-# app.config['SQLALCHEMY_ECHO'] = True
+#app.config['SQLALCHEMY_ECHO'] = True
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login.login"

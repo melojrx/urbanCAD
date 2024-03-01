@@ -494,3 +494,10 @@ INSERT INTO cad.tb_tipo_ocorrencia_toc
 VALUES(4, 'Desmoronamento ', '2024-02-25 22:51:00.817', NULL, 'collapse');
 
 
+-- ####################################
+-- #      ALTERAÇÃO 01.03.2024        #
+-- ####################################
+ALTER TABLE cad.tb_ocorrencia_oco ALTER COLUMN id_subtipo_ocorrencia_oco DROP NOT NULL;
+
+
+

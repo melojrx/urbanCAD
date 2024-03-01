@@ -153,9 +153,9 @@ class ocorrenciaController():
             txtPassaporte = form.txtPassaporte.data
             dataInicio = datetime.datetime.now()
 
-            if not subtipoOcorrencia:
-                flash('Informe o subtipo da ocorrência', 'error')
-                return render_template('cadastrarOcorrencia.html', listTipoOcorrencia=listTipoOcorrencia, form=form)
+            # if not subtipoOcorrencia:
+            #     flash('Informe o subtipo da ocorrência', 'error')
+            #     return render_template('cadastrarOcorrencia.html', listTipoOcorrencia=listTipoOcorrencia, form=form)
 
             if not txtLat and not txtLong:
                 g = geocoder.osm(txtEndereco)
