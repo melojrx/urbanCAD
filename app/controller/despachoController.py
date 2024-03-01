@@ -313,7 +313,7 @@ class DespachoController():
     @login_required
     def loadListADespachar():
         form = DespachoForm(request.form)
-        form.idRegiao.data = DespachoController.getIdRegiaoByUser();
+        form.idRegiao.data = DespachoController.getIdRegiaoByUser()
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
         return render_template('loadListaDespacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
     
