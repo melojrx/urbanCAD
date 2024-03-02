@@ -5,7 +5,7 @@
 <form method="POST" enctype='multipart/form-data' action="{{ url_for('agente.cadastrarAgente') }}">
     <h1 class="mt-4">Gerenciamento de Agentes</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{url_for('agente.listar')}}" style="color: gray">Tabela de Viaturas</a>
+        <li class="breadcrumb-item"><a href="{{url_for('agente.listar')}}" style="color: gray">Tabela de Agentes</a>
         </li>
         <li class="breadcrumb-item active">{{ "Cadastro" if not form.id.data else "Exclusão" }} de Agentes</li>
     </ol>

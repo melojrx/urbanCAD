@@ -180,7 +180,7 @@ class ocorrenciaController():
             db.session.commit()
 
             flash('Ocorrência Cadastrada com sucesso', 'sucess')
-            return redirect(url_for('ocorrencia.iniciar'))
+            return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
         except Exception as e:
             db.session.rollback()
             flash('Erro: {}'.format(e), 'error')

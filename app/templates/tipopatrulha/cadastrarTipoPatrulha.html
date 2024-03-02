@@ -6,7 +6,7 @@
     <h1 class="mt-4">Gerenciamento de Tipo de Patrulha</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{url_for('tipopatrulha.listar')}}" style="color: gray">Tabela de
-                Viaturas</a>
+                Tipos de Patrulha</a>
         </li>
         <li class="breadcrumb-item active">{{ "Cadastro" if not form.id.data else "Exclusão" }} de Tipos de Patrulha
         </li>
@@ -19,7 +19,7 @@
         </div>
         <div class="card-body">
             <div class="form-group mb-3 row justify-content-between">
-                <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     {{form.txtTipoPatrulha.label(class_="form-label")}}
                     {{form.txtTipoPatrulha(class_="form-control")}}
                     {% for error in form.txtTipoPatrulha.errors %}

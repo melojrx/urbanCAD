@@ -298,7 +298,7 @@ class DespachoController():
     
     @despacho_bp.route('/finalizarDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_AGENTE')    
+    @roles_required('MACEIO_ADMIN', 'CAD_AGENTE', 'CAD_DESPACHO')
     def finalizarDespacho(idDespachoHistorico):
         try:
 
