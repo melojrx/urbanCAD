@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, InputRequired, Length
 class OcorrenciaForm(Form):
 
     problema = StringField(
-        'Descreva a ocorrência:',
+        'Descreva a ocorrência:*',
         widget=TextArea(),
         render_kw={"placeholder": "Faça uma breve descrição do seu problema"},
         validators = [
@@ -15,7 +15,7 @@ class OcorrenciaForm(Form):
         ])
 
     endereco = StringField(
-        'Endereço da ocorrência:',
+        'Endereço da ocorrência:*',
         render_kw={"placeholder": "Endereço da ocorrência"},
         validators = [
             InputRequired(message=('*Campo Requerido')),
@@ -51,7 +51,7 @@ class OcorrenciaForm(Form):
     # Dados do interessdo
 
     txtInteressado = StringField(
-        'Noticiante:',
+        'Noticiante:*',
         render_kw={"placeholder": "Nome do Noticiante"},
         validators = [
             InputRequired(message=('*Campo Requerido')),

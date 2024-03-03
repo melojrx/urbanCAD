@@ -6,7 +6,7 @@ class InstituicaoForm(Form):
     id = HiddenField('id')
 
     txtInstituicao = StringField(
-        'Nome da Instituição:',
+        'Nome da Instituição',
         render_kw={"placeholder": "Nome da Instituição"},
         validators = [
             InputRequired(message=('*Campo Requerido')),
@@ -14,7 +14,7 @@ class InstituicaoForm(Form):
         ])
 
     txtSigla = StringField(
-        'Sigla da Instituição:',
+        'Sigla da Instituição',
         render_kw={"placeholder": "Sigla da Instituição"},
         validators = [
             InputRequired(message=('*Campo Requerido')),

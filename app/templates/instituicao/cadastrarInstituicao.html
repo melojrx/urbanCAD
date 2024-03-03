@@ -4,7 +4,7 @@
 <form method="POST" action="{{ url_for('instituicao.cadastrarInstituicao') }}">
     <h1 class="mt-4">Gerenciamento de Instituições</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{url_for('instituicao.listar')}}" style="color: gray">Tabela de Viaturas</a>
+        <li class="breadcrumb-item"><a href="{{url_for('instituicao.listar')}}" style="color: gray">Tabela de Instituições</a>
         </li>
         <li class="breadcrumb-item active">{{ "Cadastro" if not form.id.data else "Exclusão" }} de Instituições</li>
     </ol>
@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
             <div class="form-group mb-3 row justify-content-between">
-                <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     {{form.txtInstituicao.label(class_="form-label")}}
                     {{form.txtInstituicao(class_="form-control")}}
                     {% for error in form.txtInstituicao.errors %}
@@ -25,7 +25,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     {{form.txtSigla.label(class_="form-label")}}
                     {{form.txtSigla(class_="form-control")}}
                     {% for error in form.txtSigla.errors %}
