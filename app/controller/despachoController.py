@@ -128,8 +128,8 @@ class DespachoController():
         listDespachar =  querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
 
 
-        print('-----------------------listDespachar------------------------------', len(listDespachar))
-        print('---------------------listOcorrenciaDespachada--------------------------', len(listOcorrenciaDespachada))
+        # print('-----------------------listDespachar------------------------------', len(listDespachar))
+        # print('---------------------listOcorrenciaDespachada--------------------------', len(listOcorrenciaDespachada))
 
         return  listOcorrenciaDespachada, listDespachar
 
@@ -140,10 +140,12 @@ class DespachoController():
                     " JOIN cad.tb_grupo_despacho_gde gde ON reg.id = gde.id_regional_gde"
                     " JOIN cad.tb_usuario_grupo_despacho_ugd ugd ON gde.id_grupo_despacho_gde = ugd.id_grupo_despacho_ugd "
                     " WHERE ugd.id_usuario_ugd = :param;")
-        resultRegional = db.engine.execute(sqlRegional, param=current_user.id)
-        row = resultRegional.fetchone()
-
-        return row["id"]
+        try:
+            resultRegional = db.engine.execute(sqlRegional, param=current_user.id)
+            row = resultRegional.fetchone()
+            return row["id"] if row else 0
+        except Exception as e:
+            raise Exception("´pomvspfoomvbeoibvm")
 
     @despacho_bp.route('/telaDespacho', methods=['GET'])
     @login_required
@@ -151,8 +153,14 @@ class DespachoController():
     def telaDespacho():
         form = DespachoForm(request.form)
 
-        form.idRegiao.data = DespachoController.getIdRegiaoByUser()
+        try:
 
+           form.idRegiao.data = DespachoController.getIdRegiaoByUser()
+
+        except Exception as e:
+            flash('Erro: {}'.format(e), 'error') 
+            return redirect(url_for('ocorrencia.iniciar'))
+        
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
         return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
 
@@ -166,32 +174,46 @@ class DespachoController():
 
         ocorrencia = Ocorrencia.query.filter(Ocorrencia.id == idOcorrencia).first()
         
-        sql = text("SELECT cvi.id_composicao_viatura_cvi, via.txt_codigo_via, via.txt_placa_via, tpa.txt_tipo_patrulha_tpa, ins.txt_instituicao_ins"  
-                    " FROM cad.tb_viatura_via via"
-                    " JOIN cad.tb_tipo_patrulha_tpa tpa ON via.id_tipo_patrulha_via = tpa.id_tipo_patrulha_tpa"
-                    " JOIN cad.tb_instituicao_ins ins ON via.id_instituicao_via = ins.id_instituicao_ins"
-                    " JOIN cad.tb_composicao_viatura_cvi cvi ON via.id_viatura_via = cvi.id_viatura_cvi"
-                    # " JOIN cad.tb_composicao_com com ON cvi.id_composicao_viatura_cvi = com.id_composicao_viatura_com"
-                    " JOIN cad.tb_agente_age a ON cvi.id_agente_cvi = a.id_agente_age"
-                    " JOIN comum.tb_usuario_usu usu ON a.id_usuario_age = usu.id_usuario_usu"
-                    " JOIN cad.tb_usuario_grupo_despacho_ugd ugd ON usu.id_usuario_usu = ugd.id_usuario_ugd"
-                    " JOIN cad.tb_grupo_despacho_gde gde ON ugd.id_grupo_despacho_ugd = gde.id_grupo_despacho_gde"
-                    " JOIN cad.tb_regionais_reg reg ON gde.id_regional_gde = reg.id"
-                    " WHERE"
-                    " cvi.dat_fim_cvi is null AND"
-                    " a.dat_fim_age is null AND"
-                    " ugd.dat_fim_ugd is null AND"
-                    " gde.dat_fim_gde is null AND"
-                    " ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
+        if 'MACEIO_ADMIN' in session["roles"]:
+                        sql = text("SELECT cvi.id_composicao_viatura_cvi, via.txt_codigo_via, via.txt_placa_via, tpa.txt_tipo_patrulha_tpa, ins.txt_instituicao_ins, ins.txt_sigla_ins"  
+                        " FROM cad.tb_viatura_via via"
+                        " JOIN cad.tb_tipo_patrulha_tpa tpa ON via.id_tipo_patrulha_via = tpa.id_tipo_patrulha_tpa"
+                        " JOIN cad.tb_instituicao_ins ins ON via.id_instituicao_via = ins.id_instituicao_ins"
+                        " JOIN cad.tb_composicao_viatura_cvi cvi ON via.id_viatura_via = cvi.id_viatura_cvi"
+                        " JOIN cad.tb_agente_age a ON cvi.id_agente_cvi = a.id_agente_age"
+                        " JOIN comum.tb_usuario_usu usu ON a.id_usuario_age = usu.id_usuario_usu"
+                        " WHERE"
+                        " cvi.dat_fim_cvi is null AND"
+                        " a.dat_fim_age is null"
+                        )
+        else: 
+            sql = text("SELECT cvi.id_composicao_viatura_cvi, via.txt_codigo_via, via.txt_placa_via, tpa.txt_tipo_patrulha_tpa, ins.txt_instituicao_ins, ins.txt_sigla_ins"  
+                        " FROM cad.tb_viatura_via via"
+                        " JOIN cad.tb_tipo_patrulha_tpa tpa ON via.id_tipo_patrulha_via = tpa.id_tipo_patrulha_tpa"
+                        " JOIN cad.tb_instituicao_ins ins ON via.id_instituicao_via = ins.id_instituicao_ins"
+                        " JOIN cad.tb_composicao_viatura_cvi cvi ON via.id_viatura_via = cvi.id_viatura_cvi"
+                        # " JOIN cad.tb_composicao_com com ON cvi.id_composicao_viatura_cvi = com.id_composicao_viatura_com"
+                        " JOIN cad.tb_agente_age a ON cvi.id_agente_cvi = a.id_agente_age"
+                        " JOIN comum.tb_usuario_usu usu ON a.id_usuario_age = usu.id_usuario_usu"
+                        " JOIN cad.tb_usuario_grupo_despacho_ugd ugd ON usu.id_usuario_usu = ugd.id_usuario_ugd"
+                        " JOIN cad.tb_grupo_despacho_gde gde ON ugd.id_grupo_despacho_ugd = gde.id_grupo_despacho_gde"
+                        " JOIN cad.tb_regionais_reg reg ON gde.id_regional_gde = reg.id"
+                        " WHERE"
+                        " cvi.dat_fim_cvi is null AND"
+                        " a.dat_fim_age is null AND"
+                        " ugd.dat_fim_ugd is null AND"
+                        " gde.dat_fim_gde is null AND"
+                        " ST_Contains(geom, ST_SetSRID(ST_MakePoint(:param1, :param2), 4326));")
+            
         result = db.engine.execute(sql, param1=ocorrencia.txtLong, param2=ocorrencia.txtLat)
 
-        if(not result.rowcount):
-            flash('Nenhuma viatura disponível para a região', 'error')
-            return
+        # if(not result.rowcount):
+        #     flash('Nenhuma viatura disponível para a região', 'error')
+        #     render_template('formDespacho.html', form=form, ocorrencia=ocorrencia)
 
         form.despacharPara.choices = [(row["id_composicao_viatura_cvi"], 
                                        str(row["txt_tipo_patrulha_tpa"]) + " " + 
-                                       str(row["txt_instituicao_ins"]) + " " + 
+                                       str(row["txt_sigla_ins"]) + " " + 
                                        str(row["txt_codigo_via"]) + " " + 
                                        str(row["txt_placa_via"])) for row in result]
                    

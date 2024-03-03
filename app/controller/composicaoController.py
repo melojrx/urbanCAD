@@ -36,12 +36,23 @@ class composicaoController:
     def prepareCadastrarComposicao():
 
         form = ComposicaoForm(request.form)
+        
+        try:
+            agente = Agente.query.join(User).filter(and_(User.id == current_user.id, Agente.dataFim.is_(None))).first()
 
-        listAgente = Agente.query.filter(Agente.dataFim.is_(None)).all()
-        form.agente.choices = [(0, "Selecione...")]+[(row.id, row.usuario.name) for row in listAgente]
+            if not agente :
+                 flash('O Agente logado não possui região definida. Entre em contato com o Administrador do sistema', 'error')
+                 return redirect(url_for('despacho.meusDespachos'))
 
-        listViatura = Viatura.query.filter(Viatura.dataFim.is_(None)).all()
-        form.viatura.choices = [(0, "Selecione...")]+[(row.id, row) for row in listViatura]
+            form.agente.choices = [(0, "Selecione...")]+[(agente.id, agente.usuario.name)]
+            form.agente.default = agente.id
+            form.process()
+
+            listViatura = Viatura.query.filter(Viatura.dataFim.is_(None)).all()
+            form.viatura.choices = [(0, "Selecione...")]+[(row.id, row) for row in listViatura]
+        except Exception as e:
+            flash('Erro: {}'.format(e), 'error')
+            return redirect(url_for('despacho.meusDespachos'))
 
         return render_template('composicao/cadastrarComposicao.html', form=form)
 
@@ -54,8 +65,18 @@ class composicaoController:
         form = ComposicaoForm(request.form)
         dataInicio = datetime.datetime.now()
 
+        agente = form.agente.data
+        viatura = form.viatura.data
+
+        if(agente == 0):
+            flash('Informe o Agente', 'error')
+            return redirect(url_for('composicao.prepareCadastrarComposicao', **form.data))
+        if(viatura == 0):
+            flash('Informe a Viatura', 'error')
+            return redirect(url_for('composicao.prepareCadastrarComposicao', **form.data))
+
         try:
-            composicaoViatura = ComposicaoViatura(form.viatura.data, form.agente.data, dataInicio)
+            composicaoViatura = ComposicaoViatura(viatura, agente, dataInicio)
             # composicao = Composicao(composicaoViatura, form.agente.data, dataInicio)
 
             db.session.add(composicaoViatura)

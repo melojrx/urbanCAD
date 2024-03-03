@@ -77,7 +77,7 @@ class loginController:
             if "gd" in user.email:
                 session["roles"] = 'CAD_DESPACHO'
                 return redirect(url_for('despacho.telaDespacho')) 
-            if "agente" in user.email:
+            if "agente" or "007" in user.email:
                 session["roles"] = 'CAD_AGENTE'
                 return redirect(url_for('despacho.meusDespachos'))             
         else:
