@@ -10,7 +10,7 @@
     </ol>
 
     <div class="card mb-2">
-        <div class="card-header"> <i class="fas fa-user-cog"></i> Meus Dados</div>
+        <div class="card-header fw-medium"> <i class="fas fa-user-cog"></i> Meus Dados</div>
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 text-center mt-3">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="mb-2">
-                        {{form.name.label(class_="form-label")}}
+                        {{form.name.label(class_="form-label fw-medium")}}
                         {{form.name(class_="form-control")}}
                         {% for error in form.name.errors %}
                         <div class="important">{{error}}</div>
@@ -27,14 +27,14 @@
                     </div>
                     <fieldset disabled>
                         <div class="mb-2">
-                            {{form.cpf.label(class_="form-label")}}
+                            {{form.cpf.label(class_="form-label fw-medium")}}
                             {{form.cpf(class_="form-control")}}
                             {% for error in form.cpf.errors %}
                             <div class="important">{{error}}</div>
                             {% endfor %}
                         </div>
                         <div class="mb-2">
-                            {{form.email.label(class_="form-label")}}
+                            {{form.email.label(class_="form-label fw-medium")}}
                             {{form.email(class_="form-control")}}
                             {% for error in form.email.errors %}
                             <div class="important">{{error}}</div>

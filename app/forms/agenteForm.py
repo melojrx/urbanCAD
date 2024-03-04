@@ -6,7 +6,7 @@ class AgenteForm(Form):
     id = HiddenField('id')
 
     usuario = SelectField(
-        'Usuário',
+        'Usuário:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
@@ -14,7 +14,7 @@ class AgenteForm(Form):
     ])
 
     idInstituicao = SelectField(
-        'Instituição',
+        'Instituição:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),

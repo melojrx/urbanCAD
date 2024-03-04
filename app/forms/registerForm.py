@@ -11,7 +11,7 @@ class RegisterForm(Form):
     ])
 
     email = StringField(
-    'Digite seu email',
+        'Digite seu E-mail',
     validators = [
         Email(message=('Ops. Não nos parece um e-mail válido.'))
     ])

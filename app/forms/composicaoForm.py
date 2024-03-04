@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, InputRequired
 class ComposicaoForm(Form):  
 
     agente = SelectField(
-        'Agente',
+        'Agente:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),
@@ -12,7 +12,7 @@ class ComposicaoForm(Form):
     ])
 
     viatura = SelectField(
-        'Viatura',
+        'Viatura:',
         coerce=int,
         validators = [
             DataRequired(message='*Campo Requerido'),

@@ -12,22 +12,22 @@
 </ol>
                 
 <div class="card mb-2">
-    <div class="card-header">
+    <div class="card-header fw-medium">
         <i class="fas fa-user-friends"></i>
         Cadastro de Usuários de Grupo de Despacho
     </div>
     <div class="card-body">
         <div class="form-group mb-3 row justify-content-between">                    
-            <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-12">
                 {{form.usuario.label(class_="form-label")}}
-                {{form.usuario(class_="form-control")}}
+                {{form.usuario(class_="form-select")}}
                 {% for error in form.usuario.errors %}
                 <div class="important">
                     {{error}}
                 </div>
                 {% endfor %}    
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">        
+            <div class="col-lg-6 col-md-6 col-sm-12">        
                 {{form.grupoDespacho.label(class_="form-label")}}
                 {{form.grupoDespacho(class_="form-select")}}
                 {% for error in form.grupoDespacho.errors %}

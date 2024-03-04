@@ -18,7 +18,7 @@ class Viatura(db.Model):
     tipoPatrulha = db.relationship(TipoPatrulha, lazy='joined', join_depth=1)
 
     def __str__(self):
-            return f"{self.tipoPatrulha.txtTipoPatrulha} {self.instituicao.txtInstituicao} {self.txtCodigo} {self.txtPlaca}"
+            return f"{self.tipoPatrulha.txtTipoPatrulha} {self.instituicao.txtSigla} {self.txtCodigo} {self.txtPlaca}"
 
     def __init__(self, idInstituicao, idTipoPatrulha, txtCodigo, txtPlaca, txtDescricao, dataInicio):
         self.idInstituicao = idInstituicao

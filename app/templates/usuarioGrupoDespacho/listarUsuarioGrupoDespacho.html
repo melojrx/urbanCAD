@@ -9,20 +9,20 @@
 <!-- Parametros para consulta -->
 <div class="card mb-2">
   <form action="{{url_for('usuariogrupodespacho.search')}}" method="GET">
-    <div class="card-header">
+    <div class="card-header fw-medium">
       <i class="fas fa-search me-1"></i>
       Consulta de Usuário Grupo de Despacho
     </div>
     <div class="card-body">
       <div class="row">
         <!-- Ajuste das colunas para diferentes tamanhos de tela -->
-        <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="col-lg-6 col-md-6 col-sm-12">
           {{searchForm.usuarioSearch.label(class_="form-label")}}
-          {{searchForm.usuarioSearch(class="form-control form-control")}}
+          {{searchForm.usuarioSearch(class="form-select form-select")}}
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="col-lg-6 col-md-6 col-sm-12">
           {{searchForm.grupoDespachoSearch.label(class_="form-label")}}
-          {{searchForm.grupoDespachoSearch(class="form-control form-control")}}
+          {{searchForm.grupoDespachoSearch(class="form-select form-select")}}
         </div>
       </div>
       <div class="d-flex justify-content-start mt-3">
@@ -39,7 +39,7 @@
 
 <!-- Lista Usuários de Grupo de Despacho -->
 <div class="card">
-  <div class="card-header">
+  <div class="card-header fw-medium">
     <i class="fas fa-table me-1"></i>
     Tabela de Usuários de Grupos de Despacho
   </div>

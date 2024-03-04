@@ -56,7 +56,7 @@
                                 {% endfor %}
                             </div>
                             <div class="mb-1" >
-                                {{form.despacharPara.label(class_="form-label")}}
+                                {{form.despacharPara.label(class_="form-label fw-bold")}}
                                 {{form.despacharPara(class_="form-select")}}
                                 {% for error in form.despacharPara.errors %}
                                 <div class="important">
@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mt-2">
-                {{ form.submit(class_="btn btn-primary") }}
+                {{ form.submit(class_="btn btn-primary fw-medium") }}
             </div>
         </form>
     </div>
