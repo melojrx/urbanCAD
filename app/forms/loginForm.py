@@ -3,12 +3,12 @@ from wtforms.validators import DataRequired, Email, Length
  
 class LoginForm(Form):
     email = StringField(
-    'Digite seu email',
+        'E-mail',
     validators= [
         Email(message=('Ops. Não nos parece um e-mail válido.'))
     ])
 
-    password = PasswordField('Password', 
+    password = PasswordField('Senha', 
     validators = [
         DataRequired(),
         Length(min=8, message='A senha deve ter no mínimo %(min)d caracteres')

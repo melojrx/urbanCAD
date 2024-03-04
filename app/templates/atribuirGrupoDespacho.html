@@ -11,7 +11,7 @@
     </ol>
     <form method="POST" action="{{ url_for('ocorrencia.atribuirGrupoDespacho') }}">
         <div class="card mb-3">
-            <div class="card-header">
+            <div class="card-header fw-medium">
                 <i class="fas fa-folder-open"></i>
                 Formulário de atribuição de ocorrências
             </div>
@@ -37,7 +37,7 @@
                 <div class="d-flex flex-wrap justify-content-start mt-3">
                     <button class="btn btn-danger me-2" type="button"
                         onclick="window.location.href='{{url_for('ocorrencia.prepareSearchOcorrencia')}}';">Voltar</button>
-                    {{ form.submit(class_="btn btn-primary") }}
+                    {{ form.submit(class_="btn btn-primary fw-medium") }}
                 </div>
             </div>
         </div>

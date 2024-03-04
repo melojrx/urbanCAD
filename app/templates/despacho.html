@@ -4,9 +4,9 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
 
-<div class="container-fluid mt-2" id="form-cadastro-evento">
+<div class="container-fluid mt-2 p-0 m-0" id="form-cadastro-evento">
 
-        <div class="container-fluid">
+        <div class="container-fluid p-0 m-0">
             <div class="card mb-2">
                 <h3 class="card-header text-center" style="background-color: #525B62; color: antiquewhite;">
                     <strong >CENTRAL DE DESPACHOS</strong>
@@ -14,9 +14,9 @@
             </div>
         </div>
         
-        <div class="container-fluid mb-2">
+        <div class="container-fluid mb-2 p-0">
             <div class="row g-1">
-                <div class="card col-3 border-0" id="formDespacho">
+                <div class="card col-lg-3 col-md-6 col-sm-12 border-0" id="formDespacho">
                     <h5 class="card-header text-center" style="background-color: #525B62; color: antiquewhite;"><strong>Ocorrência Atual</strong>
                         <span style="color: antiquewhite;"></span>
                     </h5>
@@ -64,7 +64,7 @@
                                                     {% endfor %}
                                                 </div>
                                                 <div class="mb-1">
-                                                    {{form.despacharPara.label(class_="form-label")}}
+                                                    {{form.despacharPara.label(class_="form-label fw-bold")}}
                                                     {{form.despacharPara(class_="form-control")}}
                                                     {% for error in form.despacharPara.errors %}
                                                     <div class="important">
@@ -79,19 +79,19 @@
                             </form>
                         </div>
                         <div class="mb-0">
-                            <div id="dataDiv" class="text-center pt-1 pb-0" style="color: yellow;"></div>
+                            <div id="dataDiv" class="text-center pt-1 pb-0 fw-medium" style="color: yellow;"></div>
                             <div id="HoraDiv" class="text-center pt-1 pb-0"
                                 style="font-weight: bold; color: yellow;font-size: 1.5em;"> </div>
                         </div>
                     </div>
                 </div>
-                <div class="mapa col-9">
+                <div class="mapa col-lg-9 col-md-6 col-sm-12">
                     <div id="map"></div>
                 </div>
             </div>
         </div>
 
-        <div class="container-fluid"   id="listDespachos">
+        <div class="container-fluid p-0"   id="listDespachos">
             <!-- <div class="card-header d-flex" style="background-color: #525B62;">
                 <div class="form-check" style="color: antiquewhite;">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border-color: gray;">
