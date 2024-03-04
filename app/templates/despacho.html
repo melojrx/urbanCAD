@@ -232,6 +232,69 @@
                 </div>
             </div>
         </div>
+
+
+        <!--5 REGISTROS DE DESPACHOS MAIS RECENTES-->
+        <div class="card mb-2">
+            <div class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                <i class="far fa-calendar-check me-1"></i> 
+                5 REGISTROS DE DESPACHOS MAIS RECENTES
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover m-0" style="font-size: 14px;">
+                        <thead>
+                            <tr class="text-center table-secondary">
+                                <th>Cod. Ocorrência</th>
+                                <th>Solicitante</th>
+                                <th>Equipe</th>
+                                <th>Endereço</th>
+                                <th>Tipo de Ocorrência</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in listOcorrenciaDespachadaCinco %}
+                                <tr>
+                                    <td>{{ row.numOcorrencia}}</td>
+                                    <td>{{ row.interessado.txtInteressado}}</td>
+                                    <td>
+                                        {% for despacho in row.listDespacho %}
+                                        {{ despacho.composicaoViatura.viatura}}<br>
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ row.txtEndereco}}</td>
+                                    <td>
+                                        {% if row.subtipoOcorrencia %}
+                                            {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                                        {% else %}
+                                            Não Informada
+                                        {% endif %}                                         
+                                    </td>
+                                    <td class="d-flex align-items-center justify-content-center p-3" >
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 1 %}
+                                        <span class="badge text-bg-warning p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 2 %}
+                                        <span class="badge text-bg-primary p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 3 %}
+                                        <span class="badge text-bg-info p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                        {% if row.ocorrenciaHistorico.statusOCorrencia.id == 4 %}
+                                        <span class="badge text-bg-success p-2">{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
 </div>
 
 <script>

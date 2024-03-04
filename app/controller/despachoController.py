@@ -162,7 +162,8 @@ class DespachoController():
             return redirect(url_for('ocorrencia.iniciar'))
         
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
-        return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
+        listOcorrenciaDespachadaCinco = listOcorrenciaDespachada[:5]
+        return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar, listOcorrenciaDespachadaCinco=listOcorrenciaDespachadaCinco)
 
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
