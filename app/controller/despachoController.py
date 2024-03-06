@@ -1,4 +1,5 @@
 import datetime
+from app.DAO.despachoDao import DespachoDao
 from app.forms.despachoObservacaoForm import DespachoObservacaoForm
 from app.models.agenteModel import Agente
 
@@ -283,7 +284,7 @@ class DespachoController():
 
         try:
             form = DespachoObservacaoForm(request.form)
-            despachoHistorico = db.session.query(DespachoHistorico).filter(DespachoHistorico.id==idDespachoHistorico).first()
+            despachoHistorico = DespachoDao.getDespachoHistoricoModelById(idDespachoHistorico)
             form.idDespachoHistorico.data = despachoHistorico.id
                                           
             return render_template('gerenciarDespacho.html', form=form, despachoHistorico=despachoHistorico)

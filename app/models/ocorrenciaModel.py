@@ -24,6 +24,7 @@ class Ocorrencia(db.Model):
     subtipoOcorrencia = db.relationship(SubtipoOcorrencia)
     interessado = db.relationship(Interessado, back_populates="ocorrencia", uselist=False)
     ocorrenciaHistorico = db.relationship('OcorrenciaHistorico', primaryjoin="(Ocorrencia.id == OcorrenciaHistorico.idOcorrencia) & (OcorrenciaHistorico.dataFim == None)", back_populates='ocorrencia', uselist=False)
+    listOcorrenciaHistorico = db.relationship('OcorrenciaHistorico', viewonly=True)
     listDespacho = db.relationship("Despacho", back_populates='ocorrencia')
 
     def __init__(self, idSubtipoOcorrenia, idUsuario, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, dataInicio):

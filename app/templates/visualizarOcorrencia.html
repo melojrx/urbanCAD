@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="container-fluid mt-3 rounded mb-2" id="form-cadastro-evento">
+
+    <div class="container-fluid">
+        <div class="card mb-2">
+            <h6 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+            <i class="fas fa-bell fw-bold" style="color: yellow;"></i>
+            Ocorrência Nº: {{ocorrencia.numOcorrencia}}
+            </h6>
+            <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                <div class="mb-2">
+                    <p><strong>Problema:</strong> {{ocorrencia.txtProblema}}</p>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Endereço:</strong> {{ocorrencia.txtEndereco}}</p>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</p>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Tipo de Ocorrência:</strong>
+                        {% if ocorrencia.subtipoOcorrencia %}
+                            {{ ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                        {% else %}
+                            Não Informada
+                        {% endif %} 
+                    </p>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Subtipo de Ocorrência:</strong>
+                    {{ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</p>
+                </div>
+                <div class="mb-2">
+                    <p><strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M'+'h')}}</p>
+                </div>
+            </div>
+        </div>
+        <!--  AQUI  -->
+        <div class="card mb-2">
+            <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                <i class="fas fa-user-edit"></i>
+                Histórico da Ocorrência
+            </h5>
+            <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                {% for row in ocorrencia.listOcorrenciaHistorico %}
+                    <span class="font-weight-bold">{{row.statusOCorrencia.txtStatusOcorrencia}}</span> -
+                    <span class="fw-normal">{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}} </span> <br>
+                {%endfor%}
+            </div>
+        </div>
+        <div class="card mb-2">
+            <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                <i class="fas fa-user-edit"></i>
+                Despachos
+            </h5>
+            <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                {% for row in ocorrencia.listDespacho %}
+                    <i class="fas fa-car fw-bold" style="color: white;"></i> Viatura {{row.composicaoViatura.viatura}} - Responsável {{row.composicaoViatura.agente.usuario.name}} <br>
+                    {% for despachoHistorico in row.listDespachoHistorico %}
+                        Status {{despachoHistorico.statusDespacho.txtStatusDespacho}}  - {{despachoHistorico.dataInicio.strftime('%d/%m/%Y %H:%M')}} <br>
+
+                        Observações: <br>
+                        {% for obs in despachoHistorico.listObservacao %}
+                            <span class="font-weight-bold">{{obs.usuario.name.capitalize()}}</span> em
+                            <span class="fw-normal">{{obs.dataInicio.strftime('%d/%m/%Y %H:%M')}}: </span>
+                            <span class="fw-normal">{{obs.txtObservacao}}</span> <br>
+                            {% if (obs.fileBase64) %}
+                                <div class="mt-2 mb-2">
+                                    <img class="img-thumbnail img-fluid" src="data:image/jpeg;base64,{{obs.fileBase64}}" width="100%">
+                                </div>
+                            {% endif %}
+                        {%endfor%}
+                    {%endfor%}
+                {%endfor%}
+            </div>
+        </div>        
+        <!--  FIM AQUI  -->
+    </div>
+    <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+        <button type="button" class="btn btn-danger"
+         onclick="window.location.href='{{url_for('despacho.telaDespacho')}}';">Voltar
+        </button>
+    </div>    
+</div>
+
+{% endblock conteudo %}

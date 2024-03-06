@@ -18,6 +18,7 @@ class Despacho(db.Model):
     composicaoViatura = db.relationship(ComposicaoViatura)
     user = db.relationship(User)
     despachoHistorico = db.relationship('DespachoHistorico', primaryjoin="(Despacho.id == DespachoHistorico.idDespacho) & (DespachoHistorico.dataFim == None)", back_populates='despacho', uselist=False)
+    listDespachoHistorico = db.relationship('DespachoHistorico', viewonly=True)
 
     def __init__(self, idOcorrencia, idComposicaoViatura, idUsuario, dataInicio):
         self.idOcorrencia = idOcorrencia

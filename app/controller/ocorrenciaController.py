@@ -1,6 +1,7 @@
 import datetime
 import geocoder
 from sqlalchemy import text
+from app.DAO.ocorrenciaDao import OcorrenciaDao
 from app.forms.ocorrenciaSearchForm import OcorrenciaSearchForm
 from app.forms.ocorrenciaGrupoDespachoForm import OcorrenciaGrupoDespachoForm
 from app.models.statusOcorrenciaModel import StatusOcorrencia
@@ -294,4 +295,17 @@ class ocorrenciaController():
     def loadListOcorrencia():
         form = OcorrenciaForm(request.form)
         listOcorrenciaHistorico = ocorrenciaController.getListOcorrencia()
-        return render_template('loadListaOcorrencia.html', form=form, listOcorrenciaHistorico=listOcorrenciaHistorico)            
+        return render_template('loadListaOcorrencia.html', form=form, listOcorrenciaHistorico=listOcorrenciaHistorico)
+
+    @ocorrencia_bp.route('/visualizar/<idOcorrencia>', methods=['GET'])
+    @login_required
+    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    def visualizarOcorrencia(idOcorrencia):
+
+        try:
+            ocorrencia = OcorrenciaDao.getOcorrenciaById(idOcorrencia)
+            return render_template('visualizarOcorrencia.html', ocorrencia=ocorrencia)
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro: {}'.format(e), 'error') 
+            return redirect(url_for('despacho.telaDespacho'))          

@@ -223,7 +223,11 @@
                                             %}disabled{% endif %} type="button"
                                             onclick="window.location.href='{{ url_for('ocorrencia.finalizarOcorrencia', idOcorrenciaHistorico=row.ocorrenciaHistorico.id) }}';">Finalizar</button>
                                         </div>
-                                        </td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <button class="btn btn-success btn-sm" type="button"
+                                                onclick="window.location.href='{{ url_for('ocorrencia.visualizarOcorrencia', idOcorrencia=row.id) }}';">Visualizar</button>
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
