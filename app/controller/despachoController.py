@@ -146,7 +146,7 @@ class DespachoController():
             row = resultRegional.fetchone()
             return row["id"] if row else 0
         except Exception as e:
-            raise Exception("´pomvspfoomvbeoibvm")
+            raise Exception("Erro ao consultar Região do Usuarío. Entre em contato com o administrador", "error")
 
     @despacho_bp.route('/telaDespacho', methods=['GET'])
     @login_required
