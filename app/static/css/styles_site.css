@@ -27,7 +27,7 @@ ul {
 }
 
 .menu-site {
-    max-width: 960px;
+  max-width: 960px;
 	margin: 0 auto;
 	padding: 15px 0;
 	display: flex;
@@ -48,8 +48,8 @@ ul {
 }
 
 .menu-logo a:hover{
-	color: #3a51d5;
-    transition: all .3s;
+	color: whitesmoke;
+  transition: all .3s;
 }
 
 .menu-nav ul {
@@ -59,28 +59,17 @@ ul {
 
 .menu-nav a {
 	font-size: 1.25em;
-    font-weight: bold;
+  font-weight: bold;
 	display: block;
 	padding: 10px;
 }
 
 .menu-nav a:hover{
-	color: #122ab2;
-    transition: .3s;
+	color: whitesmoke;
+  transition: .3s;
 } 
 
 @charset "UTF-8";
-/*!
-* Start Bootstrap - Business Frontpage v5.0.9 (https://startbootstrap.com/template/business-frontpage)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE)
-*/
-/*!
- * Bootstrap  v5.2.3 (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors
- * Copyright 2011-2022 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
