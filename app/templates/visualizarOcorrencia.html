@@ -1,88 +1,125 @@
 {% extends 'base.html' %}
 {% block conteudo %}
-
+<!-- partial:index.partial.html -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&display=swap');
+</style>
 <div class="container-fluid mt-3 rounded mb-2" id="form-cadastro-evento">
-
+    <h1 class="mt-4">Timeline</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Veja a linha do tempo da ocorrência.</li>
+    </ol>
+    
     <div class="container-fluid">
-        <div class="card mb-2">
-            <h6 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
-            <i class="fas fa-bell fw-bold" style="color: yellow;"></i>
-            Ocorrência Nº: {{ocorrencia.numOcorrencia}}
-            </h6>
-            <div class="card-body" style="background-color: rgb(183, 172, 172);">
-                <div class="mb-2">
-                    <p><strong>Problema:</strong> {{ocorrencia.txtProblema}}</p>
+        <section class="design-section">
+            <div class="timeline">
+        
+                <div class="timeline-empty">
+                    <p class="text-light">{{ocorrencia.dataInicio.strftime('%m' + ' de ' + '%Y')}}</p>
                 </div>
-                <div class="mb-2">
-                    <p><strong>Endereço:</strong> {{ocorrencia.txtEndereco}}</p>
+        
+                <div class="timeline-middle">
+                    <div class="timeline-circle"></div>
                 </div>
-                <div class="mb-2">
-                    <p><strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</p>
-                </div>
-                <div class="mb-2">
-                    <p><strong>Tipo de Ocorrência:</strong>
-                        {% if ocorrencia.subtipoOcorrencia %}
-                            {{ ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
-                        {% else %}
-                            Não Informada
-                        {% endif %} 
-                    </p>
-                </div>
-                <div class="mb-2">
-                    <p><strong>Subtipo de Ocorrência:</strong>
-                    {{ocorrencia.subtipoOcorrencia.txtSubtipoOcorrencia}}</p>
-                </div>
-                <div class="mb-2">
-                    <p><strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M'+'h')}}</p>
-                </div>
-            </div>
-        </div>
-        <!--  AQUI  -->
-        <div class="card mb-2">
-            <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
-                <i class="fas fa-user-edit"></i>
-                Histórico da Ocorrência
-            </h5>
-            <div class="card-body" style="background-color: rgb(183, 172, 172);">
-                {% for row in ocorrencia.listOcorrenciaHistorico %}
-                    <span class="font-weight-bold">{{row.statusOCorrencia.txtStatusOcorrencia}}</span> -
-                    <span class="fw-normal">{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}} </span> <br>
-                {%endfor%}
-            </div>
-        </div>
-        <div class="card mb-2">
-            <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
-                <i class="fas fa-user-edit"></i>
-                Despachos
-            </h5>
-            <div class="card-body" style="background-color: rgb(183, 172, 172);">
-                {% for row in ocorrencia.listDespacho %}
-                    <i class="fas fa-car fw-bold" style="color: white;"></i> Viatura {{row.composicaoViatura.viatura}} - Responsável {{row.composicaoViatura.agente.usuario.name}} <br>
-                    {% for despachoHistorico in row.listDespachoHistorico %}
-                        Status {{despachoHistorico.statusDespacho.txtStatusDespacho}}  - {{despachoHistorico.dataInicio.strftime('%d/%m/%Y %H:%M')}} <br>
+                <div class="timeline-component timeline-content">
+                    <div class="card">
+                        <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                            <i class="fa-solid fa-bell"></i>
+                            Ocorrência
+                        </h5>
+                        <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                            <p><strong>Código:</strong> {{ocorrencia.numOcorrencia}}</p>
+                            <p><strong>Início:</strong> {{ocorrencia.dataInicio.strftime('%d/%m/%Y %H:%M'+'h')}}</p>
+                            <div>
+                                <p><strong>Endereço:</strong> {{ocorrencia.txtEndereco}}</p>
+                            </div>
+                            <div >
+                                <p><strong>Problema:</strong> {{ocorrencia.txtProblema}}</p>
+                            </div>
+                            <div >
+                                <p><strong>Tipo de Ocorrência:</strong>
+                                    {% if ocorrencia.subtipoOcorrencia %}
+                                    {{ ocorrencia.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                                    {% else %}
+                                    Não Informada
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div >
+                                <p><strong>Status:</strong> {{ocorrencia.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia}}</p>
+                            </div>
 
-                        Observações: <br>
-                        {% for obs in despachoHistorico.listObservacao %}
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-component timeline-content">
+                    <div class="card">
+                        <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                            <i class="fas fa-hourglass-half"></i>
+                            Histórico
+                        </h5>
+                        <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                            {% for row in ocorrencia.listOcorrenciaHistorico %}
+                            <span class="font-weight-bold">{{row.statusOCorrencia.txtStatusOcorrencia}}</span>
+                            <span class="fw-normal">{{row.dataInicio.strftime('%d/%m/%Y %H:%M')}} </span> <br>
+                            {%endfor%}
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-middle">
+                    <div class="timeline-circle"></div>
+                </div>
+                <div class="timeline-empty">
+                </div>
+        
+                <div class="timeline-empty">
+                </div>
+        
+                <div class="timeline-middle">
+                    <div class="timeline-circle"></div>
+                </div>
+                
+                <div class=" timeline-component timeline-content">
+                    <div class="card mb-2">
+                        <h5 class="card-header fw-bold" style="background-color: #212529; color: aliceblue; ">
+                            <i class="fas fa-user-edit"></i>
+                            Despachos
+                        </h5>
+                        <div class="card-body" style="background-color: rgb(183, 172, 172);">
+                            {% for row in ocorrencia.listDespacho %}
+                            <p><strong>Viatura:</strong> {{row.composicaoViatura.viatura}}</p>  
+                            <p><strong>Responsável:</strong> {{row.composicaoViatura.agente.usuario.name}}</p>
+                            {% for despachoHistorico in row.listDespachoHistorico %}
+                            <p><strong>Status:</strong> {{despachoHistorico.statusDespacho.txtStatusDespacho}}</p>
+                            <p><strong>Em:</strong> {{despachoHistorico.dataInicio.strftime('%d/%m/%Y' + ' às ' +  '%H:%M' + 'h')}}</p> 
+                    
+                            <p><strong>Observações:</strong></p>
+                            {% for obs in despachoHistorico.listObservacao %}
                             <span class="font-weight-bold">{{obs.usuario.name.capitalize()}}</span> em
                             <span class="fw-normal">{{obs.dataInicio.strftime('%d/%m/%Y %H:%M')}}: </span>
                             <span class="fw-normal">{{obs.txtObservacao}}</span> <br>
                             {% if (obs.fileBase64) %}
-                                <div class="mt-2 mb-2">
-                                    <img class="img-thumbnail img-fluid" src="data:image/jpeg;base64,{{obs.fileBase64}}" width="100%">
-                                </div>
+                            <div class="mt-2 mb-2">
+                                <img class="img-thumbnail img-fluid" src="data:image/jpeg;base64,{{obs.fileBase64}}" width="100%">
+                            </div>
                             {% endif %}
-                        {%endfor%}
-                    {%endfor%}
-                {%endfor%}
+                            {%endfor%}
+                            {%endfor%}
+                            {%endfor%}
+                        </div>
+                    </div>
+                </div>
+        
             </div>
-        </div>        
-        <!--  FIM AQUI  -->
+        </section>
+        <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
+            <button type="button" class="btn btn-danger"
+                onclick="window.location.href='{{url_for('despacho.telaDespacho')}}';"> Voltar
+            </button>
+        </div>
     </div>
-    <div class="d-grid gap-2 d-md-flex mx-auto justify-content-md-end mb-2 mt-2">
-        <button type="button" class="btn btn-danger"
-         onclick="window.location.href='{{url_for('despacho.telaDespacho')}}';">Voltar
-        </button>
-    </div>    
 </div>
+
+
 
 {% endblock conteudo %}
