@@ -2,6 +2,7 @@ from app.models.interessadoModel import Interessado
 from app.models.userModel import User
 from app.models.subtipoOcorrenciaModel import SubtipoOcorrencia
 from ..database import db
+from app.util import DateUtils
 
 class Ocorrencia(db.Model):
     __tablename__ = 'tb_ocorrencia_oco'
@@ -27,6 +28,12 @@ class Ocorrencia(db.Model):
     listOcorrenciaHistorico = db.relationship('OcorrenciaHistorico', viewonly=True)
     listDespacho = db.relationship("Despacho", back_populates='ocorrencia')
 
+    @property
+    def horaByData(self):
+        if self.dataInicio:
+            data_formatada = self.dataInicio.strftime('%Y-%m-%d %H:%M:%S')
+            return DateUtils.getHorasByData(data_formatada)
+        
     def __init__(self, idSubtipoOcorrenia, idUsuario, numOcorrencia, txtProblema, txtEndereco, txtLat, txtLong, dataInicio):
         self.idSubtipoOcorrenia = idSubtipoOcorrenia
         self.idUsuario = idUsuario
