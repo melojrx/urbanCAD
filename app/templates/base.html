@@ -24,7 +24,7 @@
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
       <!-- Alertas -->
       <li class="nav-item dropdown">
-        <a class="nav-link" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotificacao()">
           <i class="fa-solid fa-bell"></i>
           <span class="position-absolute top-1 start-110 translate-middle p-2 badge rounded-pill bg-danger"
             style="width: 3px; height: 3px; border-radius: 50%; z-index: 1;">
@@ -39,32 +39,8 @@
           <li>
             <hr class="dropdown-divider">
           </li>
-          {% for row in listOcorrenciaDespachadaCinco %}
-          <li>
-            <a class="dropdown-item" href="#!" onclick="window.location.href='{{ url_for('ocorrencia.visualizarOcorrencia', idOcorrencia=row.id) }}';">
-              <div class="d-flex align-items-start">
-                <i class="fa-solid fa-bell me-2"></i>
-                <div class="d-flex flex-column me-2">
-                  <span class="fs-7">Tipo: 
-                    {% if row.subtipoOcorrencia %}
-                    {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
-                    {% else %}
-                    Não Informada
-                    {% endif %}
-                  </span>
-                  <div class="d-flex">
-                    <span class="text-small text-secondary">
-                      {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}
-                    </span>
-                  </div>
-                </div>
-                <span class="fs-7 ms-auto text-secondary">há 13 horas</span>
-              </div>
-            </a>
-          </li>
-          {% endfor %}
-          <li><a class="dropdown-item fs-7 text-center" href="{{ url_for('notificacoes.notificacoes')  }}">Mostrar todas as notificações</a></li>
-        </ul>
+            <div class="container-fluid" id="listNotificacao"></div>
+        </ul> 
       </li>
       <!-- Toggle Button -->
       <li class="nav-item dropdown">
@@ -310,6 +286,23 @@
 
 
   </script>
+
+  <script>
+
+    function loadNotificacao() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+              var listaItens = document.getElementById('listNotificacao');
+              listaItens.innerHTML = xhr.responseText;
+          }
+      };
+      xhr.open('GET', '/loadListNotificacao', true);
+      xhr.send();
+    }
+
+  </script>
+
   {% endblock %}
 </body>
 </html>

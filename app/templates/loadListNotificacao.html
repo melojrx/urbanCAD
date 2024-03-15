@@ -1,0 +1,25 @@
+  {% for row in listOcorrenciaDespachadaCinco %}
+  <li>
+    <a class="dropdown-item" href="#!" onclick="window.location.href='{{ url_for('ocorrencia.visualizarOcorrencia', idOcorrencia=row.id) }}';">
+      <div class="d-flex align-items-start">
+        <i class="fa-solid fa-bell me-2"></i>
+        <div class="d-flex flex-column me-2">
+          <span class="fs-7">Tipo: 
+            {% if row.subtipoOcorrencia %}
+              {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+            {% else %}
+              Não Informada
+            {% endif %}
+          </span>
+          <div class="d-flex">
+            <span class="text-small text-secondary">
+              {{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}
+            </span>
+          </div>
+        </div>
+        <span class="fs-7 ms-auto text-secondary">{{ row.horaByData }}</span>
+      </div>
+    </a>
+  </li>
+  {% endfor %}
+  <li><a class="dropdown-item fs-7 text-center" href="{{ url_for('notificacoes.notificacoes') }}">Mostrar todas as notificações aaa</a></li>

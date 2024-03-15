@@ -1,4 +1,4 @@
-from app.DAO.ocorrenciaDTO import OcorrenciaDTO
+from app.DTO.ocorrenciaDTO import OcorrenciaDTO
 from app.DAO.ocorrenciaDao import OcorrenciaDao
 from app.controller.roleRequired import roles_required
 from ..database import db

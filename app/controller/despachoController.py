@@ -36,98 +36,23 @@ class DespachoController():
     @classmethod
     def getListDespacho(cls):
 
-        querySearchDespacho = None
-        querySearchADespachar = None
+        listOcorrenciaDespachada = None
+        listDespachar = None
 
         if not 'MACEIO_ADMIN' in session["roles"]:  
 
-            querySearchDespacho = (Ocorrencia.query
-                        .join(Interessado)
-                        .join(Despacho)
-                        .outerjoin(SubtipoOcorrencia)
-                        .outerjoin(TipoOcorrencia)
-                        .join(ComposicaoViatura)
-                        .join(OcorrenciaHistorico)
-                        .join(OcorrenciaGrupoDespacho)
-                        .join(GrupoDespacho)
-                        .join(UsuarioGrupoDespacho)
-                        .join(User)
-                        .options(
-                            joinedload('interessado'),
-                            joinedload('listDespacho'),
-                            joinedload('subtipoOcorrencia')
-                        )
-                        .filter(
-                            OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
-                            User.id == current_user.id,
-                            OcorrenciaHistorico.dataFim.is_(None))
-                        )
-
-            
-           
-            querySearchADespachar = (OcorrenciaHistorico.query
-                .join(Ocorrencia)
-                .join(Interessado)
-                .outerjoin(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
-                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-                .join(OcorrenciaGrupoDespacho)
-                .join(GrupoDespacho)
-                .join(UsuarioGrupoDespacho)
-                .options(
-                            joinedload('ocorrencia').joinedload('interessado'),
-                            joinedload('ocorrencia.subtipoOcorrencia')
-                        )
-                .filter(
-                    OcorrenciaHistorico.dataFim.is_(None),
-                    Despacho.id.is_(None),
-                    UsuarioGrupoDespacho.idUsuario == current_user.id,
-                    UsuarioGrupoDespacho.dataFim.is_(None)
-                )
-            )
+            listOcorrenciaDespachada = DespachoDao.getListDespachoByUser()
+            listDespachar = DespachoDao.getListADespacharByUser()
+                       
         else:
 
-            querySearchDespacho = (Ocorrencia.query
-                        .join(Interessado)
-                        .join(Despacho)
-                        .outerjoin(SubtipoOcorrencia, 'subtipoOcorrencia')
-                        .outerjoin(TipoOcorrencia, SubtipoOcorrencia.tipoOcorrencia)
-                        .join(ComposicaoViatura)
-                        .join(OcorrenciaHistorico)
-                        .options(
-                            joinedload('interessado'),
-                            joinedload('listDespacho'),
-                            joinedload('subtipoOcorrencia')
-                        )
-                        .filter(
-                            OcorrenciaHistorico.idStatusOcorrencia == statusOcorrenciaEnum.StatusOcorrenciaEnum.EM_ANDAMENTO.value, 
-                            OcorrenciaHistorico.dataFim.is_(None))
-                        )
-
-            querySearchADespachar = (OcorrenciaHistorico.query
-                .join(Ocorrencia)
-                .join(Interessado)
-                .outerjoin(SubtipoOcorrencia, Ocorrencia.subtipoOcorrencia)
-                .outerjoin(TipoOcorrencia, SubtipoOcorrencia.tipoOcorrencia)
-                .outerjoin(Despacho, Despacho.idOcorrencia == Ocorrencia.id)
-                .options(
-                            joinedload('ocorrencia').joinedload('interessado'),
-                            joinedload('ocorrencia.subtipoOcorrencia')
-                        )
-                .filter(
-                    OcorrenciaHistorico.dataFim.is_(None),
-                    Despacho.id.is_(None)
-                    )
-            )          
-
-        listOcorrenciaDespachada = querySearchDespacho.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
+            listOcorrenciaDespachada = DespachoDao.getListDespachoByAdmin()
+            listDespachar = DespachoDao.getListADespacharByAdmin()
 
         # O código abaixo habilita o botão de finalizar Ocorrência caso todos os despachos estejam Concluídos      
         for ocorrencia in listOcorrenciaDespachada:
                 if all(row.despachoHistorico.idStatusDespacho == statusDespachoEnum.StatusDespachoEnum.CONCLUIDO.value for row in ocorrencia.listDespacho):
                     ocorrencia.exibeFinalizarOcorrencia = True
-
-        listDespachar =  querySearchADespachar.order_by(OcorrenciaHistorico.dataInicio.desc()).all()
-
 
         # print('-----------------------listDespachar------------------------------', len(listDespachar))
         # print('---------------------listOcorrenciaDespachada--------------------------', len(listOcorrenciaDespachada))
@@ -163,8 +88,8 @@ class DespachoController():
             return redirect(url_for('ocorrencia.iniciar'))
         
         listOcorrenciaDespachada, listDespachar = DespachoController.getListDespacho()
-        listOcorrenciaDespachadaCinco = listOcorrenciaDespachada[:5]
-        return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar, listOcorrenciaDespachadaCinco=listOcorrenciaDespachadaCinco)
+
+        return render_template('despacho.html', form=form, listOcorrenciaDespachada=listOcorrenciaDespachada, listDespachar=listDespachar)
 
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
