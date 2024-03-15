@@ -9,66 +9,31 @@
 
 <div class="container border p-1 m-0" style="background-color: #F7F7F7;" >
     
-    <a href="" class="text-decoration-none text-dark"><div class="row d-flex justify-content-between mb-2 mt-2">
-        <div class="col-2 d-flex justify-content-center align-items-center">
-            <i class="fas fa-bell text-danger fs-2"></i>
-        </div>
-        <div class="col-8">
-            <div class="mb-1">
-                <span class="fw-medium">Nova ocorrência despachada para:</span><br>
-                <span><strong>Equipe:</strong> <span class="text-danger">Moto PM 82179872 LJM1T22</span></span>
-            </div>
-            <div class="mb-1">
-                <span><strong>Tipo:</strong> <span class="text-danger me-2">Desmoronamento</span><strong>Código da
-                        ocorrência:</strong> <span class="text-danger">20247261243653</span>.</span>
-            </div>
-        </div>
-        <div class="col-2 d-flex align-items-end justify-content-start">
-            <span class="text-muted">Há 13 horas</span>
-        </div>
-    </div></a>
-    <hr class="text-muted">
-    <a href="" class="text-decoration-none text-dark">
-        <div class="row d-flex justify-content-between mb-2 mt-2">
+    {% for row in listOcorrenciaDespachada %}
+        <a href="" class="text-decoration-none text-dark"><div class="row d-flex justify-content-between mb-2 mt-2">
             <div class="col-2 d-flex justify-content-center align-items-center">
                 <i class="fas fa-bell text-danger fs-2"></i>
             </div>
             <div class="col-8">
                 <div class="mb-1">
                     <span class="fw-medium">Nova ocorrência despachada para:</span><br>
-                    <span><strong>Equipe:</strong> <span class="text-danger">Moto PM 82179872 LJM1T22</span></span>
+                    <span><strong>Equipe:</strong> 
+                        {% for despacho in row.listDespacho %}
+                            <span class="text-danger">{{ despacho.composicaoViatura.viatura}}<br></span>
+                            {% endfor %}
+                    </span>
                 </div>
                 <div class="mb-1">
-                    <span><strong>Tipo:</strong> <span class="text-danger me-2">Desmoronamento</span><strong>Código da
-                            ocorrência:</strong> <span class="text-danger">20247261243653</span>.</span>
+                    <span><strong>Tipo:</strong> <span class="text-danger me-2">{{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</span><strong>Código da
+                            ocorrência:</strong> <span class="text-danger">{{ row.numOcorrencia}}</span>.</span>
                 </div>
             </div>
             <div class="col-2 d-flex align-items-end justify-content-start">
-                <span class="text-muted">Há 13 horas</span>
+                <span class="text-muted">{{ row.horaByData}}</span>
             </div>
-        </div>
-    </a>
-    <hr class="text-muted">
-    <a href="#" class="text-decoration-none text-dark" title="Clique para ver a Timeline da Ocorrência.">
-        <div class="row d-flex justify-content-between mb-2 mt-2">
-            <div class="col-2 d-flex justify-content-center align-items-center">
-                <i class="fas fa-bell text-danger fs-2"></i>
-            </div>
-            <div class="col-8">
-                <div class="mb-1">
-                    <span class="fw-medium">Nova ocorrência despachada para:</span><br>
-                    <span><strong>Equipe:</strong> <span class="text-danger">Moto PM 82179872 LJM1T22</span></span>
-                </div>
-                <div class="mb-1">
-                    <span><strong>Tipo:</strong> <span class="text-danger me-2">Desmoronamento</span><strong>Código da
-                            ocorrência:</strong> <span class="text-danger">20247261243653</span>.</span>
-                </div>
-            </div>
-            <div class="col-2 d-flex align-items-end justify-content-start">
-                <span class="text-muted">Há 13 horas</span>
-            </div>
-        </div>
-    </a>
+        </div></a>
+        <hr class="text-muted">
+    {% endfor %} 
     
 </div>
 

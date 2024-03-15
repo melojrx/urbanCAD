@@ -12,22 +12,23 @@ class nofificacoesController():
     @login_required
     @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
     def notificacoes():
-        return render_template('notificacoes.html')
+        listOcorrenciaDespachada = None
+        if not 'MACEIO_ADMIN' in session["roles"]: 
+            listOcorrenciaDespachada = DespachoDao.getListDespachoByUser()
+        else:
+            listOcorrenciaDespachada = DespachoDao.getListDespachoByAdmin()
+        return render_template('notificacoes.html', listOcorrenciaDespachada=listOcorrenciaDespachada)
 
 
     @notificacoes_bp.route("/loadListNotificacao",methods=["POST","GET"])
     @login_required
     def loadListNotificacao():
-        print('csvsdv')
 
         listOcorrenciaDespachadaCinco = None
         if not 'MACEIO_ADMIN' in session["roles"]: 
             listOcorrenciaDespachadaCinco = DespachoDao.getListDespachoByUser()
         else:
             listOcorrenciaDespachadaCinco = DespachoDao.getListDespachoByAdmin()
-
-        for a in listOcorrenciaDespachadaCinco:
-            print(a.id)
 
         listOcorrenciaDespachadaCinco = listOcorrenciaDespachadaCinco[:5]
         return render_template('loadListNotificacao.html', listOcorrenciaDespachadaCinco=listOcorrenciaDespachadaCinco)
