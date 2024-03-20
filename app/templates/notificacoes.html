@@ -10,7 +10,7 @@
 <div class="container border p-1 m-0" style="background-color: #F7F7F7;" >
     
     {% for row in listOcorrenciaDespachada %}
-        <a href="" class="text-decoration-none text-dark"><div class="row d-flex justify-content-between mb-2 mt-2">
+        <a href="#"  onclick="window.location.href='{{ url_for('ocorrencia.visualizarOcorrencia', idOcorrencia=row.id) }}';" class="text-decoration-none text-dark"><div class="row d-flex justify-content-between mb-2 mt-2">
             <div class="col-2 d-flex justify-content-center align-items-center">
                 <i class="fas fa-bell text-danger fs-2"></i>
             </div>
@@ -24,15 +24,19 @@
                     </span>
                 </div>
                 <div class="mb-1">
-                    <span><strong>Tipo:</strong> <span class="text-danger me-2">{{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}</span><strong>Código da
-                            ocorrência:</strong> <span class="text-danger">{{ row.numOcorrencia}}</span>.</span>
+                    {% if row.subtipoOcorrencia %}
+                    <span><strong>Tipo:</strong><span class="text-danger me-2"> {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia.capitalize()}}</span>
+                    {% else %}
+                    <span><strong>Tipo:</strong><span class="text-danger me-2"> Não Informada</span>
+                    {% endif %}
+                    <spa><strong>Código da ocorrência:</strong> <span class="text-danger">{{ row.numOcorrencia}}</span>
                 </div>
             </div>
             <div class="col-2 d-flex align-items-end justify-content-start">
                 <span class="text-muted">{{ row.horaByData}}</span>
             </div>
         </div></a>
-        <hr class="text-muted">
+        <hr class="text-muted">  
     {% endfor %} 
     
 </div>
