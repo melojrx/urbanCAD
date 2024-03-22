@@ -14,7 +14,7 @@
                 <div class="card bg-primary text-white mb-4">
                     <div class="card-body">Ocorrências Totais</div>
                     <div class="card-footer d-flex align-items-center justify-content-end">
-                        <span class="badge text-bg-secondary fs-6">1002</span>
+                        <span class="badge text-bg-secondary fs-6">{{ocorrenciaTotais}}</span>
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 <div class="card bg-warning text-white mb-4">
                     <div class="card-body">Em Andamento</div>
                         <div class="card-footer d-flex align-items-center justify-content-end">
-                            <span class="badge text-bg-secondary fs-6">970</span>
+                            <span class="badge text-bg-secondary fs-6">{{ocorrenciaEmAndamento}}</span>
                         </div> 
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <div class="card bg-success text-white mb-4">
                     <div class="card-body">Ocorrências Finalizadas</div>
                     <div class="card-footer d-flex align-items-center justify-content-end">
-                        <span class="badge text-bg-secondary fs-6">808</span>
+                        <span class="badge text-bg-secondary fs-6">{{ocorrenciaFinalizada}}</span>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                 <div class="card bg-info text-white mb-4">
                     <div class="card-body">Enviadas para Despacho</div>
                     <div class="card-footer d-flex align-items-center justify-content-end">
-                        <span class="badge text-bg-secondary fs-6">987</span>
+                        <span class="badge text-bg-secondary fs-6">{{ocorrenciaDespachada}}</span>
                     </div>
                 </div>
             </div>
@@ -85,25 +85,30 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                    <tr>
-                                        <td>Joelio dos Santos</td>
-                                        <td>Desmatamento</td>
-                                        <td>Com Vitimas</td>
-                                        <td>1234565</td>
-                                        <td>Finalizada</td>
-                                        <td>23/03/2024 às 14:00h</td>
-                                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fas fa-eye"></i> Visualizar</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Kiko do Chaves</td>
-                                        <td>Assalto</td>
-                                        <td>Com Vitimas</td>
-                                        <td>12345</td>
-                                        <td>Finalizada</td>
-                                        <td>23/03/2024 às 14:00h</td>
-                                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i
-                                                    class="fas fa-eye"></i> Visualizar</button></td>
-                                    </tr>
+                                    {% for row in listOcorrencia.items %}
+                                        <tr>
+                                            <td>{{ row.interessado.txtInteressado}}</td>
+                                            <td>
+                                                {% if row.subtipoOcorrencia %}
+                                                    {{ row.subtipoOcorrencia.tipoOcorrencia.txtTipoOcorrencia}}
+                                                {% else %}
+                                                    Não Informada
+                                                {% endif %}  
+                                            </td>
+                                            <td>
+                                                {% if row.subtipoOcorrencia %}
+                                                    {{ row.subtipoOcorrencia.txtSubtipoOcorrencia}}
+                                                {% else %}
+                                                    Não Informada
+                                                {% endif %}  
+                                            </td>
+                                            <td>{{ row.numOcorrencia}}</td>
+                                            <td>{{ row.ocorrenciaHistorico.statusOCorrencia.txtStatusOcorrencia }}</td>
+                                            <td>{{ row.ocorrenciaHistorico.dataFim.strftime('%d/%m/%Y %H:%M' + 'h')}}</td>
+                                            <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i
+                                                        class="fas fa-eye"></i> Visualizar</button></td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                             <nav class="mt-2 mb-0 d-flex justify-content-end"  aria-label="Page navigation">
@@ -159,10 +164,17 @@
     </div>
 </div>
 
-<script src="{{url_for('static', filename='js/map.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 <script src="{{url_for('static', filename='js/chart-area-demo.js')}}"></script>
 <script src="{{url_for('static', filename='js/chart-bar-demo.js')}}"></script>
 <script src="{{url_for('static', filename='js/chart-pie-demo.js')}}"></script>
+
+<script>
+    var listOcorrenciaByStatus = JSON.parse('{{ listOcorrenciaByStatus | tojson | safe }}');
+    createPieChart(listOcorrenciaByStatus);
+
+    var listOcorrenciaByRegiao = JSON.parse('{{ listOcorrenciaByRegiao | tojson | safe }}');
+    createBarChart(listOcorrenciaByRegiao);
+</script>
 
 {% endblock conteudo%}

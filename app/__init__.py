@@ -26,7 +26,6 @@ login_manager.login_message = u"Por favor, realize o login para acessar a págin
 
 from .rotas.agenteRout import agente_bp
 from .rotas.loginRout import login_bp
-from .rotas.chartRout import chart_bp
 from .rotas.composicaoRout import composicao_bp
 from .rotas.despachoRout import despacho_bp
 from .rotas.gpsRout import gps_bp
@@ -45,7 +44,6 @@ from .rotas.notificacoesRout import  notificacoes_bp
 
 app.register_blueprint(agente_bp)
 app.register_blueprint(public_bp)
-app.register_blueprint(chart_bp)
 app.register_blueprint(composicao_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(despacho_bp)
