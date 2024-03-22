@@ -22,59 +22,67 @@
     </form>
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-      <!-- Alertas -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotificacao()">
-          <i class="fa-solid fa-bell"></i>
-          <span class="position-absolute top-1 start-110 translate-middle p-2 badge rounded-pill bg-danger"
-            style="width: 3px; height: 3px; border-radius: 50%; z-index: 1;">
-            <span class="visually-hidden">unread messages</span>
-          </span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="notificationDropdown">
-          <!-- Mensagens no Dropdown -->
-          <li>
-            <h6 class="dropdown-header fs-7 text-start">Notificações</h6>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-            <div class="container" id="listNotificacao"></div>
-        </ul> 
-      </li>
-      <!-- Toggle Button -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" id="toggleThemeBtn" href="#" role="button" data-bs-toggle="dropdown"
-          aria-expanded="false"><i class="fas fa-adjust"></i></a>
-        <!-- Dropdown para Modo Light/Dark -->
-        <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#" onclick="setTheme('light')">
-              <i class="fas fa-sun"></i> Modo Light
-            </a></li>
-          <li><a class="dropdown-item" href="#" onclick="setTheme('dark')">
-              <i class="fas fa-moon"></i> Modo Dark
-            </a></li>
-          <li><a class="dropdown-item" href="#" onclick="setTheme('auto')">
-              <i class="fas fa-adjust"></i> Modo Auto
-            </a></li>
-        </ul>
-      </li>
-      {% if current_user %}
-      <!-- User Login -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-          aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-        <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#!"><i class="fas fa-user"></i> Olá, {{ current_user.name.split()[0].capitalize() }}</a></li>
-          <li><a class="dropdown-item" href="{{url_for('usuario.prepareUpdate')}}"><i class="fas fa-user-cog"></i> Meus Dados</a></li>
-          <li>
-            <hr class="dropdown-divider" />
-          </li>
-          <li><a class="dropdown-item" href="{{url_for('login.logout')}}"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
-        </ul>
-      </li>
-      {% endif %}
-    </ul>
+    <!-- Alertas -->
+    <li class="nav-item dropdown">
+      <a class="nav-link" role="button" href="{{url_for('notificacoes.notificacoes')}}"
+       >
+        <i class="fa-solid fa-bell"></i>
+        <span class="position-absolute top-1 start-110 translate-middle p-2 badge rounded-pill bg-danger"
+          style="width: 3px; height: 3px; border-radius: 50%; z-index: 1;">
+          <span class="visually-hidden">unread messages</span>
+        </span>
+      </a>
+      <!-- <a class="nav-link" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotificacao()">
+        <i class="fa-solid fa-bell"></i>
+        <span class="position-absolute top-1 start-110 translate-middle p-2 badge rounded-pill bg-danger"
+          style="width: 3px; height: 3px; border-radius: 50%; z-index: 1;">
+          <span class="visually-hidden">unread messages</span>
+        </span>
+      </a> -->
+      <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="notificationDropdown">
+        <!-- Mensagens no Dropdown -->
+        <li>
+          <h6 class="dropdown-header fs-7 text-start">Notificações</h6>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+          <div class="container" id="listNotificacao"></div>
+      </ul> 
+    </li>
+    <!-- Toggle Button -->
+    <li class="nav-item dropdown">
+      <a class="nav-link" id="toggleThemeBtn" href="#" role="button" data-bs-toggle="dropdown"
+        aria-expanded="false"><i class="fas fa-adjust"></i></a>
+      <!-- Dropdown para Modo Light/Dark -->
+      <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="#" onclick="setTheme('light')">
+            <i class="fas fa-sun"></i> Modo Light
+          </a></li>
+        <li><a class="dropdown-item" href="#" onclick="setTheme('dark')">
+            <i class="fas fa-moon"></i> Modo Dark
+          </a></li>
+        <li><a class="dropdown-item" href="#" onclick="setTheme('auto')">
+            <i class="fas fa-adjust"></i> Modo Auto
+          </a></li>
+      </ul>
+    </li>
+    {% if current_user %}
+    <!-- User Login -->
+    <li class="nav-item dropdown">
+      <a class="nav-link" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+        aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+      <ul class="dropdown-menu dropdown-menu-end dropdown-theme-ul" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="#!"><i class="fas fa-user"></i> Olá, {{ current_user.name.split()[0].capitalize() }}</a></li>
+        <li><a class="dropdown-item" href="{{url_for('usuario.prepareUpdate')}}"><i class="fas fa-user-cog"></i> Meus Dados</a></li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li><a class="dropdown-item" href="{{url_for('login.logout')}}"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+      </ul>
+    </li>
+    {% endif %}
+  </ul>
   </nav>
 
   <div id="layoutSidenav">
@@ -91,10 +99,6 @@
             {% endif %}
             <div class="sb-sidenav-menu-heading">ATENDIMENTO</div>           
             {% if ('MACEIO_ADMIN' in session["roles"]) %}
-            <!-- <a class="nav-link" href="#">
-              <div class="sb-nav-link-icon"><i class="fas fa-map-marker-alt"></i></div>
-              Monitoramento
-            </a> -->
             <a class="nav-link" href="{{url_for('ocorrencia.prepareSearchOcorrencia')}}">
               <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
               Ocorrências
@@ -164,10 +168,10 @@
               <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
               Estatísticas
             </a>
-            <a class="nav-link" href="charts.html">
+            <!-- <a class="nav-link" href="charts.html">
               <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
               Relatórios
-            </a>
+            </a> -->
             {% endif %}
           </div>
         </div>

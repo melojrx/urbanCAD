@@ -7,74 +7,153 @@
     <div class="container-fluid px-4">
         <h1 class="mt-4">Dashboard</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Dashboard</li>
+            <li class="breadcrumb-item active">Acompanhe os principais KPI´s do Sistema</li>
         </ol>
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-primary text-white mb-4">
                     <div class="card-body">Ocorrências Totais</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver detalhes</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <div class="card-footer d-flex align-items-center justify-content-end">
+                        <span class="badge text-bg-secondary fs-6">1002</span>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-warning text-white mb-4">
                     <div class="card-body">Em Andamento</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver detalhes</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                    </div>
+                        <div class="card-footer d-flex align-items-center justify-content-end">
+                            <span class="badge text-bg-secondary fs-6">970</span>
+                        </div> 
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-success text-white mb-4">
                     <div class="card-body">Ocorrências Finalizadas</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver detalhes</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <div class="card-footer d-flex align-items-center justify-content-end">
+                        <span class="badge text-bg-secondary fs-6">808</span>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-info text-white mb-4">
                     <div class="card-body">Enviadas para Despacho</div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver detalhes</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <div class="card-footer d-flex align-items-center justify-content-end">
+                        <span class="badge text-bg-secondary fs-6">987</span>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-chart-area me-1"></i>
-                        Monitoramento de Ocorrências</div>
-                    <div class="card-body map_dashboard"><div id="map"></div></div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-xl-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-chart-area me-1"></i>
-                        Area Chart Example
-                    </div>
-                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-1"></i>
+                    Ocorrências por Status
                 </div>
+                <div class="card-body"><canvas id="myPieChart" width="100%" height="40"></canvas></div>
+                <div class="card-footer small text-muted">Atualizado em 21/03/2024 às 11:59 PM</div>
+            </div>
             </div>
             <div class="col-xl-6">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-bar me-1"></i>
-                        Bar Chart Example
+                        Ocorrências por Região
                     </div>
                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                    <div class="card-footer small text-muted">Atualizado em 21/03/2024 às 11:59 PM</div>
                 </div>
+            </div>
+            <div class="col-12">
+                <div class="card mb-2">
+                    <div class="card-header fw-medium">
+                        <i class="fas fa-table me-1"></i>
+                        Tabela de Ocorrências Finalizadas
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover m-0" style="font-size: 14px;">
+                                <thead>
+                                    <tr class="text-center table-secondary">
+                                        <th>Noticiante</th>
+                                        <th>Tipo Ocorrência</th>
+                                        <th>Subtipo Ocorrência</th>
+                                        <th>Nº da Ocorrência</th>
+                                        <th>Status</th>
+                                        <th>Data</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr>
+                                        <td>Joelio dos Santos</td>
+                                        <td>Desmatamento</td>
+                                        <td>Com Vitimas</td>
+                                        <td>1234565</td>
+                                        <td>Finalizada</td>
+                                        <td>23/03/2024 às 14:00h</td>
+                                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fas fa-eye"></i> Visualizar</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kiko do Chaves</td>
+                                        <td>Assalto</td>
+                                        <td>Com Vitimas</td>
+                                        <td>12345</td>
+                                        <td>Finalizada</td>
+                                        <td>23/03/2024 às 14:00h</td>
+                                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"> <i
+                                                    class="fas fa-eye"></i> Visualizar</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <nav class="mt-2 mb-0 d-flex justify-content-end"  aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">Próximo</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fas fa-bell fw-bold fs-4"></i> Descrição da Ocorrência</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Número da Ocorrência: 20247213172750</p>
+        
+                <p>Interessado: Bruno do kld</p>
+                
+                <p>Tipo de Ocorrência: Assalto</p>
+                
+                <p>Subtipo de Ocorrência: Com reféns</p>
+                
+                <p>Status: Finalizada</p>
+                
+                <p>Data de Início: 21/03/2024 17:27</p>
+
+                <p>Data de Finalização: 21/03/2024 22:00</p>
+
+                <p>Tempo até Finalizar: 3 Dias, 6 Horas e 10 min</p>
+                
+                <p>Descrição do Problema: Ocorrência de Testes</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+               
             </div>
         </div>
     </div>
@@ -84,5 +163,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 <script src="{{url_for('static', filename='js/chart-area-demo.js')}}"></script>
 <script src="{{url_for('static', filename='js/chart-bar-demo.js')}}"></script>
+<script src="{{url_for('static', filename='js/chart-pie-demo.js')}}"></script>
 
 {% endblock conteudo%}
