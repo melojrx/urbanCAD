@@ -5,23 +5,15 @@ from ..forms.loginForm import LoginForm
 from ..forms.registerForm import RegisterForm
 from ..rotas.loginRout import login_bp
 from flask_login import login_user, logout_user
-from flask import render_template, request, redirect, url_for, flash, session, jsonify
-import requests
+from flask import render_template, request, redirect, url_for, flash, session
 
 class loginController:
 
-    global app_key 
-    app_key = '930b745492848e4dbfbb9c5320ff78ad26b2693a61fefec01ef087e0'
-    global institution_external_id
-    institution_external_id = 'cff955b7939ec690e6b63d82ffca69de1a45184b292e9792d8aa709f'
-
     @login_bp.route('/register', methods=['GET', 'POST'])
     def register():
-
         form = RegisterForm(request.form)
 
         if request.method == 'POST' and form.validate(): 
-
             name = form.name.data
             email = form.email.data
             txtcpf = form.cpf.data
@@ -35,92 +27,74 @@ class loginController:
             if email:
                 email = email.lower()
 
+            # Verificar se usuário já existe
+            existing_user = User.query.filter_by(email=email).first()
+            if existing_user:
+                flash('Este email já está cadastrado.', 'error')
+                return render_template('register.html', form=form)
+
+            existing_cpf = User.query.filter_by(cpf=txtcpf).first()
+            if existing_cpf:
+                flash('Este CPF já está cadastrado.', 'error')
+                return render_template('register.html', form=form)
+
             try:
+                # Usar role do formulário ou determinar baseado no email
+                role = form.role.data if hasattr(form, 'role') and form.role.data else 'CAD_AGENTE'
+                if not role and "admin" in email:
+                    role = 'CAD_ADMIN'
+                elif not role and ("despacho" in email or "gd" in email):
+                    role = 'CAD_DESPACHO'
+                elif not role:
+                    role = 'CAD_AGENTE'
                 
-                user = User(name, email, txtcpf)
+                user = User(name, email, txtcpf, pwd, role)
                 db.session.add(user)
+                db.session.commit()
                 
-                url = 'http://10.82.85.8:8012/api/b2in/user/role'
-                data = {'institution_external_id': institution_external_id, 'email': email, 'password': 
-                        pwd, "application_external_id": app_key, "role_name": "MACEIO_USER", 'type': 'USER'}
-                headers = {'Content-Type': 'application/json'}
-                response = requests.post(url, json=data, headers=headers)
-                data = response.json() 
-                #print(response.status_code)
-                #print(response.json())
+                flash('Usuário cadastrado com sucesso!', 'success')
+                return redirect(url_for('login.login'))
                 
-                if(response.status_code != 201):
-                    db.session.rollback()
-                    flash('Erro: {}'.format(response.status_code), 'error') 
-                    flash('Erro: {}. {}'.format(response.status_code, data['message']), 'error') 
-                    return render_template('login.html', form=form)
-                else:
-                    db.session.commit()
-                    flash('Usuário cadastrado com sucesso', 'sucess')
-                    return redirect(url_for('login.login')) 
             except Exception as e:
                 db.session.rollback()
-                flash('Erro: {}'.format(e), 'error')  
+                flash(f'Erro ao cadastrar usuário: {e}', 'error')
+                
         return render_template('register.html', form=form)   
 
-    @login_bp.route('/login', methods=['GET', 'POST'] )
+    @login_bp.route('/login', methods=['GET', 'POST'])
     def login():
-
         form = LoginForm(request.form)
+        
         if request.method == 'POST' and form.validate(): 
-            user = User.query.filter_by(email=form.email.data).first()
-
-            login_user(user)
-            if "admin" in user.email:
-                session["roles"] = 'MACEIO_ADMIN'
-                return redirect(url_for('ocorrencia.iniciar')) 
-            if "gd" in user.email:
-                session["roles"] = 'CAD_DESPACHO'
-                return redirect(url_for('despacho.telaDespacho')) 
-            if "agente" or "007" in user.email:
-                session["roles"] = 'CAD_AGENTE'
-                return redirect(url_for('despacho.meusDespachos'))             
-        else:
-             return render_template('login.html', form=form)
-        # ------------------------------------------------
-        form = LoginForm(request.form)
-
-        if request.method == 'POST' and form.validate(): 
-
-            email = form.email.data
-            pwd = form.password.data
-
-            try:
-
-                url = 'http://10.82.85.8:8012/api/b2in/auth'
-                data = {'email': email, 'password': pwd, 'app_key': app_key, 'type': 'WEB'}
-                headers = {'Content-Type': 'application/json'}
-                response = requests.post(url, json=data, headers=headers)
-                data = response.json()
-                #print(response.status_code)
-
-                if(response.status_code == 200):
-                    
-                    user = User.query.filter(User.email == email).first()
-                    #user.roles = data['roles']
-                    #print(data['roles'])
- 
-                    session["roles"] = data['roles']
-                    if ('MACEIO_ADMIN' not in session["roles"] and 'CAD_DESPACHO' not in session["roles"] and 'CAD_AGENTE' not in session["roles"]):
-                        flash('Usuário sem papel definido. Entre em contato com o Administrador do sistema.', 'error')
-                        return render_template('login.html', form=form)
-                    login_user(user)
+            email = form.email.data.lower()
+            password = form.password.data
+            
+            # Busca usuário pelo email
+            user = User.query.filter_by(email=email).first()
+            
+            if user and user.verify_password(password):
+                login_user(user)
+                
+                # Define role na sessão
+                session["roles"] = user.role
+                
+                # Redireciona baseado no role
+                if user.role == 'CAD_ADMIN':
                     return redirect(url_for('ocorrencia.iniciar'))
-                elif(response.status_code == 500):
-                    flash('Erro: {}. {}'.format(response.status_code, data['Login indisponível']), 'error')                  
+                elif user.role == 'CAD_DESPACHO':
+                    return redirect(url_for('despacho.telaDespacho'))
+                elif user.role == 'CAD_AGENTE':
+                    return redirect(url_for('despacho.meusDespachos'))
                 else:
-                    flash('Erro: {}. {}'.format(response.status_code, data['message']), 'error') 
+                    # Role não reconhecido
+                    flash('Usuário com papel não reconhecido. Entre em contato com o Administrador.', 'error')
+                    logout_user()
                     return render_template('login.html', form=form)
-            except Exception as e:
-                flash('Erro: {}'.format(e), 'error')             
+            else:
+                flash('Email ou senha inválidos.', 'error')
                 return render_template('login.html', form=form)
-        else:
-            return render_template('login.html', form=form)
+        
+        return render_template('login.html', form=form)
             
     @login_bp.route('/logout')
     def logout():

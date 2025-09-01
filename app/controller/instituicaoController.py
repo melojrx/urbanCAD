@@ -14,7 +14,7 @@ class instituicaoController():
         
     @instituicao_bp.route('/listarInstituicao', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def listar():
         page = request.args.get('page', 1, type=int)
         searchForm = InstituicaoSearchForm(request.form)
@@ -24,14 +24,14 @@ class instituicaoController():
     
     @instituicao_bp.route('/prepareCadastrarInstituicao', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareCadastrar():
         form = InstituicaoForm(request.form)
         return render_template('instituicao/cadastrarInstituicao.html', form=form)    
     
     @instituicao_bp.route('/cadastrarInstituicao', methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def cadastrarInstituicao():
 
         try:
@@ -55,7 +55,7 @@ class instituicaoController():
     
     @instituicao_bp.route('/prepareExcluirInstituicao/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareExcluir(id):
 
         viatura = instituicaoDao.getInstituicaoById(id)
@@ -68,7 +68,7 @@ class instituicaoController():
     
     @instituicao_bp.route('/excluir/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def excluir(id):
         dataFim = datetime.datetime.now()
         try:
@@ -81,7 +81,7 @@ class instituicaoController():
 
     @instituicao_bp.route('/searchInstituicao', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def search():
         searchForm = InstituicaoSearchForm(request.args)
         page = request.args.get('page', 1, type=int)

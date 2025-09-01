@@ -1,24 +1,27 @@
-FROM python:3.8.10
+FROM python:3.8-slim-bullseye
 
-WORKDIR /home/ubuntu/maceio-server-cyro/urbanCAD
+WORKDIR /app
 
-# Copie os arquivos de requirements.txt
+# Instalar dependências do sistema necessárias para PostgreSQL e geoespacial
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    libpq-dev \
+    libgeos-dev \
+    libgdal-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar e instalar dependências Python
 COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir gunicorn && \
+    pip install --no-cache-dir -r requirements.txt
 
-#RUN python -m venv venv
-#ERUN /bin/bash -c "source venv/bin/activate"
-
-# Instale as dependências dentro da venv
-#RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir gunicorn
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copie o restante do código
+# Copiar código da aplicação
 COPY . .
-#COPY app/static/ /home/ubuntu/maceio-server-cyro/urbanCAD/app/static/
 
+# Expor porta
+EXPOSE 8009
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8009", "--workers", "1", "--worker-class", "eventlet", "wsgi:app"]
-#CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8009", "wsgi:app"]
-#CMD ["gunicorn", "wsgi:app", "-b", "0.0.0.0:8009", "--worker-class", "eventlet", "--workers", "4", "--log-level", "debug"]
-#CMD ["gunicorn", "app:app", "-w","4", "-b", "0.0.0.0:8009", "--worker-class", "eventlet", "--workers", "4", "wsgi:app"]
+# Comando para executar a aplicação
+CMD ["gunicorn", "--bind", "0.0.0.0:8009", "--workers", "1", "--worker-class", "gevent", "wsgi:app"]

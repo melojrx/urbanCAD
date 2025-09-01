@@ -16,7 +16,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/listarTipoPatrulha', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def listar():
         try:
             searchForm = TipoPatrulhaSearchForm(request.form)
@@ -31,7 +31,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/prepareCadastrarTipoPatrulha', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareCadastrar():
 
         form = TipoPatrulhaForm(request.form)
@@ -41,7 +41,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/cadastrarTipoPatrulha' , methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def cadastrarTipoPatrulha():
 
         form = TipoPatrulhaForm(request.form)
@@ -61,7 +61,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/prepareExcluirTipoPatrulha/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareExcluir(id):
 
         tipoPatrulha = tipoPatrulhaDao.getTipoPatrulhaById(id)
@@ -74,7 +74,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/excluir/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def excluir(id):
         dataFim = datetime.datetime.now()
         try:
@@ -87,7 +87,7 @@ class tipoPatrulhaController:
 
     @tipopatrulha_bp.route('/searchTipoPatrulha', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def search():
         searchForm = TipoPatrulhaSearchForm(request.args)
         page = request.args.get('page', 1, type=int)

@@ -5,13 +5,13 @@ class LoginForm(Form):
     email = StringField(
         'E-mail',
     validators= [
-        Email(message=('Ops. Não nos parece um e-mail válido.'))
+        Email(message=('Ops. Não nos parece um e-mail válido.'), allow_smtputf8=False)
     ])
 
     password = PasswordField('Senha', 
     validators = [
         DataRequired(),
-        Length(min=8, message='A senha deve ter no mínimo %(min)d caracteres')
+        Length(min=4, message='A senha deve ter no mínimo %(min)d caracteres')
     ])
 
     submit = SubmitField('Entrar')

@@ -1,5 +1,5 @@
 from ..util.validaCpfUtil import ValidaCpf
-from wtforms import BooleanField, Form, PasswordField, StringField, SubmitField
+from wtforms import BooleanField, Form, PasswordField, StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, Length
 
 class RegisterForm(Form):
@@ -24,6 +24,17 @@ class RegisterForm(Form):
         Length(max=11, min=11, message='O CPF deve ter conter exatamente 11 caracteres'),
         ValidaCpf()
     ])
+
+    role = SelectField(
+        'Selecione o Papel do Usuário',
+        choices=[
+            ('CAD_AGENTE', 'Agente'),
+            ('CAD_DESPACHO', 'Despachante'),
+            ('CAD_ADMIN', 'Administrador')
+        ],
+        default='CAD_AGENTE',
+        validators=[DataRequired(message='*Campo Requerido')]
+    )
 
     password = PasswordField('Digite sua Senha', 
     validators = [

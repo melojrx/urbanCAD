@@ -22,7 +22,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/listarUsuarioGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def listar():
         try:
             searchForm = UsuarioGrupoDespachoSearchForm(request.form)
@@ -39,7 +39,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/prepareCadastrarUsuarioGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareCadastrarUsuarioGrupoDespacho():
 
         try:
@@ -56,7 +56,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/cadastrarUsuarioGrupoDespacho' , methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def cadastrarUsuarioGrupoDespacho():
 
         form = UsuarioGrupoDespachoForm(request.form)
@@ -86,7 +86,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/prepareExcluirUsuarioGrupoDespacho/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareExcluir(id):
 
         usuarioGrupoDespacho = usuarioGrupoDespachoDao.getUsuarioGrupoDespachoById(id)
@@ -102,7 +102,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/excluirUsuarioGrupoDespacho/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def excluir(id):
         dataFim = datetime.datetime.now()
         try:
@@ -115,7 +115,7 @@ class UsuarioGrupoDespachoController:
 
     @usuariogrupodespacho_bp.route('/usuariogrupodespacho.search', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def search():
         searchForm = UsuarioGrupoDespachoSearchForm(request.args)
         page = request.args.get('page', 1, type=int)

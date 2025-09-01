@@ -1,13 +1,24 @@
 from app import app
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+import os
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://cad_maceio:cad1q2w3emaceio@10.82.85.8:19000/urban_maceio'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/postgres'
+# Usar variável de ambiente ou valor padrão
+DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/postgres')
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
-app.config['SECRET_KEY'] = 'secret'
+# Usar SECRET_KEY do ambiente ou valor padrão
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secret')
 
 db = SQLAlchemy(app)
+"""Extensão de migração.
+Para criar migrações:
+    flask db init
+    flask db migrate -m "mensagem"
+    flask db upgrade
+"""
+migrate = Migrate(app, db)
 
 @app.errorhandler(Exception)
 def internal_error(e):

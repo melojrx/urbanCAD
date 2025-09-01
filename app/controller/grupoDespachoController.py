@@ -21,7 +21,7 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/listarGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def listar():
         try:
             searchForm = GrupoDespachoSearchForm(request.form)
@@ -37,7 +37,7 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/prepareCadastrarGrupoDespacho', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def prepareCadastrarGrupoDespacho():
 
         try:
@@ -53,7 +53,7 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/cadastrarGrupoDespacho' , methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def cadastrarGrupoDespacho():
 
         form = GrupoDespachoForm(request.form)
@@ -78,7 +78,7 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/prepareExcluirGrupoDespacho/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareExcluir(id):
 
         grupoDespacho = grupoDespachoDao.getGrupoDespachoById(id)
@@ -92,7 +92,7 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/excluirGrupoDespacho/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def excluir(id):
         dataFim = datetime.datetime.now()
         try:
@@ -105,7 +105,7 @@ class GrupoDespachoController:
 
     @grupodespacho_bp.route('/viatura.search', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def search():
         searchForm = GrupoDespachoSearchForm(request.args)
         page = request.args.get('page', 1, type=int)

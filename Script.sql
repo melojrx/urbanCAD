@@ -207,6 +207,31 @@ CREATE TABLE cad.tb_tipo_ocorrencia_toc (
 	CONSTRAINT tipo_ocorrencia_pkey PRIMARY KEY (id_tipo_ocorrencia_toc)
 );
 
+-- #############################################################
+-- #  SCHEMA / TABELA DE USUÁRIO (referenciada por várias FKs) #
+-- #############################################################
+-- O script original referenciava comum.tb_usuario_usu mas não criava o schema 'comum'.
+-- Adicionamos aqui a criação para evitar falhas na inicialização via docker.
+CREATE SCHEMA IF NOT EXISTS comum;
+CREATE TABLE IF NOT EXISTS comum.tb_usuario_usu (
+  id_usuario_usu SERIAL PRIMARY KEY,
+  txt_nome_usu VARCHAR(200) NOT NULL,
+  txt_email_usu VARCHAR(200) NOT NULL UNIQUE,
+  txt_cpf_usu VARCHAR(11) NOT NULL UNIQUE,
+  txt_password_hash_usu VARCHAR(255),
+  txt_role_usu VARCHAR(50) NOT NULL DEFAULT 'CAD_AGENTE'
+);
+-- Seeds básicos de usuário (ajuste/remova em produção)
+INSERT INTO comum.tb_usuario_usu (txt_nome_usu, txt_email_usu, txt_cpf_usu, txt_password_hash_usu, txt_role_usu)
+  VALUES ('Administrador', 'admin@admin.com', '00000000000', 'pbkdf2:sha256:260000$jJUuOUSJOIjMLH6K$69df9509be1fd59afdc4670c55a2eee21f26ff63cddbb1e0d248efe821fecdd5', 'CAD_ADMIN')
+  ON CONFLICT (txt_email_usu) DO NOTHING;
+INSERT INTO comum.tb_usuario_usu (txt_nome_usu, txt_email_usu, txt_cpf_usu, txt_password_hash_usu, txt_role_usu)
+  VALUES ('Agente Padrão', 'agente@agente.com', '11111111111', 'pbkdf2:sha256:260000$MPZZoWXL9tc5RloG$d1ced35d6c4e19e592a98798574c6ec8c802ea5195afecd336dd62f0dfd3bad1', 'CAD_AGENTE')
+  ON CONFLICT (txt_email_usu) DO NOTHING;
+INSERT INTO comum.tb_usuario_usu (txt_nome_usu, txt_email_usu, txt_cpf_usu, txt_password_hash_usu, txt_role_usu)
+  VALUES ('Despachante', 'despacho@despacho.com', '22222222222', 'pbkdf2:sha256:260000$MPZZoWXL9tc5RloG$d1ced35d6c4e19e592a98798574c6ec8c802ea5195afecd336dd62f0dfd3bad1', 'CAD_DESPACHO')
+  ON CONFLICT (txt_email_usu) DO NOTHING;
+
 CREATE TABLE cad.tb_subtipo_ocorrencia_soc (
 	id_subtipo_ocorrencia_soc integer NOT NULL DEFAULT nextval('cad.subtipo_ocorrencia_seq'::regclass),
   id_tipo_ocorrencia_soc integer NOT NULL,

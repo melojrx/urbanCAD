@@ -37,7 +37,7 @@ class ocorrenciaController():
     def iniciar():
         try:
             # Se o usário tem permissão de governo
-            if 'MACEIO_ADMIN' in session["roles"]: 
+            if 'CAD_ADMIN' in session["roles"]: 
                 return redirect(url_for('ocorrencia.prepareSearchOcorrencia'))
             elif 'CAD_DESPACHO' in session["roles"]:
                 return redirect(url_for('despacho.telaDespacho'))
@@ -49,7 +49,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/prepareSearchOcorrencia', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def prepareSearchOcorrencia():
 
         form = OcorrenciaSearchForm(request.form)
@@ -64,7 +64,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/searchOcorrencia', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def searchOcorrencia():
 
         form = OcorrenciaSearchForm(request.form)
@@ -121,7 +121,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/prepareCadastrarOcorrencia', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def prepareCadastrarOcorrencia():
 
         global listTipoOcorrencia 
@@ -133,7 +133,7 @@ class ocorrenciaController():
     
     @ocorrencia_bp.route('/cadastrarOcorrencia', methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def cadastrarOcorrencia():
 
         try:
@@ -199,7 +199,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/prepareAtribuirOcorrencia/<idOcorrencia>/<lat>/<long>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def prepareAtribuirOcorrencia(idOcorrencia, lat, long):
         
         try:
@@ -238,7 +238,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/atribuirGrupoDespacho', methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def atribuirGrupoDespacho():
 
         try:
@@ -268,7 +268,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/finalizarOcorrencia/<idOcorrenciaHistorico>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')    
+    @roles_required('CAD_ADMIN')    
     def finalizarOcorrencia(idOcorrenciaHistorico):
         try:
 
@@ -299,7 +299,7 @@ class ocorrenciaController():
 
     @ocorrencia_bp.route('/visualizar/<idOcorrencia>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def visualizarOcorrencia(idOcorrencia):
 
         try:

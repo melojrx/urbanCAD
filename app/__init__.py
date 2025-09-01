@@ -32,7 +32,6 @@ from .rotas.gpsRout import gps_bp
 from .rotas.endpointRout import json_bp
 from .rotas.grupoDespachoRout import grupodespacho_bp
 from .rotas.instituicaoRout import instituicao_bp
-from .rotas.maletaRout import maleta_bp
 from .rotas.ocorrenciaRout import ocorrencia_bp
 from .rotas.publicRout import public_bp
 from .rotas.tipoPatrulhaRout import tipopatrulha_bp
@@ -51,7 +50,6 @@ app.register_blueprint(gps_bp)
 app.register_blueprint(grupodespacho_bp)
 app.register_blueprint(instituicao_bp)
 app.register_blueprint(json_bp)
-app.register_blueprint(maleta_bp)
 app.register_blueprint(ocorrencia_bp)
 app.register_blueprint(tipopatrulha_bp)
 app.register_blueprint(viatura_bp)

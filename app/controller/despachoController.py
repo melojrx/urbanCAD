@@ -39,7 +39,7 @@ class DespachoController():
         listOcorrenciaDespachada = None
         listDespachar = None
 
-        if not 'MACEIO_ADMIN' in session["roles"]:  
+        if not 'CAD_ADMIN' in session["roles"]:  
 
             listOcorrenciaDespachada = DespachoDao.getListDespachoByUser()
             listDespachar = DespachoDao.getListADespacharByUser()
@@ -75,7 +75,7 @@ class DespachoController():
 
     @despacho_bp.route('/telaDespacho', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')    
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')    
     def telaDespacho():
         form = DespachoForm(request.form)
 
@@ -93,7 +93,7 @@ class DespachoController():
 
     @despacho_bp.route('/prepareDespachar/<idOcorrencia>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')    
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')    
     def prepareDespachar(idOcorrencia):
 
         form = DespachoForm(request.form)
@@ -101,7 +101,7 @@ class DespachoController():
 
         ocorrencia = Ocorrencia.query.filter(Ocorrencia.id == idOcorrencia).first()
         
-        if 'MACEIO_ADMIN' in session["roles"]:
+        if 'CAD_ADMIN' in session["roles"]:
                         sql = text("SELECT cvi.id_composicao_viatura_cvi, via.txt_codigo_via, via.txt_placa_via, tpa.txt_tipo_patrulha_tpa, ins.txt_instituicao_ins, ins.txt_sigla_ins"  
                         " FROM cad.tb_viatura_via via"
                         " JOIN cad.tb_tipo_patrulha_tpa tpa ON via.id_tipo_patrulha_via = tpa.id_tipo_patrulha_tpa"
@@ -148,7 +148,7 @@ class DespachoController():
 
     @despacho_bp.route('/despachar', methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')    
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')    
     def despachar():
 
         try:
@@ -181,7 +181,7 @@ class DespachoController():
    
     @despacho_bp.route('/atenderDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')     
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')     
     def atenderDespacho(idDespachoHistorico):
 
         try:
@@ -204,7 +204,7 @@ class DespachoController():
         
     @despacho_bp.route('/gerenciarDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')
     def gerenciarDespacho(idDespachoHistorico):
 
         try:
@@ -220,7 +220,7 @@ class DespachoController():
 
     @despacho_bp.route('/cadastrarObservacao', methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')     
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')     
     def cadastrarObservacao():
 
         try:
@@ -240,14 +240,14 @@ class DespachoController():
 
     @despacho_bp.route('/meusDespachos', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO', 'CAD_AGENTE')
     def meusDespachos():
         listDespachoHistorico = DespachoHistorico.query.filter(DespachoHistorico.idStatusDespacho != statusDespachoEnum.StatusDespachoEnum.CONCLUIDO.value).join(Despacho).join(ComposicaoViatura).join(Agente).filter(and_(Agente.idUsuario==current_user.id, DespachoHistorico.dataFim.is_(None))).order_by(DespachoHistorico.dataInicio.desc()).all()
         return render_template('meusDespachos.html', listDespachoHistorico=listDespachoHistorico)
     
     @despacho_bp.route('/finalizarDespacho/<idDespachoHistorico>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_AGENTE', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_AGENTE', 'CAD_DESPACHO')
     def finalizarDespacho(idDespachoHistorico):
         try:
 

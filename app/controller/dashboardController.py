@@ -10,7 +10,7 @@ class dashboardController():
 
     @dashboard_bp.route('/dashboard')
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def dashboard():
         try:
 

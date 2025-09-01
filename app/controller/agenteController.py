@@ -19,7 +19,7 @@ class agenteController:
 
     @agente_bp.route('/listarAgente', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def listar():
         try:
             page = request.args.get('page', 1, type=int)
@@ -37,7 +37,7 @@ class agenteController:
 
     @agente_bp.route('/prepareCadastrarAgente', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareCadastrarAgente():
 
         form = AgenteForm(data=request.args)
@@ -53,7 +53,7 @@ class agenteController:
 
     @agente_bp.route('/cadastrarAgente' , methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def cadastrarAgente():
 
         form = AgenteForm(request.form)
@@ -80,7 +80,7 @@ class agenteController:
 
     @agente_bp.route('/prepareExcluirAgente/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareExcluir(id):
 
         agente = agenteDao.getAgenteById(id)
@@ -99,7 +99,7 @@ class agenteController:
     
     @agente_bp.route('/excluirAgente/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def excluir(id):
         dataFim = datetime.datetime.now()
         try:
@@ -112,7 +112,7 @@ class agenteController:
 
     @agente_bp.route('/search', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def search():
         searchForm = AgenteSearchForm(request.args)
         page = request.args.get('page', 1, type=int)

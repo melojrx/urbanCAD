@@ -19,7 +19,7 @@ class viaturaController():
 
     @viatura_bp.route('/listarViaturas', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def listar():
         try:
             searchForm = ViaturaSearchForm(request.form)
@@ -39,7 +39,7 @@ class viaturaController():
 
     @viatura_bp.route('/prepareCadastrar', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareCadastrar():
         form = ViaturaForm(data=request.args)
 
@@ -51,7 +51,7 @@ class viaturaController():
 
     @viatura_bp.route('/cadastrar' , methods=['POST'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def cadastrar():
 
         form = ViaturaForm(request.form)
@@ -81,7 +81,7 @@ class viaturaController():
 
     @viatura_bp.route('/prepareExcluirViatura/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def prepareExcluir(id):
 
         viatura = viaturaDao.getViaturaById(id)
@@ -98,7 +98,7 @@ class viaturaController():
 
     @viatura_bp.route('/excluirViatura/<id>', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def excluir(id):
         dataFim = datetime.datetime.now()
         try:
@@ -111,7 +111,7 @@ class viaturaController():
         
     @viatura_bp.route('/viatura.searchViatura', methods=['GET'])
     @login_required
-    @roles_required('MACEIO_ADMIN')
+    @roles_required('CAD_ADMIN')
     def search():
         searchForm = ViaturaSearchForm(request.args)
         page = request.args.get('page', 1, type=int)

@@ -10,10 +10,10 @@ class nofificacoesController():
 
     @notificacoes_bp.route('/notificacoes')
     @login_required
-    @roles_required('MACEIO_ADMIN', 'CAD_DESPACHO')
+    @roles_required('CAD_ADMIN', 'CAD_DESPACHO')
     def notificacoes():
         listOcorrenciaDespachada = None
-        if not 'MACEIO_ADMIN' in session["roles"]: 
+        if not 'CAD_ADMIN' in session["roles"]: 
             listOcorrenciaDespachada = DespachoDao.getListDespachoByUser()
         else:
             listOcorrenciaDespachada = DespachoDao.getListDespachoByAdmin()
@@ -25,7 +25,7 @@ class nofificacoesController():
     def loadListNotificacao():
 
         listOcorrenciaDespachadaCinco = None
-        if not 'MACEIO_ADMIN' in session["roles"]: 
+        if not 'CAD_ADMIN' in session["roles"]: 
             listOcorrenciaDespachadaCinco = DespachoDao.getListDespachoByUser()
         else:
             listOcorrenciaDespachadaCinco = DespachoDao.getListDespachoByAdmin()
